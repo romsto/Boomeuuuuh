@@ -1,5 +1,5 @@
 buildscript {
-    
+
 
     repositories {
         mavenLocal()
@@ -9,7 +9,7 @@ buildscript {
         google()
     }
     dependencies {
-        
+
 
     }
 }
@@ -36,11 +36,11 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
+
 }
 
 project(":desktop") {
     apply plugin: "java-library"
-
 
     dependencies {
         implementation project(":core")
@@ -55,15 +55,28 @@ project(":desktop") {
 project(":core") {
     apply plugin: "java-library"
 
-
     dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "net.dermetfan.libgdx-utils:libgdx-utils:0.13.4"
         api "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.4"
         api "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:1.0.2"
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(":server") {
+    apply plugin: "java"
+
+    dependencies {
+        compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     }
 
     test {
