@@ -38,6 +38,10 @@ public class ServerConnection extends Thread {
         }
     }
 
+    /**
+     * Sends one or more packets through TCP
+     * @param packets Packets to send
+     */
     public void send(Packet... packets) {
         for (Packet packet : packets) {
             try {

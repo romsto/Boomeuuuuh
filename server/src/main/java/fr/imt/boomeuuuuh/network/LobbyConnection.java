@@ -9,12 +9,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class PartyConnection extends Thread {
+public class LobbyConnection extends Thread {
 
     private final DatagramSocket socket;
 
-    public PartyConnection() throws SocketException {
-        this.socket = new DatagramSocket();
+    public LobbyConnection(int port) throws SocketException {
+        this.socket = new DatagramSocket(port);
 
         this.start();
     }
@@ -32,6 +32,11 @@ public class PartyConnection extends Thread {
         }
     }
 
+    /**
+     * Sends one or more packets to a specific player through UDP
+     * @param player Receiver
+     * @param packets Packets to send
+     */
     public void send(Player player, Packet... packets) {
         InetAddress address = player.getAddress();
         int updPort = player.getUDPPort();
