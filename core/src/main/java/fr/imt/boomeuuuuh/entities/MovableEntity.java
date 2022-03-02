@@ -1,7 +1,13 @@
 package fr.imt.boomeuuuuh.entities;
 
-public class MovableEntity extends Entity{
+public abstract class MovableEntity extends Entity{
     public MovableEntity (int id){
         super(id);
     }
+
+    @Override
+    public void draw() {
+
+    }
+}
 }

@@ -1,6 +1,6 @@
 package fr.imt.boomeuuuuh.entities;
 
-public class Entity {
+public abstract class Entity {
 
     private final int id;
     private float x,y;
@@ -28,4 +28,6 @@ public class Entity {
     public void setY(float y) {
         this.y = y;
     }
+
+    public abstract void draw();
 }
