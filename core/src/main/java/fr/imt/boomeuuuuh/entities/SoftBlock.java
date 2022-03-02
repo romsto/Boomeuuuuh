@@ -1,0 +1,13 @@
+package fr.imt.boomeuuuuh.entities;
+
+public class SoftBlock extends Entity {
+
+    public SoftBlock(int id) {
+        super(id);
+    }
+
+    /* Animate the disappearing of the block*/
+    public void disappear(){
+    }
+
+}
