@@ -5,7 +5,8 @@ public class BombeStandard extends Bomb{
     public BombeStandard(int id) {
         super(id);
     }
-    public void draw() {
+
 
     }
-}
+
+

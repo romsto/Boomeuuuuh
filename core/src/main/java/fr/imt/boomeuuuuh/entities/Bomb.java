@@ -1,6 +1,6 @@
 package fr.imt.boomeuuuuh.entities;
 
-public abstract class Bomb extends MovableEntity {
+public class Bomb extends MovableEntity {
 
 
     public Bomb(int id) {
@@ -8,5 +8,8 @@ public abstract class Bomb extends MovableEntity {
     }
 
     @Override
-    public abstract void draw();
+    public void draw() {
+
+    }
+
 }

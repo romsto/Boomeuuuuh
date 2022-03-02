@@ -5,8 +5,4 @@ public class Player extends MovableEntity {
         super(id);
     }
 
-    @Override
-    public void draw() {
-
-    }
 }
