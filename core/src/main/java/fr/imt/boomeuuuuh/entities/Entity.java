@@ -1,13 +1,9 @@
 package fr.imt.boomeuuuuh.entities;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+public abstract class Entity {
 
-public class Entity {
-
-    protected final int id;
-    protected float x, y;
-    protected boolean visible;
-    protected Sprite sprite;
+    private final int id;
+    private float x,y;
 
     public Entity(int id) {
         this.id = id;
@@ -25,14 +21,6 @@ public class Entity {
         return id;
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
     public void setX(float x) {
         this.x = x;
     }
@@ -41,7 +29,5 @@ public class Entity {
         this.y = y;
     }
 
-    public Sprite getSprite() {return sprite;}
-
-    public void setSprite(Sprite sprite) {this.sprite = sprite;}
+    public abstract void draw();
 }

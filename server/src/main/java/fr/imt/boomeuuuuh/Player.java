@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh;
 
+import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 
 import java.io.IOException;
@@ -11,6 +12,8 @@ public class Player {
     private int id;
     private String name;
     private boolean authentified = false;
+
+    private Lobby lobby;
 
     private final InetAddress address;
     private final Socket serverSocket;
@@ -30,5 +33,17 @@ public class Player {
 
     public int getUDPPort() {
         return udpPort;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
     }
 }
