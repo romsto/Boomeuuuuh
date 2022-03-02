@@ -6,6 +6,11 @@ public class SoftBlock extends Entity {
         super(id);
     }
 
+    @Override
+    public void draw() {
+
+    }
+
     /* Animate the disappearing of the block*/
     public void disappear(){
     }

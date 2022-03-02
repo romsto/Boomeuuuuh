@@ -6,6 +6,10 @@ public class HardBlock extends Entity{
         super(id);
     }
 
+    @Override
+    public void draw() {
+
+    }
 
 
 }
