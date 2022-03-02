@@ -31,8 +31,8 @@ public class ServerConnection extends Thread {
             byte[] incomingBytes = new byte[28]; // TODO change the buffer size in order to optimize
             try {
                 int size = inputStream.read(incomingBytes);
-                Packet packet = Packet.getFromBytes(incomingBytes);
-                // TODO HANDLE THIS PACKET
+                Packet packet = Packet.getFromBytes(incomingBytes, player);
+                packet.handle();
             } catch (IOException e) {
                 if (e instanceof SocketTimeoutException)
                     Boomeuuuuh.logger.info((player.getName() == null ? player.getAddress().toString() : player.getName()) + " timed out...");

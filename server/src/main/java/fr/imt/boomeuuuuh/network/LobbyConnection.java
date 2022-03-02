@@ -24,7 +24,8 @@ public class LobbyConnection extends Thread {
             DatagramPacket incomingPacket = new DatagramPacket(new byte[28], 28); // TODO change buffer size to optimize
             try {
                 socket.receive(incomingPacket);
-                // TODO Handle packet and link to a specific player
+                Packet packet = Packet.getFromBytes(incomingPacket.getData(), incomingPacket.getAddress());
+                packet.handle();
             } catch (IOException e) {
                 Boomeuuuuh.logger.severe("Error while reading incoming UDP packets : " + e.getMessage());
             }

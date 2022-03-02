@@ -29,7 +29,6 @@ public class Server extends Thread {
                 players.put(address, player);
             } catch (IOException e) {
                 Boomeuuuuh.logger.severe("Error while accepting connections : " + e.getMessage());
-                // TODO Manage this exception
             }
         }
     }

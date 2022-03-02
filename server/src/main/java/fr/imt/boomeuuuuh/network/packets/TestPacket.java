@@ -12,11 +12,16 @@ public class TestPacket extends Packet {
     }
 
     @Override
-    byte[] encode() {
+    protected byte[] encode() {
         return message.getBytes(StandardCharsets.UTF_8);
     }
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public void handle() {
+
     }
 }
