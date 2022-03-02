@@ -1,13 +1,12 @@
 package fr.imt.boomeuuuuh.network;
 
+import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.*;
 
 public class LobbyConnection extends Thread {
 
@@ -27,14 +26,15 @@ public class LobbyConnection extends Thread {
                 socket.receive(incomingPacket);
                 // TODO Handle packet and link to a specific player
             } catch (IOException e) {
-                // TODO manage timeout and exception here
+                Boomeuuuuh.logger.severe("Error while reading incoming UDP packets : " + e.getMessage());
             }
         }
     }
 
     /**
      * Sends one or more packets to a specific player through UDP
-     * @param player Receiver
+     *
+     * @param player  Receiver
      * @param packets Packets to send
      */
     public void send(Player player, Packet... packets) {
@@ -46,7 +46,7 @@ public class LobbyConnection extends Thread {
             try {
                 socket.send(new DatagramPacket(packed, packed.length, address, updPort));
             } catch (IOException e) {
-                // TODO Manage this exception
+                Boomeuuuuh.logger.severe("Impossible to send packets to " + player.getAddress());
             }
         }
     }

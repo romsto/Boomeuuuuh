@@ -15,4 +15,8 @@ public class TestPacket extends Packet {
     byte[] encode() {
         return message.getBytes(StandardCharsets.UTF_8);
     }
+
+    public String getMessage() {
+        return message;
+    }
 }
