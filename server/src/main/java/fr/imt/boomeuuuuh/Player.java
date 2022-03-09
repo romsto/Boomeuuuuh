@@ -17,7 +17,7 @@ public class Player {
 
     private final InetAddress address;
     private final Socket serverSocket;
-    private final ServerConnection serverConnection;
+    public final ServerConnection serverConnection;
     private int udpPort;
 
     public Player(Socket socket) throws IOException {
