@@ -2,13 +2,13 @@ package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Screen;
 import fr.imt.boomeuuuuh.MyGame;
 
-public class PersonalScreen implements Screen {
+public class PreferencesScreen implements Screen {
 
 
-    MyGame game; // Note it's "MyGame" not "Game"
+    private MyGame game; // Note it's "MyGame" not "Game"
 
     // constructor to keep a reference to the main Game class
-    public PersonalScreen(MyGame game){
+    public PreferencesScreen(MyGame game){
         this.game = game;
     }
 

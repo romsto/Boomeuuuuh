@@ -5,7 +5,7 @@ import fr.imt.boomeuuuuh.MyGame;
 public class PlayScreen implements Screen {
 
 
-    MyGame game; // Note it's "MyGame" not "Game"
+    private MyGame game; // Note it's "MyGame" not "Game"
 
     // constructor to keep a reference to the main Game class
     public PlayScreen(MyGame game){

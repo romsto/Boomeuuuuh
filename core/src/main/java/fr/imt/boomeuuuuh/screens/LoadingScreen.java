@@ -5,7 +5,7 @@ import fr.imt.boomeuuuuh.MyGame;
 public class LoadingScreen implements Screen {
 
 
-    MyGame game; // Note it's "MyGame" not "Game"
+    private MyGame game; // Note it's "MyGame" not "Game"
 
     // constructor to keep a reference to the main Game class
     public LoadingScreen(MyGame game){
@@ -14,10 +14,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        /* Make all the possibilities for the screen to lead to another one
-        if (Gdx.input.justTouched()) // Criterion
-            game.setScreen(game.anotherScreen);  // Screen to change
-         */
+        game.changeScreen(MyGame.MAINMENU);
     }
 
     @Override
