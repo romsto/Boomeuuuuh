@@ -41,6 +41,7 @@ public class Server extends Thread {
      * @param player Player to remove
      */
     public static void removePlayer(Player player) {
+        player.disconnect();
         players.remove(player.getAddress());
         // TODO disconnect player
     }
