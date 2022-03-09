@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.lobbies;
 
+import fr.imt.boomeuuuuh.Game.GameManager;
 import fr.imt.boomeuuuuh.Player;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 
