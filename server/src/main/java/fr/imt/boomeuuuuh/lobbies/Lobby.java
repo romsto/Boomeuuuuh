@@ -25,9 +25,9 @@ public class Lobby {
     private Player owner;
     private String name;
 
-    public Lobby(int udpPort, int lobbyID, String name, Player owner) throws SocketException {
-        this.udpPort = udpPort;
-        this.lobbyConnection = new LobbyConnection(udpPort);
+    public Lobby(int lobbyID, String name, Player owner) throws SocketException {
+        this.lobbyConnection = new LobbyConnection();
+        this.udpPort = lobbyConnection.getPort();
         this.lobbyID = lobbyID;
 
         this.players = new ArrayList<>();
@@ -75,17 +75,35 @@ public class Lobby {
     public void addPlayer(Player player) {
         players.add(player);
 
-        //TODO : relay info to all client lobbys
+        //TODO : relay info to all client lobbys (TCP)
+    }
+
+    //After connection is accepted by the lobby
+    //  player receives info that it has connected to the lobby and receives the lobby info
+    public void sendLobbyInfo(Player player){
+        //TODO : send lobby info to player (TCP)
     }
 
     public void removePlayer(Player player) {
         players.remove(player);
 
-        //TODO : relay info to all client lobbys
+        //TODO : relay info to all client lobbys (TCP)
     }
     //-----------------------------------------------------
     //--------------------Relay Methods--------------------
     //  -> Used for communication
+
+    //DISCONNECT (TCP)
+    //Relay disconnect to all players
+    public void disconnectAll(){
+        for (Player p : players)
+            disconnectPlayer(p);
+    }
+
+    public void disconnectPlayer(Player p){
+        //TODO : Send player the order to disconnect
+        players.removeIf(pl -> pl.getId() == p.getId());
+    }
 
     //CHAT (TCP)
     //Relay chat from a player to all others
