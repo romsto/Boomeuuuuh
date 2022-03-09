@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import fr.imt.boomeuuuuh.entities.Entity;
 
 import java.util.ArrayList;
@@ -15,5 +16,10 @@ public class Game {
     public Game() {
 
 
+    }
+    public void draw(SpriteBatch batch, float temps){
+        for(int i=0;i<entities.size();i++){
+            entities.get(i).draw(batch, temps);
+        }
     }
 }

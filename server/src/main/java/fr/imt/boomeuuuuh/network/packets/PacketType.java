@@ -2,9 +2,8 @@ package fr.imt.boomeuuuuh.network.packets;
 
 import fr.imt.boomeuuuuh.Player;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
-import fr.imt.boomeuuuuh.network.packets.client.JoinLobbyPacket;
-import fr.imt.boomeuuuuh.network.packets.client.RequestLobbyListPacket;
-import fr.imt.boomeuuuuh.network.packets.client.SendChatPacket;
+import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
+import fr.imt.boomeuuuuh.network.packets.client.*;
 
 public enum PacketType {
 
@@ -40,7 +39,26 @@ public enum PacketType {
             return new SendChatPacket(new String(data), player);
         }
     },
-    RECEIVE_CHAT;
+    RECEIVE_CHAT,
+    CREATE_LOBBY {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new CreateLobbyPacket(player, new String(data));
+        }
+    },
+    KICK,
+    LEAVE {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new LeavePacket(player);
+        }
+    },
+    DISCONNECT {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new DisconnectPacket(player);
+        }
+    };
 
     public Packet make(byte[] data) {
 

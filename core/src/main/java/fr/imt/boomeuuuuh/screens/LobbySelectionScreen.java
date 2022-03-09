@@ -4,7 +4,7 @@ import fr.imt.boomeuuuuh.MyGame;
 
 public class LobbySelectionScreen implements Screen {
 
-    MyGame game; // Note it's "MyGame" not "Game"
+    private MyGame game; // Note it's "MyGame" not "Game"
 
     // constructor to keep a reference to the main Game class
     public LobbySelectionScreen(MyGame game){

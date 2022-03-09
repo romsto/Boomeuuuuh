@@ -7,9 +7,4 @@ public class Bomb extends MovableEntity {
         super(id);
     }
 
-    @Override
-    public void draw() {
-
-    }
-
 }

@@ -24,10 +24,11 @@ public abstract class Packet {
      */
     public byte[] getBytes() {
         byte[] data = encode();
-        byte[] packet = new byte[data.length + 1];
+        byte[] packet = new byte[data.length + 2];
 
-        packet[0] = (byte) (packetType.ordinal() - 127);
-        System.arraycopy(data, 0, packet, 1, data.length);
+        packet[0] = (byte) (packetType.ordinal() - 126);
+        packet[1] = (byte) (data.length - 126);
+        System.arraycopy(data, 0, packet, 2, data.length);
         return packet;
     }
 
@@ -38,8 +39,9 @@ public abstract class Packet {
      * @return Packet built
      */
     public static Packet getFromBytes(byte[] packet, InetAddress address) {
-        int type = packet[0] + 127;
-        byte[] data = extractData(packet);
+        int type = packet[0] + 126;
+        int size = packet[1] + 126;
+        byte[] data = extractData(packet, size);
         PacketType packetType = PacketType.values()[type];
 
         Packet instance = packetType.make(data);
@@ -55,8 +57,9 @@ public abstract class Packet {
      * @return Packet built
      */
     public static Packet getFromBytes(byte[] packet, Player player) {
-        int type = packet[0] + 127;
-        byte[] data = extractData(packet);
+        int type = packet[0] + 126;
+        int size = packet[1] + 126;
+        byte[] data = extractData(packet, size);
         PacketType packetType = PacketType.values()[type];
 
         Packet instance = packetType.make(data);
@@ -69,11 +72,12 @@ public abstract class Packet {
      * Extracts data from a packet (removing the header)
      *
      * @param packet Packet to extract
+     * @param size   of the packet
      * @return extracted data
      */
-    private static byte[] extractData(byte[] packet) {
-        byte[] data = new byte[packet.length - 1];
-        System.arraycopy(packet, 1, data, 0, packet.length - 1);
+    private static byte[] extractData(byte[] packet, int size) {
+        byte[] data = new byte[size];
+        System.arraycopy(packet, 2, data, 0, size);
         return data;
     }
 }

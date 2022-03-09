@@ -1,4 +1,8 @@
-package fr.imt.boomeuuuuh.network.packets;
+package fr.imt.boomeuuuuh.network.packets.both;
+
+import fr.imt.boomeuuuuh.Boomeuuuuh;
+import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.network.packets.PacketType;
 
 import java.nio.charset.StandardCharsets;
 
@@ -22,6 +26,7 @@ public class TestPacket extends Packet {
 
     @Override
     public void handle() {
-
+        System.out.println(getMessage());
+        Boomeuuuuh.logger.info(getMessage());
     }
 }

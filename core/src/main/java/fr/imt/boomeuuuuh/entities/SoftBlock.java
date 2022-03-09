@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh.entities;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class SoftBlock extends Entity {
 
     public SoftBlock(int id) {
@@ -7,7 +9,7 @@ public class SoftBlock extends Entity {
     }
 
     @Override
-    public void draw() {
+    public void draw(SpriteBatch batch, float temps) {
 
     }
 

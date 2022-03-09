@@ -102,7 +102,7 @@ public class Lobby {
     }
 
     public void disconnectPlayer(Player p){
-        //TODO : Send player the order to disconnect
+        p.leaveLobby("Lobby closed"); // TODO Change reason here
         players.removeIf(pl -> pl.getId() == p.getId());
     }
 

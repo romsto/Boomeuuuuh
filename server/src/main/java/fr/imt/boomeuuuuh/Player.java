@@ -2,6 +2,7 @@ package fr.imt.boomeuuuuh;
 
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
+import fr.imt.boomeuuuuh.network.packets.server.KickPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -18,7 +19,6 @@ public class Player {
     private final InetAddress address;
     private final Socket serverSocket;
     public final ServerConnection serverConnection;
-    private int udpPort;
 
     public Player(Socket socket) throws IOException {
         this.serverSocket = socket;
@@ -31,10 +31,6 @@ public class Player {
         return address;
     }
 
-    public int getUDPPort() {
-        return udpPort;
-    }
-
     public String getName() {
         return name;
     }
@@ -45,5 +41,28 @@ public class Player {
 
     public Lobby getLobby() {
         return lobby;
+    }
+
+    public boolean isInLobby() {
+        return lobby != null;
+    }
+
+    public void joinLobby(Lobby lobby) {
+        if (isInLobby())
+            leaveLobby("Already in a lobby");
+        this.lobby = lobby;
+        // TODO send Lobby info packet
+    }
+
+    public void leaveLobby(String reason) {
+        KickPacket kickPacket = new KickPacket(reason);
+        getLobby().getLobbyConnection().send(this, kickPacket);
+    }
+
+    public void disconnect() {
+        if (isInLobby()) {
+            // TODO leave lobby
+        }
+        serverConnection.close();
     }
 }
