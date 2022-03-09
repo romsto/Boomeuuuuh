@@ -7,21 +7,24 @@ import fr.imt.boomeuuuuh.network.packets.Packet;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class LobbyConnection extends Thread {
 
     private final DatagramSocket socket;
     private final int udpPort;
+    private boolean stop = false;
 
     public LobbyConnection() throws SocketException {
         this.socket = new DatagramSocket();
-        this.udpPort = socket.getPort();
+        this.udpPort = socket.getLocalPort();
         this.start();
     }
 
     @Override
     public void run() {
-        while (true /* TODO make it closable */) {
+        while (!stop) {
             DatagramPacket incomingPacket = new DatagramPacket(new byte[28], 28); // TODO change buffer size to optimize
             try {
                 socket.receive(incomingPacket);
@@ -34,7 +37,9 @@ public class LobbyConnection extends Thread {
     }
 
     //-------------------------GET-------------------------
-    public int getPort(){ return udpPort; }
+    public int getPort() {
+        return udpPort;
+    }
     //-----------------------------------------------------
 
     /**
@@ -55,5 +60,13 @@ public class LobbyConnection extends Thread {
                 Boomeuuuuh.logger.severe("Impossible to send packets to " + player.getAddress());
             }
         }
+    }
+
+    /**
+     * Stops the socket
+     */
+    public void close() {
+        this.stop = true;
+        this.socket.close();
     }
 }

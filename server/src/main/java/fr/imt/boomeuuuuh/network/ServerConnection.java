@@ -5,32 +5,39 @@ import fr.imt.boomeuuuuh.Player;
 import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 public class ServerConnection extends Thread {
 
     private final Player player;
-    private final InputStream inputStream;
-    private final OutputStream outputStream;
+    private final Socket serverSocket;
+    private final BufferedReader reader;
+    private final PrintStream writer;
+    private boolean stop = false;
 
     public ServerConnection(Player player, Socket serverSocket) throws IOException {
         this.player = player;
-        this.inputStream = serverSocket.getInputStream();
-        this.outputStream = serverSocket.getOutputStream();
-
+        this.serverSocket = serverSocket;
+        this.reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+        this.writer = new PrintStream(serverSocket.getOutputStream());
         this.start();
     }
 
     @Override
     public void run() {
-        while (true/* TODO make possible to disconnect the player */) {
-            byte[] incomingBytes = new byte[28]; // TODO change the buffer size in order to optimize
+        while (!stop) {
             try {
-                int size = inputStream.read(incomingBytes);
+                String line = reader.readLine();
+                if (line == null) {
+                    // Close connection
+                    Boomeuuuuh.logger.info((player.getName() == null ? player.getAddress().toString() : player.getName()) + " left.");
+                    Server.removePlayer(player);
+                    break;
+                }
+
+                byte[] incomingBytes = line.getBytes();
                 Packet packet = Packet.getFromBytes(incomingBytes, player);
                 packet.handle();
             } catch (IOException e) {
@@ -39,6 +46,7 @@ public class ServerConnection extends Thread {
                 else
                     Boomeuuuuh.logger.severe("Error while reading incoming packets of " + player.getAddress() + " : " + e.getMessage());
                 Server.removePlayer(player);
+                break;
             }
         }
     }
@@ -50,11 +58,19 @@ public class ServerConnection extends Thread {
      */
     public void send(Packet... packets) {
         for (Packet packet : packets) {
-            try {
-                outputStream.write(packet.getBytes());
-            } catch (IOException e) {
-                Boomeuuuuh.logger.severe("Impossible to send packets to " + player.getAddress());
-            }
+            writer.println(new String(packet.getBytes()));
+        }
+    }
+
+    /**
+     * Kill the client socket
+     */
+    public void close() {
+        this.stop = true;
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            Boomeuuuuh.logger.warning("Cannot disconnect " + (player.getName() == null ? player.getAddress().toString() : player.getName()));
         }
     }
 }

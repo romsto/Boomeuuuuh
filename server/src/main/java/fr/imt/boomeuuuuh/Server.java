@@ -13,13 +13,15 @@ public class Server extends Thread {
     private static ServerSocket serverSocket;
     private static final Map<InetAddress, Player> players = new HashMap<>();
 
+    private boolean stop = false;
+
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (!stop) {
             try {
                 Socket socket = serverSocket.accept();
                 InetAddress address = socket.getInetAddress();
@@ -70,5 +72,12 @@ public class Server extends Thread {
      */
     public static Collection<Player> getPlayers() {
         return players.values();
+    }
+
+    /**
+     * Stops the server
+     */
+    public void close() {
+        this.stop = true;
     }
 }
