@@ -11,10 +11,11 @@ import java.net.*;
 public class LobbyConnection extends Thread {
 
     private final DatagramSocket socket;
+    private final int udpPort;
 
-    public LobbyConnection(int port) throws SocketException {
-        this.socket = new DatagramSocket(port);
-
+    public LobbyConnection() throws SocketException {
+        this.socket = new DatagramSocket();
+        this.udpPort = socket.getPort();
         this.start();
     }
 
@@ -31,6 +32,10 @@ public class LobbyConnection extends Thread {
             }
         }
     }
+
+    //-------------------------GET-------------------------
+    public int getPort(){ return udpPort; }
+    //-----------------------------------------------------
 
     /**
      * Sends one or more packets to a specific player through UDP

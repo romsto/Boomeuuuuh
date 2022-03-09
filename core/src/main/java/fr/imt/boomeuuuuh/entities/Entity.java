@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh.entities;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class Entity {
 
     private final int id;
@@ -29,7 +31,7 @@ public class Entity {
         this.y = y;
     }
 
-    public  void draw(){
+    public  void draw(SpriteBatch batch, float temps){
 
     }
 }
