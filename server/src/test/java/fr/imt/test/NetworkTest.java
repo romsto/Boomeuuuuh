@@ -1,18 +1,22 @@
 package fr.imt.test;
 
+import com.google.common.primitives.Ints;
 import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 public class NetworkTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testTestPacket() throws UnknownHostException {
         TestPacket destruct = new TestPacket("Ceci est test");
         byte[] bytes = destruct.getBytes();
@@ -20,7 +24,7 @@ public class NetworkTest {
         Assertions.assertEquals(destruct.getMessage(), reconstruct.getMessage());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testTCPSocket() throws IOException, InterruptedException {
         Server server = new Server(25500);
         server.start();
@@ -35,7 +39,7 @@ public class NetworkTest {
         server.close();
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testUDPSocket() throws IOException, InterruptedException {
         LobbyConnection lobbyConnection = new LobbyConnection();
         int port = lobbyConnection.getPort();
@@ -46,5 +50,16 @@ public class NetworkTest {
         DatagramPacket packet1 = new DatagramPacket(testPacket1, testPacket1.length, InetAddress.getLocalHost(), port);
         socket.send(packet);
         socket.send(packet1);
+    }
+
+    @Test
+    public void testBytesConversions() {
+        int integer = new Random().nextInt(5000);
+        byte[] integerToByte = Ints.toByteArray(integer);
+        Assertions.assertEquals(integer, Ints.fromByteArray(integerToByte));
+
+        String message = "This is a spécial message with UTF-8 chars";
+        byte[] messageToBytes = message.getBytes(StandardCharsets.UTF_8);
+        Assertions.assertEquals(message, new String(message));
     }
 }
