@@ -1,11 +1,10 @@
 package fr.imt.boomeuuuuh.network.packets;
 
+import com.google.common.primitives.Ints;
 import fr.imt.boomeuuuuh.Player;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.*;
-
-import java.math.BigInteger;
 
 public enum PacketType {
 
@@ -64,7 +63,7 @@ public enum PacketType {
     INITIALIZE_LOBBY_CONNECTION {
         @Override
         public Packet make(byte[] data, Player player) {
-            return new InitializeLobbyConnectionPacket(new BigInteger(data).intValueExact(), player);
+            return new InitializeLobbyConnectionPacket(Ints.fromByteArray(data), player);
         }
     },
     SUCCESSFULLY_JOINED;
