@@ -34,14 +34,17 @@ public class LobbyManager {
         return lobbies;
     }
 
-    public static void startLobby(Player stPlayer) {
+    public static Lobby startLobby(Player stPlayer) {
+        Lobby nLobby = null;
         try {
-            Lobby nLobby = new Lobby(lobbyID, stPlayer.getName() + lobbyID, stPlayer);
+            nLobby = new Lobby(lobbyID, stPlayer.getName() + lobbyID, stPlayer);
             lobbyID++;
             lobbies.add(nLobby);
         } catch (Exception e) {
             Boomeuuuuh.logger.severe(e.toString());
         }
+        
+        return nLobby;
     }
 
     //-------------------CONNECT PLAYER--------------------
@@ -106,8 +109,7 @@ public class LobbyManager {
     }
 
     private static void endLobby(Lobby lobby) {
-        //Disconnect all players
-        lobby.disconnectAll();
+        lobby.close();
         //Remove lobby
         lobbies.removeIf(lob -> lob.getLobbyID() == lobby.getLobbyID());
     }

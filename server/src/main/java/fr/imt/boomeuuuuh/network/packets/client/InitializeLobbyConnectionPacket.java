@@ -1,6 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.client;
 
-import fr.imt.boomeuuuuh.LobbyJoiningState;
+import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
 import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;

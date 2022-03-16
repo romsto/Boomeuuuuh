@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.network.packets;
 
 import com.google.common.primitives.Ints;
+import fr.imt.boomeuuuuh.network.packets.both.ReadyPacket;
 import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
@@ -67,7 +68,34 @@ public enum PacketType {
         }
     },
     SUCCESSFULLY_JOINED,
-    LOBBY_CREDENTIALS;
+    LOBBY_CREDENTIALS,
+    ENTITY_CREATE,
+    ENTITY_DESTROY,
+    ENTITY_MOVE,
+    PLAYER_REFERENCE,
+    BOMB_PLACE,
+    BOMB_PLACED,
+    START_GAME,
+    END_GAME,
+    READY {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new ReadyPacket(player);
+        }
+    },
+    CHANGE_LOBBY_NAME {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new ChangeNamePacket(new String(data), player);
+        }
+    },
+    LAUNCH_GAME {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new LaunchGamePacket(player);
+        }
+    };
+
 
     public Packet make(byte[] data) {
 

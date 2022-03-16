@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh.lobbies;
 
+import fr.imt.boomeuuuuh.Game.GameManager;
+import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
 import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 import fr.imt.boomeuuuuh.network.packets.Packet;
@@ -16,7 +18,7 @@ import java.util.Collection;
 
 public class Lobby {
 
-    public boolean closed = false;
+    public boolean running = true;
 
     private final LobbyConnection lobbyConnection;
     private final int udpPort;
@@ -26,6 +28,9 @@ public class Lobby {
     private Player owner;
     private String name;
     private boolean open = true;
+
+    private GameManager gameManager;
+    private LobbyState state = LobbyState.WAITING;
 
     public Lobby(int lobbyID, String name, Player owner) throws SocketException {
         this.lobbyConnection = new LobbyConnection();
@@ -69,6 +74,22 @@ public class Lobby {
         return open;
     }
 
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public LobbyState getState() {
+        return state;
+    }
+
+    private Lobby getInstance() {
+        return this;
+    }
+
     //-----------------------------------------------------
     //------------------------SET--------------------------
 
@@ -78,6 +99,18 @@ public class Lobby {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public void startGame() {
+        // TODO start the game
+        open = false;
+        state = LobbyState.PLAYING;
+    }
+
+    public void stopGame() {
+        // TODO stop the game
+        open = true;
+        state = LobbyState.WAITING;
     }
 
     public void addPlayer(Player player) {
@@ -92,11 +125,24 @@ public class Lobby {
     public void removePlayer(Player player) {
         player.leaveLobby("Lobby closed"); // TODO Change reason here
         players.remove(player);
+        if (players.size() <= 0) {
+            // There is no more players. Closing lobby
+            close();
+            return;
+        }
+
+        if (owner.equals(player))
+            owner = players.stream().findAny().get(); // Change owner if the player was online
     }
 
     public void disconnectAll() {
         for (Player p : players)
             removePlayer(p);
+    }
+
+    public void close() {
+        disconnectAll();
+        running = false;
     }
 
     /**
@@ -127,18 +173,30 @@ public class Lobby {
     }
     //-----------------------------------------------------
 
-    private class LobbyThread extends Thread {
+    class LobbyExecutor extends Thread {
 
-        long lastUpdate = System.nanoTime();
+        private long lastTick = System.nanoTime();
+        private long currentTick = 0;
 
         @Override
         public void run() {
-            long diff = System.nanoTime() - lastUpdate;
+            while (running) {
+                if (System.nanoTime() - lastTick < 5e7) {
+                    if (currentTick == 20) {
+                        LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
+                        broadcastToAll(true, lobbyInfoPacket);
+                    }
 
 
-            long lastUpdate = System.nanoTime();
-            if (!closed)
-                run();
+
+                    if (currentTick >= 20)
+                        currentTick = 0;
+                    else
+                        currentTick++;
+                    lastTick = System.nanoTime();
+                }
+            }
         }
     }
+
 }

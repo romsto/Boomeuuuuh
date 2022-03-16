@@ -1,11 +1,10 @@
 package fr.imt.boomeuuuuh.players;
 
-import fr.imt.boomeuuuuh.LobbyJoiningState;
+import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.server.KickPacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyCredentialsPacket;
-import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -16,6 +15,7 @@ public class Player {
     private int id;
     private String name;
     private boolean authentified = false;
+    private boolean online = true;
 
     private Lobby lobby;
     private LobbyJoiningState joinedLobby = LobbyJoiningState.DISCONNETED;
@@ -84,9 +84,9 @@ public class Player {
     }
 
     public void disconnect() {
-        if (isInLobby()) {
-            // TODO leave lobby
-        }
+        if (isInLobby())
+            lobby.removePlayer(this);
+        online = false;
         serverConnection.close();
     }
 
