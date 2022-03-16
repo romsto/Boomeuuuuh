@@ -1,7 +1,7 @@
 package fr.imt.boomeuuuuh.network.packets;
 
 import com.google.common.primitives.Ints;
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.*;
@@ -30,7 +30,7 @@ public enum PacketType {
     JOIN_LOBBY {
         @Override
         public Packet make(byte[] data, Player player) {
-            return new JoinLobbyPacket(player);
+            return new JoinLobbyPacket(player, new String(data));
         }
     },
     LOBBY_INFO,
@@ -66,7 +66,8 @@ public enum PacketType {
             return new InitializeLobbyConnectionPacket(Ints.fromByteArray(data), player);
         }
     },
-    SUCCESSFULLY_JOINED;
+    SUCCESSFULLY_JOINED,
+    LOBBY_CREDENTIALS;
 
     public Packet make(byte[] data) {
 

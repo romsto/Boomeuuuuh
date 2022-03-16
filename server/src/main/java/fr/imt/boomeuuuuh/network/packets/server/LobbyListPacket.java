@@ -1,27 +1,24 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
 import fr.imt.boomeuuuuh.lobbies.Lobby;
+import fr.imt.boomeuuuuh.lobbies.LobbyManager;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LobbyListPacket extends Packet {
 
-    private String rawString;
+    private final String rawString;
 
     public LobbyListPacket() {
         super(PacketType.LOBBY_LIST);
 
-        List<Lobby> lobbies = new ArrayList<>(); // TODO fetch all lobbies here
         StringBuilder builder = new StringBuilder();
-
-        String separator = "";
-        for (Lobby lobby : lobbies) {
-            builder.append(separator).append(lobby.toString()); // Todo create the toString method
-            separator = "\u3052";
+        String delimiter = "";
+        for (Lobby lobby : LobbyManager.getLobbies()) {
+            builder.append(delimiter).append(lobby.getName()).append("|`").append(lobby.getPlayers().size()).append("|`").append(lobby.isOpen() ? 1 : 0);
+            delimiter = "~`|";
         }
 
         this.rawString = builder.toString();
