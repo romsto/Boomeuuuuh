@@ -1,17 +1,20 @@
 package fr.imt.boomeuuuuh.network.packets.client;
 
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.lobbies.LobbyManager;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 
 public class JoinLobbyPacket extends Packet {
 
     private final Player player;
+    private final String name;
 
-    public JoinLobbyPacket(Player player) {
+    public JoinLobbyPacket(Player player, String name) {
         super(PacketType.JOIN_LOBBY);
 
         this.player = player;
+        this.name = name;
     }
 
     @Override
@@ -22,6 +25,6 @@ public class JoinLobbyPacket extends Packet {
 
     @Override
     public void handle() {
-        // TODO
+        LobbyManager.connectPlayer(player, name);
     }
 }

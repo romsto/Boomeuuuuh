@@ -1,8 +1,11 @@
-package fr.imt.boomeuuuuh;
+package fr.imt.boomeuuuuh.players;
 
+import fr.imt.boomeuuuuh.LobbyJoiningState;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.server.KickPacket;
+import fr.imt.boomeuuuuh.network.packets.server.LobbyCredentialsPacket;
+import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -70,7 +73,7 @@ public class Player {
             leaveLobby("Already in a lobby");
         this.lobby = lobby;
         this.joinedLobby = LobbyJoiningState.WAITING_PORT;
-        // TODO send Lobby info packet
+        serverConnection.send(new LobbyCredentialsPacket(lobby.getUdpPort()));
     }
 
     public void leaveLobby(String reason) {
@@ -85,6 +88,21 @@ public class Player {
             // TODO leave lobby
         }
         serverConnection.close();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Player player = (Player) o;
+
+        return id == player.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }
 

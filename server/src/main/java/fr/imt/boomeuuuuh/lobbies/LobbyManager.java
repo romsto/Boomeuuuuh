@@ -1,11 +1,12 @@
 package fr.imt.boomeuuuuh.lobbies;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import fr.imt.boomeuuuuh.Boomeuuuuh;
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.players.Player;
 
 //Class for lobby manager
 //  -> Has reference to lobbies
@@ -25,72 +26,81 @@ public class LobbyManager {
         return lobbies.stream().filter(lobby -> lobby.getUdpPort() == port).findFirst();
     }
 
-    public static Optional<Lobby> getLobby(Player owner){
+    public static Optional<Lobby> getLobby(Player owner) {
         return lobbies.stream().filter(lobby -> lobby.getOwner().getId() == owner.getId()).findFirst();
     }
 
-    public static void startLobby(Player stPlayer){
-        try{
+    public static Collection<Lobby> getLobbies() {
+        return lobbies;
+    }
+
+    public static void startLobby(Player stPlayer) {
+        try {
             Lobby nLobby = new Lobby(lobbyID, stPlayer.getName() + lobbyID, stPlayer);
             lobbyID++;
             lobbies.add(nLobby);
-        }catch (Exception e){ Boomeuuuuh.logger.severe(e.toString()); }
+        } catch (Exception e) {
+            Boomeuuuuh.logger.severe(e.toString());
+        }
     }
 
     //-------------------CONNECT PLAYER--------------------
-    public static void connectPlayer(Player pl, String name){
+    public static void connectPlayer(Player pl, String name) {
         Optional<Lobby> l = getLobby(name);
-        if(l.isPresent())
+        if (l.isPresent())
             connectPlayer(pl, l.get());
-        else{
+        else {
             Boomeuuuuh.logger.severe("Lobby isn't registered to the manager");
         }
     }
 
-    public static void connectPlayer(Player pl, int port){
+    public static void connectPlayer(Player pl, int port) {
         Optional<Lobby> l = getLobby(port);
-        if(l.isPresent())
+        if (l.isPresent())
             connectPlayer(pl, l.get());
-        else{
+        else {
             Boomeuuuuh.logger.severe("Lobby isn't registered to the manager");
         }
     }
 
-    public static void connectPlayer(Player pl, Player owner){
+    public static void connectPlayer(Player pl, Player owner) {
         Optional<Lobby> l = getLobby(owner);
-        if(l.isPresent())
+        if (l.isPresent())
             connectPlayer(pl, l.get());
-        else{
+        else {
             Boomeuuuuh.logger.severe("Lobby isn't registered to the manager");
         }
     }
 
-    private static void connectPlayer(Player pl, Lobby targetLobby){
+    private static void connectPlayer(Player pl, Lobby targetLobby) {
         targetLobby.addPlayer(pl);
     }
+
     //-----------------------------------------------------
     //----------------------END LOBBY----------------------
     public static void endLobby(String name) {
         Optional<Lobby> l = getLobby(name);
-        if(l.isPresent())
+        if (l.isPresent())
             endLobby(l.get());
-        else{
+        else {
             Boomeuuuuh.logger.severe("Lobby isn't registered to the manager");
         }
     }
+
     public static void endLobby(int port) {
         Optional<Lobby> l = getLobby(port);
-        if(l.isPresent())
+        if (l.isPresent())
             endLobby(l.get());
-        else{
+        else {
             Boomeuuuuh.logger.severe("Lobby isn't registered to the manager");
         }
     }
+
     public static void endLobby(Player owner) {
         Optional<Lobby> l = getLobby(owner);
-        if(l.isPresent())
+        if (l.isPresent())
             endLobby(l.get());
-        else{
+        else {
             Boomeuuuuh.logger.severe("Lobby isn't registered to the manager");
         }
     }
@@ -111,7 +121,7 @@ public class LobbyManager {
         return getLobby(port).isPresent();
     }
 
-    public static boolean exists(Player owner){
+    public static boolean exists(Player owner) {
         return getLobby(owner).isPresent();
     }
 }

@@ -2,7 +2,7 @@ package fr.imt.boomeuuuuh.Game;
 
 import fr.imt.boomeuuuuh.entities.Entity;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.entities.bombs.*;
 
 import java.util.ArrayList;
