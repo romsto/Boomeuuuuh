@@ -1,24 +1,24 @@
 package fr.imt.boomeuuuuh.network;
 
-import fr.imt.boomeuuuuh.Boomeuuuuh;
-import fr.imt.boomeuuuuh.Player;
-import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 
 import java.io.IOException;
-import java.net.*;
-import java.util.Arrays;
-import java.util.List;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
 
 public class LobbyConnection extends Thread {
 
     private final DatagramSocket socket;
     private final int udpPort;
+    private final InetAddress address;
     private boolean stop = false;
 
-    public LobbyConnection() throws SocketException {
+    public LobbyConnection(InetAddress address, int port) throws SocketException {
         this.socket = new DatagramSocket();
-        this.udpPort = socket.getLocalPort();
+        this.udpPort = port;
+        this.address = address;
         this.start();
     }
 
@@ -28,10 +28,10 @@ public class LobbyConnection extends Thread {
             DatagramPacket incomingPacket = new DatagramPacket(new byte[28], 28); // TODO change buffer size to optimize
             try {
                 socket.receive(incomingPacket);
-                Packet packet = Packet.getFromBytes(incomingPacket.getData(), incomingPacket.getAddress());
+                Packet packet = Packet.getFromBytes(incomingPacket.getData());
                 packet.handle();
             } catch (IOException e) {
-                Boomeuuuuh.logger.severe("Error while reading incoming UDP packets : " + e.getMessage());
+                // TODO manage this error
             }
         }
     }
@@ -40,24 +40,25 @@ public class LobbyConnection extends Thread {
     public int getPort() {
         return udpPort;
     }
+
+    public InetAddress getAddress() {
+        return address;
+    }
     //-----------------------------------------------------
 
     /**
      * Sends one or more packets to a specific player through UDP
      *
-     * @param player  Receiver
      * @param packets Packets to send
      */
-    public void send(Player player, Packet... packets) {
-        InetAddress address = player.getAddress();
-        int updPort = player.getPort();
+    public void send(Packet... packets) {
 
         for (Packet packet : packets) {
             byte[] packed = packet.getBytes();
             try {
-                socket.send(new DatagramPacket(packed, packed.length, address, updPort));
+                socket.send(new DatagramPacket(packed, packed.length, address, udpPort));
             } catch (IOException e) {
-                Boomeuuuuh.logger.severe("Impossible to send packets to " + player.getAddress());
+                // TODO Manage this error
             }
         }
     }

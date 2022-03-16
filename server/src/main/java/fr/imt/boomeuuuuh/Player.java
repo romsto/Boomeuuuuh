@@ -15,6 +15,8 @@ public class Player {
     private boolean authentified = false;
 
     private Lobby lobby;
+    private LobbyJoiningState joinedLobby = LobbyJoiningState.DISCONNETED;
+    private int port;
 
     private final InetAddress address;
     private final Socket serverSocket;
@@ -43,20 +45,39 @@ public class Player {
         return lobby;
     }
 
+    public LobbyJoiningState getJoinedLobby() {
+        return joinedLobby;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setJoinedLobbyState(LobbyJoiningState state) {
+        this.joinedLobby = state;
+    }
+
     public boolean isInLobby() {
-        return lobby != null;
+        return lobby != null && joinedLobby != LobbyJoiningState.DISCONNETED;
     }
 
     public void joinLobby(Lobby lobby) {
         if (isInLobby())
             leaveLobby("Already in a lobby");
         this.lobby = lobby;
+        this.joinedLobby = LobbyJoiningState.WAITING_PORT;
         // TODO send Lobby info packet
     }
 
     public void leaveLobby(String reason) {
         KickPacket kickPacket = new KickPacket(reason);
         getLobby().getLobbyConnection().send(this, kickPacket);
+        lobby = null;
+        joinedLobby = LobbyJoiningState.DISCONNETED;
     }
 
     public void disconnect() {
@@ -66,3 +87,4 @@ public class Player {
         serverConnection.close();
     }
 }
+

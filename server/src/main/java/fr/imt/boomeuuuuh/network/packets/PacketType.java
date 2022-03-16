@@ -5,6 +5,8 @@ import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.*;
 
+import java.math.BigInteger;
+
 public enum PacketType {
 
     TEST {
@@ -58,7 +60,14 @@ public enum PacketType {
         public Packet make(byte[] data, Player player) {
             return new DisconnectPacket(player);
         }
-    };
+    },
+    INITIALIZE_LOBBY_CONNECTION {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new InitializeLobbyConnectionPacket(new BigInteger(data).intValueExact(), player);
+        }
+    },
+    SUCCESSFULLY_JOINED;
 
     public Packet make(byte[] data) {
 
