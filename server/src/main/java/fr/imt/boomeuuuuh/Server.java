@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh;
 
+import fr.imt.boomeuuuuh.players.Player;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;

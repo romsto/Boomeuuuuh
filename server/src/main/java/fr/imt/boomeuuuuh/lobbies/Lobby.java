@@ -1,30 +1,31 @@
 package fr.imt.boomeuuuuh.lobbies;
 
-import fr.imt.boomeuuuuh.Game.GameManager;
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
+import fr.imt.boomeuuuuh.network.packets.Packet;
 
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 //Class for a lobby
 //  -> Repertories players connected to it (and the subsequent game)
 //  -> Manages UDP communications with the players
-//  -> Manages information passed between palyers - eg. player skin that has to be relayed
+//  -> Manages information passed between players - eg. player skin that has to be relayed
 //  -> Manages Chat
 
 public class Lobby {
+
+    public boolean closed = false;
 
     private final LobbyConnection lobbyConnection;
     private final int udpPort;
     private final int lobbyID;
 
-    //Player Variables
     private final Collection<Player> players;
     private Player owner;
     private String name;
+    private boolean open = true;
 
     public Lobby(int lobbyID, String name, Player owner) throws SocketException {
         this.lobbyConnection = new LobbyConnection();
@@ -52,7 +53,9 @@ public class Lobby {
         return lobbyConnection;
     }
 
-    public int getLobbyID(){ return lobbyID; }
+    public int getLobbyID() {
+        return lobbyID;
+    }
 
     public Player getOwner() {
         return owner;
@@ -60,6 +63,10 @@ public class Lobby {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isOpen() {
+        return open;
     }
 
     //-----------------------------------------------------
@@ -75,90 +82,63 @@ public class Lobby {
 
     public void addPlayer(Player player) {
         players.add(player);
-
-        //TODO : relay info to all client lobbys (TCP)
+        player.joinLobby(this);
     }
 
-    //After connection is accepted by the lobby
-    //  player receives info that it has connected to the lobby and receives the lobby info
-    public void sendLobbyInfo(Player player){
-        //TODO : send lobby info to player (TCP)
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 
     public void removePlayer(Player player) {
+        player.leaveLobby("Lobby closed"); // TODO Change reason here
         players.remove(player);
-
-        //TODO : relay info to all client lobbys (TCP)
     }
-    //-----------------------------------------------------
-    //--------------------Relay Methods--------------------
-    //  -> Used for communication
 
-    //DISCONNECT (TCP)
-    //Relay disconnect to all players
-    public void disconnectAll(){
+    public void disconnectAll() {
         for (Player p : players)
-            disconnectPlayer(p);
+            removePlayer(p);
     }
 
-    public void disconnectPlayer(Player p){
-        p.leaveLobby("Lobby closed"); // TODO Change reason here
-        players.removeIf(pl -> pl.getId() == p.getId());
+    /**
+     * Broadcasts packet(s) to all players
+     *
+     * @param udp     Using UDP or TCP
+     * @param packets to send
+     */
+    public void broadcastToAll(boolean udp, Packet... packets) {
+        if (udp)
+            players.forEach(p -> lobbyConnection.send(p, packets));
+        else
+            players.forEach(p -> p.serverConnection.send(packets));
     }
 
-    //CHAT (TCP)
-    //Relay chat from a player to all others
-    public void relayChat(List<String> chat, Player origin){
-        for (Player p:players) {
-            if (p != origin)
-                relayChat(chat, origin, p);
-        }
+    /**
+     * Broadcasts packet(s) to all players except one
+     *
+     * @param udp     Using UDP or TCP
+     * @param player  not to send the packet(s)
+     * @param packets to send
+     */
+    public void broadcastExcept(boolean udp, Player player, Packet... packets) {
+        if (udp)
+            players.stream().filter(p -> !player.equals(p)).forEach(p -> lobbyConnection.send(p, packets));
+        else
+            players.stream().filter(p -> !player.equals(p)).forEach(p -> p.serverConnection.send(packets));
     }
-    //Relay chat from a player to another
-    public void relayChat(List<String> chat, Player origin, Player target){
-        //TODO : do chat relay through players
-    }
-
-    //PLAYER INFO (TCP)
-    //Relay player specific info to all other players (player skin, name, stats)
-    public void relayPlayerInfo(Player origin){
-        for (Player p:players) {
-            if (p != origin)
-                relayPlayerInfo(origin, p);
-        }
-    }
-    //Relay player specific info to a target player
-    public void relayPlayerInfo(Player origin, Player target){
-        //TODO : Relay info through player
-    }
-
-    //PLAYER POSITIONS (TCP)
-    //Send position of all players
-    public void relayTCPPositions(List<PlayerPos> pos, Player target){
-        //TODO : Relay packet through player
-    }
-    //PLAYER POSITIONS (UDP)
-    //Send position updates to all players
-    public void relayUpdatedPositions(List<PlayerPos> pos){
-        for (Player p:players) {
-            relayUpdatedPositions(pos, p);
-        }
-    }
-    //Send position updates to one player
-    public void relayUpdatedPositions(List<PlayerPos> pos, Player target){
-        //TODO : Send packet through TCP
-    }
-
-    //BOMBS (TCP)
-    //  EXPLODE
-    public void sendExplosion(){}
-    //  PLACE
-    public void relayPlaceBomb(){}
     //-----------------------------------------------------
-}
 
-class PlayerPos{ //TODO : Convert this shit to packets
-    public Player player;
-    public int posx;
-    public int posy;
+    private class LobbyThread extends Thread {
+
+        long lastUpdate = System.nanoTime();
+
+        @Override
+        public void run() {
+            long diff = System.nanoTime() - lastUpdate;
+
+
+            long lastUpdate = System.nanoTime();
+            if (!closed)
+                run();
+        }
+    }
 }

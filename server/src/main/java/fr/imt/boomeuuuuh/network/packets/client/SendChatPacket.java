@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.network.packets.client;
 
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.network.packets.server.ReceiveChatPacket;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 
@@ -24,6 +25,9 @@ public class SendChatPacket extends Packet {
 
     @Override
     public void handle() {
-        // TODO send to lobby then broadcast to everyone
+        if (!player.isInLobby())
+            return;
+
+        player.getLobby().broadcastToAll(false, new ReceiveChatPacket(player.getName() + " : " + message));
     }
 }

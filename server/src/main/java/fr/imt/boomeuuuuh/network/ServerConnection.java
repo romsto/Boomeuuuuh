@@ -1,7 +1,7 @@
 package fr.imt.boomeuuuuh.network;
 
 import fr.imt.boomeuuuuh.Boomeuuuuh;
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 

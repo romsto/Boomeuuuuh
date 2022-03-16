@@ -1,6 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets;
 
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.Server;
 
 import java.net.InetAddress;

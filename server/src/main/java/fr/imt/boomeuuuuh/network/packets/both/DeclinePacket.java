@@ -1,6 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.both;
 
-import fr.imt.boomeuuuuh.Player;
+import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 
