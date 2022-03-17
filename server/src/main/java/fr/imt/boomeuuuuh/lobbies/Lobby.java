@@ -40,8 +40,6 @@ public class Lobby {
         this.players = new ArrayList<>();
         this.owner = owner;
         this.name = name;
-
-        addPlayer(owner);
     }
 
     //-------------------------GET-------------------------
@@ -123,7 +121,6 @@ public class Lobby {
     }
 
     public void removePlayer(Player player) {
-        player.leaveLobby("Lobby closed"); // TODO Change reason here
         players.remove(player);
         if (players.size() <= 0) {
             // There is no more players. Closing lobby
@@ -142,6 +139,7 @@ public class Lobby {
 
     public void close() {
         disconnectAll();
+        lobbyConnection.close();
         running = false;
     }
 
@@ -153,7 +151,7 @@ public class Lobby {
      */
     public void broadcastToAll(boolean udp, Packet... packets) {
         if (udp)
-            players.forEach(p -> lobbyConnection.send(p, packets));
+            players.stream().filter(p -> p.getJoinedLobbyState() == LobbyJoiningState.CONNECTED).forEach(p -> lobbyConnection.send(p, packets));
         else
             players.forEach(p -> p.serverConnection.send(packets));
     }
@@ -167,7 +165,7 @@ public class Lobby {
      */
     public void broadcastExcept(boolean udp, Player player, Packet... packets) {
         if (udp)
-            players.stream().filter(p -> !player.equals(p)).forEach(p -> lobbyConnection.send(p, packets));
+            players.stream().filter(p -> p.getJoinedLobbyState() == LobbyJoiningState.CONNECTED).filter(p -> !player.equals(p)).forEach(p -> lobbyConnection.send(p, packets));
         else
             players.stream().filter(p -> !player.equals(p)).forEach(p -> p.serverConnection.send(packets));
     }

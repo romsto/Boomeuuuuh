@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
-import fr.imt.boomeuuuuh.entities.BombeStandard;
 
 public class Boomeuuuuh extends ApplicationAdapter {
 	public static SpriteBatch batch;

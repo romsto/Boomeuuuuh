@@ -54,7 +54,7 @@ public class LobbyConnection extends Thread {
             try {
                 socket.send(new DatagramPacket(packed, packed.length, address, updPort));
             } catch (IOException e) {
-                Boomeuuuuh.logger.severe("Impossible to send packets to " + player.getAddress());
+                Boomeuuuuh.logger.severe("Impossible to send packets through UDP to " + player.getAddress());
             }
         }
     }

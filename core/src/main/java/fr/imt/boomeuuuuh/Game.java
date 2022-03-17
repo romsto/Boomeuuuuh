@@ -18,8 +18,8 @@ public class Game {
 
     }
     public void draw(SpriteBatch batch, float temps){
-        for(int i=0;i<entities.size();i++){
-            entities.get(i).draw(batch, temps);
+        for (Entity entity : entities) {
+            entity.draw(batch, temps);
         }
     }
 }

@@ -10,13 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.entities.BombeStandard;
-
-import java.nio.charset.StandardCharsets;
 
 public class MainMenuScreen implements Screen{
 

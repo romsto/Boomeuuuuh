@@ -2,7 +2,6 @@ package fr.imt.boomeuuuuh.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.MyGame;
 
 public class DesktopLauncher {

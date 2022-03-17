@@ -48,7 +48,7 @@ public class Player {
         return lobby;
     }
 
-    public LobbyJoiningState getJoinedLobby() {
+    public LobbyJoiningState getJoinedLobbyState() {
         return joinedLobby;
     }
 
@@ -69,8 +69,9 @@ public class Player {
     }
 
     public void joinLobby(Lobby lobby) {
-        if (isInLobby())
+        if (isInLobby()) {
             leaveLobby("Already in a lobby");
+        }
         this.lobby = lobby;
         this.joinedLobby = LobbyJoiningState.WAITING_PORT;
         serverConnection.send(new LobbyCredentialsPacket(lobby.getUdpPort()));
@@ -79,6 +80,7 @@ public class Player {
     public void leaveLobby(String reason) {
         KickPacket kickPacket = new KickPacket(reason);
         getLobby().getLobbyConnection().send(this, kickPacket);
+        lobby.removePlayer(this);
         lobby = null;
         joinedLobby = LobbyJoiningState.DISCONNETED;
     }

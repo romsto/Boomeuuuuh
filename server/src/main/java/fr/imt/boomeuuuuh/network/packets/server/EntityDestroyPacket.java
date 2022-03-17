@@ -3,7 +3,6 @@ package fr.imt.boomeuuuuh.network.packets.server;
 import com.google.common.primitives.Ints;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
-import fr.imt.boomeuuuuh.players.Location;
 
 import java.io.ByteArrayOutputStream;
 

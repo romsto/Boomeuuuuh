@@ -1,11 +1,9 @@
 package fr.imt.boomeuuuuh.entities.bombs;
 
 import fr.imt.boomeuuuuh.entities.Entity;
-import fr.imt.boomeuuuuh.entities.SoftBlock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class ExplosionShape {
     //Explosion geometry

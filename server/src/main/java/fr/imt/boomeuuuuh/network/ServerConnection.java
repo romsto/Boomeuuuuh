@@ -13,15 +13,15 @@ public class ServerConnection extends Thread {
 
     private final Player player;
     private final Socket serverSocket;
-    private final BufferedReader reader;
-    private final PrintStream writer;
+    private final DataInputStream reader;
+    private final DataOutputStream writer;
     private boolean stop = false;
 
     public ServerConnection(Player player, Socket serverSocket) throws IOException {
         this.player = player;
         this.serverSocket = serverSocket;
-        this.reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-        this.writer = new PrintStream(serverSocket.getOutputStream());
+        this.reader = new DataInputStream(serverSocket.getInputStream());
+        this.writer = new DataOutputStream(serverSocket.getOutputStream());
         this.start();
     }
 
@@ -29,22 +29,22 @@ public class ServerConnection extends Thread {
     public void run() {
         while (!stop) {
             try {
-                String line = reader.readLine();
-                if (line == null) {
+                int length = reader.readInt();
+                if (length <= 0) {
                     // Close connection
                     Boomeuuuuh.logger.info((player.getName() == null ? player.getAddress().toString() : player.getName()) + " left.");
                     Server.removePlayer(player);
                     break;
                 }
-
-                byte[] incomingBytes = line.getBytes();
+                byte[] incomingBytes = new byte[length];
+                reader.readFully(incomingBytes);
                 Packet packet = Packet.getFromBytes(incomingBytes, player);
                 packet.handle();
             } catch (IOException e) {
                 if (e instanceof SocketTimeoutException)
                     Boomeuuuuh.logger.info((player.getName() == null ? player.getAddress().toString() : player.getName()) + " timed out...");
                 else
-                    Boomeuuuuh.logger.severe("Error while reading incoming packets of " + player.getAddress() + " : " + e.getMessage());
+                    Boomeuuuuh.logger.info((player.getName() == null ? player.getAddress().toString() : player.getName()) + " left.");
                 Server.removePlayer(player);
                 break;
             }
@@ -58,7 +58,14 @@ public class ServerConnection extends Thread {
      */
     public void send(Packet... packets) {
         for (Packet packet : packets) {
-            writer.println(new String(packet.getBytes()));
+            try {
+                byte[] bytes = packet.getBytes();
+                writer.writeInt(bytes.length);
+                writer.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO Manage error
+            }
         }
     }
 

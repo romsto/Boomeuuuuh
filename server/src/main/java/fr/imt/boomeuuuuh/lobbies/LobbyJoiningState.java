@@ -4,5 +4,5 @@ public enum LobbyJoiningState {
 
     DISCONNETED,
     WAITING_PORT,
-    CONNECTED;
+    CONNECTED
 }
