@@ -7,18 +7,20 @@ import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.*;
 
+import java.nio.charset.StandardCharsets;
+
 public enum PacketType {
 
     TEST {
         @Override
         public Packet make(byte[] data) {
-            return new TestPacket(new String(data));
+            return new TestPacket(new String(data, StandardCharsets.UTF_8));
         }
     },
     DECLINE {
         @Override
         public Packet make(byte[] data, Player player) {
-            return new DeclinePacket(new String(data), player);
+            return new DeclinePacket(new String(data, StandardCharsets.UTF_8), player);
         }
     },
     LOBBY_LIST,
@@ -38,7 +40,7 @@ public enum PacketType {
     SEND_CHAT {
         @Override
         public Packet make(byte[] data, Player player) {
-            return new SendChatPacket(new String(data), player);
+            return new SendChatPacket(new String(data, StandardCharsets.UTF_8), player);
         }
     },
     RECEIVE_CHAT,

@@ -60,6 +60,6 @@ public class NetworkTest {
 
         String message = "This is a spécial message with UTF-8 chars";
         byte[] messageToBytes = message.getBytes(StandardCharsets.UTF_8);
-        Assertions.assertEquals(message, new String(messageToBytes));
+        Assertions.assertEquals(message, new String(messageToBytes, StandardCharsets.UTF_8));
     }
 }
