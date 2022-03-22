@@ -5,7 +5,7 @@ import fr.imt.boomeuuuuh.Server;
 
 import java.net.InetAddress;
 
-public abstract class Packet {
+public abstract class   Packet {
 
     private final PacketType packetType;
 
