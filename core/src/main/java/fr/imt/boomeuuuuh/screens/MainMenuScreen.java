@@ -40,7 +40,7 @@ public class MainMenuScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
         //create buttons
-        TextButton newGame = new TextButton("New Game", skin);
+        TextButton newGame = new TextButton("Play", skin);
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
 
@@ -64,7 +64,7 @@ public class MainMenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.PLAY);
+                game.changeScreen(ScreenType.LOG_IN);
             }
         });
 
