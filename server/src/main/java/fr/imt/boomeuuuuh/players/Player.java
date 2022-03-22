@@ -1,10 +1,11 @@
 package fr.imt.boomeuuuuh.players;
 
-import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
+import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.server.KickPacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyCredentialsPacket;
+import fr.imt.boomeuuuuh.network.packets.server.PlayerDataPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -14,7 +15,7 @@ public class Player {
 
     private int id;
     private String name;
-    private boolean authentified = false;
+    private final boolean authentified = false;
     private boolean online = true;
 
     private Lobby lobby;
@@ -50,6 +51,17 @@ public class Player {
 
     public LobbyJoiningState getJoinedLobbyState() {
         return joinedLobby;
+    }
+
+    public boolean isAuthentified() {
+        return authentified;
+    }
+
+    public boolean authenticate(String username, String password) {
+        // TODO MANAGE THE AUTHENTICATION
+
+        this.serverConnection.send(new PlayerDataPacket(this));
+        return true;
     }
 
     public int getPort() {

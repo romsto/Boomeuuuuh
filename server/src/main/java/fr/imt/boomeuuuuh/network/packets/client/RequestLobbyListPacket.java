@@ -1,9 +1,10 @@
 package fr.imt.boomeuuuuh.network.packets.client;
 
-import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyListPacket;
+import fr.imt.boomeuuuuh.players.Player;
 
 public class RequestLobbyListPacket extends Packet {
 
@@ -23,6 +24,12 @@ public class RequestLobbyListPacket extends Packet {
 
     @Override
     public void handle() {
+        if (!player.isAuthentified()) {
+            DeclinePacket declinePacket = new DeclinePacket("You're not authenticated.");
+            player.serverConnection.send(declinePacket);
+            return;
+        }
+
         player.serverConnection.send(new LobbyListPacket());
     }
 }

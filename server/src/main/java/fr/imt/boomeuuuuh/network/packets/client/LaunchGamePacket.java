@@ -23,6 +23,12 @@ public class LaunchGamePacket extends Packet {
 
     @Override
     public void handle() {
+        if (!player.isAuthentified()) {
+            DeclinePacket declinePacket = new DeclinePacket("You're not authenticated.");
+            player.serverConnection.send(declinePacket);
+            return;
+        }
+
         if (!player.isInLobby())
             return;
 

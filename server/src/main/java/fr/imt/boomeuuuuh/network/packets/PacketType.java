@@ -1,11 +1,11 @@
 package fr.imt.boomeuuuuh.network.packets;
 
 import com.google.common.primitives.Ints;
-import fr.imt.boomeuuuuh.network.packets.both.ReadyPacket;
-import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
+import fr.imt.boomeuuuuh.network.packets.both.ReadyPacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.*;
+import fr.imt.boomeuuuuh.players.Player;
 
 import java.nio.charset.StandardCharsets;
 
@@ -96,7 +96,25 @@ public enum PacketType {
         public Packet make(byte[] data, Player player) {
             return new LaunchGamePacket(player);
         }
-    };
+    },
+    PLAYER_INFO,
+    LOGIN {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            String str = new String(data, StandardCharsets.UTF_8);
+            String[] split = str.split("¤µ¤");
+            return new LogInPacket(player, split[0], split[1]);
+        }
+    },
+    CREATE_ACCOUNT {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            String str = new String(data, StandardCharsets.UTF_8);
+            String[] split = str.split("¤µ¤");
+            return new CreateAccountPacket(player, split[0], split[1]);
+        }
+    },
+    PLAYER_DATA;
 
 
     public Packet make(byte[] data) {
