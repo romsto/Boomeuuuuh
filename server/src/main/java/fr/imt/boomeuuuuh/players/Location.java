@@ -24,6 +24,10 @@ public class Location {
         return y;
     }
 
+    public boolean comprisedInExcludingBorder(int minx, int maxx, int miny, int maxy){
+        return (minx < x && x < maxx && miny < y && y < maxy);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

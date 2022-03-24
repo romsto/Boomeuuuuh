@@ -157,6 +157,22 @@ public class Lobby {
     }
 
     /**
+     * Broadcasts packet(s) to all players except the one specified
+     *
+     * @param udp     Using UDP or TCP
+     * @param omit    Player to omit
+     * @param packets to send
+     */
+    public void broadcastToAllExcept(boolean udp, Player omit, Packet... packets) {
+        if (udp)
+            players.stream().filter(p -> p.getJoinedLobbyState() == LobbyJoiningState.CONNECTED && p != omit).forEach(p -> lobbyConnection.send(p, packets));
+        else
+            for (Player p : players)
+                if(p != omit)
+                    p.serverConnection.send(packets);
+    }
+
+    /**
      * Broadcasts packet(s) to all players except one
      *
      * @param udp     Using UDP or TCP
@@ -169,6 +185,7 @@ public class Lobby {
         else
             players.stream().filter(p -> !player.equals(p)).forEach(p -> p.serverConnection.send(packets));
     }
+
     //-----------------------------------------------------
 
     class LobbyExecutor extends Thread {

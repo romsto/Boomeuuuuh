@@ -1,12 +1,15 @@
 package fr.imt.boomeuuuuh.entities;
 
+import fr.imt.boomeuuuuh.network.LobbyConnection;
+import fr.imt.boomeuuuuh.players.Location;
+
 public class Entity {
     //State Variables
     private final int id;
     private boolean isObstacle = false;
 
     //Dynamic Variables
-    protected int x,y;
+    protected Location pos;
 
     public Entity(int id) {
         this.id = id;
@@ -16,12 +19,14 @@ public class Entity {
     public boolean isObstacle() { return isObstacle; }
     public boolean isMovable() { return false; }
 
-    public int getX(){ return x; }
-    public int getY(){ return y; }
+    public Location getPos(){ return pos; }
+    public int getX(){ return pos.getX(); }
+    public int getY(){ return pos.getY(); }
 
     public int getId() { return id; }
     //-----------------------------------------------------
     //------------------------SET--------------------------
     public void isObstacle(boolean isObstacle){ this.isObstacle = isObstacle; }
+    public void setPos(Location pos){ this.pos = pos; }
     //-----------------------------------------------------
 }
