@@ -2,7 +2,9 @@ package fr.imt.boomeuuuuh.entities.bombs;
 
 import fr.imt.boomeuuuuh.entities.DynamicEntity;
 import fr.imt.boomeuuuuh.entities.Entity;
+import fr.imt.boomeuuuuh.entities.PlayerEntity;
 import fr.imt.boomeuuuuh.entities.SoftBlock;
+import fr.imt.boomeuuuuh.players.Player;
 
 import java.util.List;
 
@@ -18,7 +20,9 @@ public class Bomb extends DynamicEntity {
     //Explosion
     private final ExplosionShape expShape;
 
-    public Bomb(int id) {
+    private final Player parentPlayer;
+
+    public Bomb(int id, Player parentPlayer) {
         super(id);
 
         //SetTime
@@ -26,21 +30,25 @@ public class Bomb extends DynamicEntity {
 
         //Create explosion shape
         expShape = new ExplosionShape(power, power, power, power);
+
+        //SetPlayer
+        this.parentPlayer = parentPlayer;
     }
 
-    public void checkExplosion(List<Entity> entityList, int[][] baseMap){
+    public void checkExplosion(List<Entity> entityList, int mapHeight, int mapWidth){
         if (!(endTime < System.currentTimeMillis()))
-            Explode(entityList, baseMap);
+            Explode(entityList, mapHeight, mapWidth);
     }
-    public void forceExplode(List<Entity> entityList, int[][] baseMap){ Explode(entityList, baseMap); }
+    public void forceExplode(List<Entity> entityList, int mapHeight, int mapWidth){ Explode(entityList, mapHeight, mapWidth); }
 
-    private void Explode(List<Entity> entityList, int[][] baseMap){
-        for (Entity e : expShape.calcExplosion(entityList, baseMap, x, y)){
-            //TODO : Do all cases
+    private void Explode(List<Entity> entityList, int mapHeight, int mapWidth){
+        for (Entity e : expShape.calcExplosion(entityList, mapHeight, mapWidth, x, y)){
             if (e instanceof Bomb)
-                ((Bomb) e).forceExplode(entityList, baseMap);
+                ((Bomb) e).forceExplode(entityList, mapHeight, mapWidth);
             if (e instanceof SoftBlock)
                 ((SoftBlock) e).destroy();
+            if (e instanceof PlayerEntity)
+                ((PlayerEntity) e).Kill();
         }
     }
 

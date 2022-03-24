@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.players;
 
+import fr.imt.boomeuuuuh.entities.PlayerEntity;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
 import fr.imt.boomeuuuuh.network.ServerConnection;
@@ -118,5 +119,13 @@ public class Player {
     public int hashCode() {
         return id;
     }
+
+    //-------------------------GAME------------------------
+    PlayerEntity myEntity;
+    boolean inGame;
+
+    public void setEntity(PlayerEntity e){ myEntity = e;}
+    public PlayerEntity getEntity(){return myEntity;}
+    //-----------------------------------------------------
 }
 
