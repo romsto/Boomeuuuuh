@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.entities;
 
+import fr.imt.boomeuuuuh.Game.GameManager;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 import fr.imt.boomeuuuuh.players.Location;
 
@@ -28,5 +29,7 @@ public class Entity {
     //------------------------SET--------------------------
     public void isObstacle(boolean isObstacle){ this.isObstacle = isObstacle; }
     public void setPos(Location pos){ this.pos = pos; }
+    //-----------------------------------------------------
+    //--------------------BASIC METHODS--------------------
     //-----------------------------------------------------
 }

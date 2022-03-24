@@ -8,6 +8,7 @@ import fr.imt.boomeuuuuh.network.packets.Packet;
 
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 //Class for a lobby
@@ -157,19 +158,17 @@ public class Lobby {
     }
 
     /**
-     * Broadcasts packet(s) to all players except the one specified
+     * Broadcasts packet to players specified
      *
      * @param udp     Using UDP or TCP
-     * @param omit    Player to omit
-     * @param packets to send
+     * @param packet to send
+     * @param playersT players targeted by broadcast
      */
-    public void broadcastToAllExcept(boolean udp, Player omit, Packet... packets) {
+    public void broadcastTo(boolean udp, Packet packet, Player... playersT) {
         if (udp)
-            players.stream().filter(p -> p.getJoinedLobbyState() == LobbyJoiningState.CONNECTED && p != omit).forEach(p -> lobbyConnection.send(p, packets));
+            Arrays.stream(playersT).filter(p -> p.getJoinedLobbyState() == LobbyJoiningState.CONNECTED).forEach(p -> lobbyConnection.send(p, packet));
         else
-            for (Player p : players)
-                if(p != omit)
-                    p.serverConnection.send(packets);
+            Arrays.stream(playersT).forEach(p -> p.serverConnection.send(packet));
     }
 
     /**

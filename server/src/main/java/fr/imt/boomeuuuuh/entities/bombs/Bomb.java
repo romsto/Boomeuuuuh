@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.entities.bombs;
 
+import fr.imt.boomeuuuuh.Game.GameManager;
 import fr.imt.boomeuuuuh.entities.*;
 import fr.imt.boomeuuuuh.players.Player;
 
@@ -36,20 +37,18 @@ public class Bomb extends DynamicEntity {
     public int getPower() { return power; }
     //-----------------------------------------------------
 
-    public void checkExplosion(List<Entity> entityList, int mapHeight, int mapWidth){
+    public void checkExplosion(List<Entity> entityList, GameManager manager){
         if (!(endTime < System.currentTimeMillis()))
-            Explode(entityList, mapHeight, mapWidth);
+            Explode(entityList, manager);
     }
-    public void forceExplode(List<Entity> entityList, int mapHeight, int mapWidth){ Explode(entityList, mapHeight, mapWidth); }
+    public void forceExplode(List<Entity> entityList, GameManager manager){ Explode(entityList, manager); }
 
-    private void Explode(List<Entity> entityList, int mapHeight, int mapWidth){
-        for (Entity e : expShape.calcExplosion(entityList, mapHeight, mapWidth, pos.getX(), pos.getY())){
+    private void Explode(List<Entity> entityList, GameManager manager){
+        for (Entity e : expShape.calcExplosion(entityList, manager.getMapHeight(), manager.getMapWidth(), pos.getX(), pos.getY())){
             if (e instanceof Bomb)
-                ((Bomb) e).forceExplode(entityList, mapHeight, mapWidth);
-            if (e instanceof SoftBlock)
-                ((SoftBlock) e).destroy();
-            if (e instanceof PowerUp)
-                ((PowerUp) e).destroy();
+                ((Bomb) e).forceExplode(entityList, manager);
+            if (e instanceof SoftBlock || e instanceof PowerUp)
+                manager.destroyEntity(e);
             if (e instanceof PlayerEntity)
                 ((PlayerEntity) e).Kill();
         }
