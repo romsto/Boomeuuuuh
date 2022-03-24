@@ -3,8 +3,11 @@ package fr.imt.boomeuuuuh;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import fr.imt.boomeuuuuh.network.ServerConnection;
+import fr.imt.boomeuuuuh.network.packets.client.LogInPacket;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +24,14 @@ public class MyGame extends Game {
         batch = new SpriteBatch();
 
         changeScreen(ScreenType.MAIN_MENU);
+
+        try {
+            ServerConnection connection = new ServerConnection("localhost:301");
+            connection.send(new LogInPacket("test", "tes3"));
+            connection.send(new LogInPacket("test", "test"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
