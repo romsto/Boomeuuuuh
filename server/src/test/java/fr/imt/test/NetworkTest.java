@@ -40,7 +40,7 @@ public class NetworkTest {
     }
 
     @Test
-    public void testUDPSocket() throws IOException, InterruptedException {
+    public void testUDPSocket() throws IOException {
         LobbyConnection lobbyConnection = new LobbyConnection();
         int port = lobbyConnection.getPort();
         DatagramSocket socket = new DatagramSocket();
@@ -60,6 +60,6 @@ public class NetworkTest {
 
         String message = "This is a spécial message with UTF-8 chars";
         byte[] messageToBytes = message.getBytes(StandardCharsets.UTF_8);
-        Assertions.assertEquals(message, new String(message));
+        Assertions.assertEquals(message, new String(messageToBytes, StandardCharsets.UTF_8));
     }
 }

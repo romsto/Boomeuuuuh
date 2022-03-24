@@ -6,16 +6,16 @@ import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.players.Player;
 
-public class JoinLobbyPacket extends Packet {
+public class ChangeNamePacket extends Packet {
 
     private final Player player;
     private final String name;
 
-    public JoinLobbyPacket(Player player, String name) {
-        super(PacketType.JOIN_LOBBY);
+    public ChangeNamePacket(String name, Player player) {
+        super(PacketType.CHANGE_LOBBY_NAME);
 
-        this.player = player;
         this.name = name;
+        this.player = player;
     }
 
     @Override
@@ -26,12 +26,19 @@ public class JoinLobbyPacket extends Packet {
 
     @Override
     public void handle() {
-        if (!player.isAuthentified()) {
-            DeclinePacket declinePacket = new DeclinePacket("You're not authenticated.");
-            player.serverConnection.send(declinePacket);
+        if (!player.isInLobby())
+            return;
+
+        if (!player.getLobby().getOwner().equals(player)) {
+            player.serverConnection.send(new DeclinePacket("You're not owner of the lobby."));
             return;
         }
 
-        LobbyManager.connectPlayer(player, name);
+        if (LobbyManager.exists(name)) {
+            player.serverConnection.send(new DeclinePacket("You're not owner of the lobby."));
+            return;
+        }
+
+        player.getLobby().setName(name);
     }
 }

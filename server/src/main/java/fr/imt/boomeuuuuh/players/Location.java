@@ -1,7 +1,5 @@
 package fr.imt.boomeuuuuh.players;
 
-import com.google.common.primitives.Ints;
-
 public class Location {
 
     final int x, y;

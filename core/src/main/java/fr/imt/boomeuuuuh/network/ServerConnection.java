@@ -2,10 +2,7 @@ package fr.imt.boomeuuuuh.network;
 
 import fr.imt.boomeuuuuh.network.packets.Packet;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -13,15 +10,15 @@ import java.net.SocketTimeoutException;
 public class ServerConnection extends Thread {
 
     private final Socket serverSocket;
-    private final BufferedReader reader;
-    private final PrintStream writer;
+    private final DataInputStream reader;
+    private final DataOutputStream writer;
     private boolean stop = false;
 
     public ServerConnection(String ipAddress) throws IOException {
         String[] address = ipAddress.split(":");
         this.serverSocket = new Socket(InetAddress.getByName(address[0]), Integer.parseInt(address[1]));
-        this.reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-        this.writer = new PrintStream(serverSocket.getOutputStream());
+        this.reader = new DataInputStream(serverSocket.getInputStream());
+        this.writer = new DataOutputStream(serverSocket.getOutputStream());
         this.start();
     }
 
@@ -29,14 +26,14 @@ public class ServerConnection extends Thread {
     public void run() {
         while (!stop) {
             try {
-                String line = reader.readLine();
-                if (line == null) {
+                int length = reader.readInt();
+                if (length <= 0) {
                     // TODO close connection
                     close();
                     break;
                 }
-
-                byte[] incomingBytes = line.getBytes();
+                byte[] incomingBytes = new byte[length];
+                reader.readFully(incomingBytes);
                 Packet packet = Packet.getFromBytes(incomingBytes);
                 packet.handle();
             } catch (IOException e) {
@@ -57,7 +54,14 @@ public class ServerConnection extends Thread {
      */
     public void send(Packet... packets) {
         for (Packet packet : packets) {
-            writer.println(new String(packet.getBytes()));
+            try {
+                byte[] bytes = packet.getBytes();
+                writer.writeInt(bytes.length);
+                writer.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO Manage exception
+            }
         }
     }
 

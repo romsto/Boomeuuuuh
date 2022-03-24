@@ -1,11 +1,11 @@
 package fr.imt.boomeuuuuh.players;
 
-import fr.imt.boomeuuuuh.LobbyJoiningState;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
+import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.server.KickPacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyCredentialsPacket;
-import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
+import fr.imt.boomeuuuuh.network.packets.server.PlayerDataPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -15,7 +15,8 @@ public class Player {
 
     private int id;
     private String name;
-    private boolean authentified = false;
+    private final boolean authentified = false;
+    private boolean online = true;
 
     private Lobby lobby;
     private LobbyJoiningState joinedLobby = LobbyJoiningState.DISCONNETED;
@@ -48,8 +49,19 @@ public class Player {
         return lobby;
     }
 
-    public LobbyJoiningState getJoinedLobby() {
+    public LobbyJoiningState getJoinedLobbyState() {
         return joinedLobby;
+    }
+
+    public boolean isAuthentified() {
+        return authentified;
+    }
+
+    public boolean authenticate(String username, String password) {
+        // TODO MANAGE THE AUTHENTICATION
+
+        this.serverConnection.send(new PlayerDataPacket(this));
+        return true;
     }
 
     public int getPort() {
@@ -69,8 +81,9 @@ public class Player {
     }
 
     public void joinLobby(Lobby lobby) {
-        if (isInLobby())
+        if (isInLobby()) {
             leaveLobby("Already in a lobby");
+        }
         this.lobby = lobby;
         this.joinedLobby = LobbyJoiningState.WAITING_PORT;
         serverConnection.send(new LobbyCredentialsPacket(lobby.getUdpPort()));
@@ -79,14 +92,15 @@ public class Player {
     public void leaveLobby(String reason) {
         KickPacket kickPacket = new KickPacket(reason);
         getLobby().getLobbyConnection().send(this, kickPacket);
+        lobby.removePlayer(this);
         lobby = null;
         joinedLobby = LobbyJoiningState.DISCONNETED;
     }
 
     public void disconnect() {
-        if (isInLobby()) {
-            // TODO leave lobby
-        }
+        if (isInLobby())
+            lobby.removePlayer(this);
+        online = false;
         serverConnection.close();
     }
 

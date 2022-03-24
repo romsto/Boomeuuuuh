@@ -6,7 +6,7 @@ public class Entity {
     private boolean isObstacle = false;
 
     //Dynamic Variables
-    private float x,y;
+    protected int x,y;
 
     public Entity(int id) {
         this.id = id;
@@ -15,6 +15,9 @@ public class Entity {
     //-------------------------GET-------------------------
     public boolean isObstacle() { return isObstacle; }
     public boolean isMovable() { return false; }
+
+    public int getX(){ return x; }
+    public int getY(){ return y; }
 
     public int getId() { return id; }
     //-----------------------------------------------------

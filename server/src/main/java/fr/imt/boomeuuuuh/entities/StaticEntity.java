@@ -5,5 +5,4 @@ public class StaticEntity extends Entity {
     public StaticEntity(int id) {
         super(id);
     }
-    
 }

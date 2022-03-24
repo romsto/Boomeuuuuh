@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
 
 public class Boomeuuuuh extends ApplicationAdapter {
-	SpriteBatch batch;
-	private  float   temps;
+	public static SpriteBatch batch;
+	public   static float   temps;
 
 	@Override
 	public void create () {
@@ -18,7 +18,7 @@ public class Boomeuuuuh extends ApplicationAdapter {
 	@Override
 	public void render () {
 		temps += Gdx.graphics.getDeltaTime();
-		ScreenUtils.clear(1, 0, 0, 1);
+		ScreenUtils.clear(0, 0, 1, 1);
 		batch.begin();
 		//Game.draw(batch,temps);//
 		batch.end();

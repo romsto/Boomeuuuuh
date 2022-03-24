@@ -5,7 +5,7 @@ import fr.imt.boomeuuuuh.MyGame;
 public class LoadingScreen implements Screen {
 
 
-    private MyGame game; // Note it's "MyGame" not "Game"
+    private final MyGame game; // Note it's "MyGame" not "Game"
 
     // constructor to keep a reference to the main Game class
     public LoadingScreen(MyGame game){
@@ -14,7 +14,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        game.changeScreen(MyGame.MAINMENU);
+        game.changeScreen(ScreenType.MAIN_MENU);
     }
 
     @Override

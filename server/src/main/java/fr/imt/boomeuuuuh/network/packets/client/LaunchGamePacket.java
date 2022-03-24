@@ -3,18 +3,15 @@ package fr.imt.boomeuuuuh.network.packets.client;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
-import fr.imt.boomeuuuuh.network.packets.server.ReceiveChatPacket;
 import fr.imt.boomeuuuuh.players.Player;
 
-public class SendChatPacket extends Packet {
+public class LaunchGamePacket extends Packet {
 
     private final Player player;
-    private final String message;
 
-    public SendChatPacket(String message, Player player) {
-        super(PacketType.SEND_CHAT);
+    public LaunchGamePacket(Player player) {
+        super(PacketType.LAUNCH_GAME);
 
-        this.message = message;
         this.player = player;
     }
 
@@ -35,6 +32,11 @@ public class SendChatPacket extends Packet {
         if (!player.isInLobby())
             return;
 
-        player.getLobby().broadcastToAll(false, new ReceiveChatPacket(player.getName() + " : " + message));
+        if (!player.getLobby().getOwner().equals(player)) {
+            player.serverConnection.send(new DeclinePacket("You're not owner of the lobby."));
+            return;
+        }
+
+        // TODO tries to launch the game
     }
 }

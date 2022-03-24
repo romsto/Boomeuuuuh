@@ -3,29 +3,21 @@ package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 
-public class MainMenuScreen implements Screen {
+public class LoginScreen implements Screen {
 
     private final MyGame game;
     private final Stage stage;
-    //private BombeStandard st;
-    //public SpriteBatch batch;
-    //public float   temps;
+    public Label label;
 
-    public MainMenuScreen(MyGame game) {
+    public LoginScreen(MyGame game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        //batch= new SpriteBatch();
-        //temps = 0.0F;
     }
 
     @Override
@@ -39,41 +31,26 @@ public class MainMenuScreen implements Screen {
         // temporary until we have asset manager in
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
-        //create buttons
-        TextButton newGame = new TextButton("Play", skin);
-        TextButton preferences = new TextButton("Preferences", skin);
-        TextButton exit = new TextButton("Exit", skin);
+        //create elements
+        label = new Label("Connection page", skin);
+        TextField username = new TextField("Username", skin);
+        TextField password = new TextField("Password", skin);
+        TextButton login = new TextButton("Log-In", skin);
+        TextButton register = new TextButton("Register", skin);
 
         //add buttons to table
-        table.add(newGame).fillX().uniformX();
+        table.add(label).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
-        table.add(preferences).fillX().uniformX();
+        table.add(username).fillX().uniformX();
         table.row();
-        table.add(exit).fillX().uniformX();
-        //st = new BombeStandard(50);
-        //st.setX(150);st.setY(150);st.setPower(6);
+        password.setPasswordMode(true);
+        table.add(password).fillX().uniformX();
+        table.row();
+        table.add(login).fillX().uniformX();
+        table.row();
+        table.add(register).fillX().uniformX();
 
         // create button listeners
-        exit.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
-            }
-        });
-
-        newGame.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.LOG_IN);
-            }
-        });
-
-        preferences.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.PREFERENCES);
-            }
-        });
 
     }
 
@@ -86,13 +63,6 @@ public class MainMenuScreen implements Screen {
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-        //temps += Gdx.graphics.getDeltaTime();
-        //batch.begin();
-        //st.draw(batch,temps );
-        //Game.draw(batch,temps);//
-        //batch.end();
-
     }
 
     @Override

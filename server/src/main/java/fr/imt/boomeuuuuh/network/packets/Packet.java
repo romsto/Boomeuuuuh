@@ -5,7 +5,7 @@ import fr.imt.boomeuuuuh.Server;
 
 import java.net.InetAddress;
 
-public abstract class Packet {
+public abstract class   Packet {
 
     private final PacketType packetType;
 
@@ -45,7 +45,7 @@ public abstract class Packet {
         PacketType packetType = PacketType.values()[type];
 
         Packet instance = packetType.make(data);
-        if (instance == null)
+        if (instance.packetType == PacketType.TEST)
             instance = packetType.make(data, Server.getPlayer(address));
         return instance;
     }
@@ -61,9 +61,8 @@ public abstract class Packet {
         int size = packet[1] + 126;
         byte[] data = extractData(packet, size);
         PacketType packetType = PacketType.values()[type];
-
         Packet instance = packetType.make(data);
-        if (instance == null)
+        if (instance.packetType == PacketType.TEST)
             instance = packetType.make(data, player);
         return instance;
     }
