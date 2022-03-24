@@ -25,7 +25,6 @@ public class GameManager {
     String mapID;
     int mapHeight;
     int mapWidth;
-    private final int[][] baseMap;
 
     //Id references
     private int lastID;
@@ -40,7 +39,6 @@ public class GameManager {
         //TODO : Load Map from mapID
         mapWidth = 100;
         mapHeight = 100;
-        baseMap = new int[mapWidth][mapHeight];
     }
 
     //-----------------------------------------------------
@@ -51,8 +49,7 @@ public class GameManager {
         //---Bombs---
         for (Entity e : entityList) {
             if(e instanceof Bomb)
-                ((Bomb) e).checkExplosion(entityList, baseMap);//Faille possible
-
+                ((Bomb) e).checkExplosion(entityList, mapHeight, mapWidth);//Faille possible
         }
         //-----------
 
@@ -61,6 +58,11 @@ public class GameManager {
     }
     //-----------------------------------------------------
     //------------------------BOMBS------------------------
-    public void placeBomb(Player origin, Bomb bombType){}
+    public void placeBomb(Player origin, Bomb bombType){
+        Bomb b = bombType; //Need to fix this when we know more about comm
+        entityList.add(b);
+
+        //TODO : Communicate action to clients
+    }
     //-----------------------------------------------------
 }

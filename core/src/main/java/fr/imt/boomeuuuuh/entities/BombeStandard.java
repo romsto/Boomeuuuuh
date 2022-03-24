@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import fr.imt.boomeuuuuh.Game;
 
 
 public class BombeStandard extends Bomb {
@@ -13,10 +14,12 @@ public class BombeStandard extends Bomb {
     TextureRegion[][] tmp = TextureRegion.split(sheetTexture, 32, sheetTexture.getHeight()); // divise sheetTexture selon la taille de nos frames
     TextureRegion[] tabRegion = new TextureRegion[32]; // Tableau contenant nos frames
     int index = 0;
-    boolean explode = false;
+    boolean Clign = true;
+    boolean feu = true;
     long t;
     Animation img = new Animation(0.25F, tabRegion);//Obj Animation qui contient le tableau de frame et le temps de chaque frame
     private TextureRegion regionCourante; // la frame actuelle, qui est une région de la sheet contenant toutes les frames
+    int right=0,left=0,up=0,down=0;
 
 
     public BombeStandard(int id) {
@@ -28,27 +31,63 @@ public class BombeStandard extends Bomb {
     }
 
     public void draw(SpriteBatch batch, float temps) {
-        if (!explode) {
+        if (Clign) {
             regionCourante = (TextureRegion) img.getKeyFrame(temps, false); // On choisi la region correspondant au temps t
             regionCourante.setRegion(regionCourante, 0, 0, 32, 32);// on set
-            batch.draw(regionCourante, this.getX(), this.getY()); // on dessine cette image , aux coordonnées
+            batch.draw(regionCourante, this.getX_screen(), this.getY_screen()); // on dessine cette image , aux coordonnées
+        }
 
-            if (System.nanoTime() - t > 3e9) {
-                explode = true;
-                for (int k = 0; k < this.power; k++) { //mettre les if pour verifier si des objets sont sur le chemin
-                    batch.draw(explosion_horiz, this.getX() + (32 * k), this.getY());
-                    batch.draw(explosion_horiz, this.getX() - (32 * k), this.getY());
-                    batch.draw(explosion_verti, this.getX(), this.getY() + (32 * k));
-                    batch.draw(explosion_verti, this.getX(), this.getY() - (32 * k));
+       if (System.nanoTime() - t > 3e9 & feu) {
+                Clign = false;
+                for (Entity E:Game.entities){
+                    if(E instanceof Bloc){
+                        if(E.getY()==this.getY()){
+                            if( (this.getX()-power<= E.getX()) & (E.getX()<=this.getX()-1) ){
+                                left = Math.max(left,E.getX());
+                            }
+                            if( (this.getX()+power>= E.getX()) & (E.getX()>=this.getX()+1) ){
+                                right = Math.min(right,E.getX());
+                            }
+                        }
+                        if(E.getX()==this.getX()){
+                            if( (this.getY()-power<= E.getY()) & (E.getY()<=this.getY()-1)){
+                                down = Math.max(down,E.getY());
+                            }
+                            if( (this.getY()+power>= E.getY()) & (E.getY()>=this.getY()+1) ){
+
+                                up = Math.min(up,E.getY());
+                            }
+                        }
+                    }
+                }
+
+                for (int k = 0; k < this.power; k++) {
+                    if(this.getX() + k<= Math.min(this.getX()+power,right)) {
+                        batch.draw(explosion_horiz, this.getX_screen() + (32 * k), this.getY_screen());
+                    }
+                    if(this.getX() - k>= Math.max(this.getX()-power,left)) {
+                        batch.draw(explosion_horiz, this.getX_screen() - (32 * k), this.getY_screen());
+                    }
+                    if(this.getY() + k<= Math.min(this.getY()+power,up)) {
+                        batch.draw(explosion_verti, this.getX_screen(), this.getY_screen() + (32 * k));
+                    }
+                    if(this.getY() - k>= Math.max(this.getY()-power,down)) {
+                        batch.draw(explosion_verti, this.getX_screen(), this.getY_screen() - (32 * k));
+                    }
+
+
+                    }
+
+                if(System.nanoTime()-t>35e8){
+                        feu=false;
+                    }
 
                 }
 
 
-            }
+      }
 
-        }
-    }
-}
+ }
 
 
 
