@@ -3,6 +3,7 @@ package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.entities.BombeStandard;
 
 public class MainMenuScreen implements Screen {
 
@@ -25,7 +27,7 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         //batch= new SpriteBatch();
-        //temps = 0.0F;
+       // temps = 0.0F;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class MainMenuScreen implements Screen {
         table.row();
         table.add(exit).fillX().uniformX();
         //st = new BombeStandard(50);
-        //st.setX(150);st.setY(150);st.setPower(6);
+       // st.setX_screen(150);st.setY_screen(150);st.setPower(6);
 
         // create button listeners
         exit.addListener(new ChangeListener() {
@@ -87,7 +89,7 @@ public class MainMenuScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        //temps += Gdx.graphics.getDeltaTime();
+       // temps += Gdx.graphics.getDeltaTime();
         //batch.begin();
         //st.draw(batch,temps );
         //Game.draw(batch,temps);//

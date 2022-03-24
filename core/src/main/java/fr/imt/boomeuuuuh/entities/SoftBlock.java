@@ -2,7 +2,7 @@ package fr.imt.boomeuuuuh.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class SoftBlock extends Entity {
+public class SoftBlock extends Bloc {
 
     public SoftBlock(int id) {
         super(id);
