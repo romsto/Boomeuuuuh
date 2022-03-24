@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="1">
- <tileset firstgid="1" source="../Pictures/tileset/botte de paille.tsx"/>
- <tileset firstgid="2" source="botte de paille.tsx"/>
- <tileset firstgid="3" source="tileset 1.tsx"/>
- <tileset firstgid="486" source="../Pictures/tileset/fence_barbed.tsx"/>
- <tileset firstgid="501" source="../Pictures/tileset/sceau invoc noir.tsx"/>
+ <tileset firstgid="1" source="../tileset/bale.tsx"/>
+ <tileset firstgid="2" source="../tileset/bale.tsx"/>
+ <tileset firstgid="3" source="../tileset/tileset.tsx"/>
+ <tileset firstgid="486" source="../tileset/fence.tsx"/>
+ <tileset firstgid="501" source="../tileset/invocation.tsx"/>
  <layer id="1" name="pelouse " width="15" height="15">
   <data encoding="csv">
 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,

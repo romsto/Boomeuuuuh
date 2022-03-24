@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
 
 public class MainMenuScreen implements Screen {
