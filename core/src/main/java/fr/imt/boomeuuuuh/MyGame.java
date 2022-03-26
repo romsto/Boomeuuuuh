@@ -20,7 +20,7 @@ public class MyGame extends Game {
     public void create() {
         batch = new SpriteBatch();
 
-        changeScreen(ScreenType.LOADING);
+        changeScreen(ScreenType.PLAY);
     }
 
     @Override
