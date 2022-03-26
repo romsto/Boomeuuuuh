@@ -5,6 +5,7 @@ import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.both.ReadyPacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.*;
+import fr.imt.boomeuuuuh.players.Location;
 import fr.imt.boomeuuuuh.players.Player;
 
 import java.nio.charset.StandardCharsets;
@@ -75,7 +76,12 @@ public enum PacketType {
     ENTITY_DESTROY,
     ENTITY_MOVE,
     PLAYER_REFERENCE,
-    BOMB_PLACE,
+    BOMB_PLACE {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new BombPlacePacket(player, Location.fromBytesArray(data));
+        }
+    },
     BOMB_PLACED,
     START_GAME,
     END_GAME,
@@ -101,16 +107,16 @@ public enum PacketType {
     LOGIN {
         @Override
         public Packet make(byte[] data, Player player) {
-            String str = new String(data, StandardCharsets.UTF_8);
-            String[] split = str.split("¤µ¤");
+            String str = new String(data, StandardCharsets.UTF_16);
+            String[] split = str.split("Ǝ");
             return new LogInPacket(player, split[0], split[1]);
         }
     },
     CREATE_ACCOUNT {
         @Override
         public Packet make(byte[] data, Player player) {
-            String str = new String(data, StandardCharsets.UTF_8);
-            String[] split = str.split("¤µ¤");
+            String str = new String(data, StandardCharsets.UTF_16);
+            String[] split = str.split("Ǝ");
             return new CreateAccountPacket(player, split[0], split[1]);
         }
     },

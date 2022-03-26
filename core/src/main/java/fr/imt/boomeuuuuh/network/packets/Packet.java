@@ -20,7 +20,6 @@ public abstract class Packet {
     public byte[] getBytes() {
         byte[] data = encode();
         byte[] packet = new byte[data.length + 2];
-        System.out.println("S Packet " + packetType.ordinal());
         packet[0] = (byte) (packetType.ordinal() - 126);
         packet[1] = (byte) (data.length - 126);
         System.arraycopy(data, 0, packet, 2, data.length);
@@ -37,7 +36,6 @@ public abstract class Packet {
         int type = packet[0] + 126;
         if (type < 0 || type >= PacketType.values().length)
             type = 0;
-        System.out.println("R Packet " + type);
         int size = packet[1] + 126;
         byte[] data = extractData(packet, size);
         PacketType packetType = PacketType.values()[type];

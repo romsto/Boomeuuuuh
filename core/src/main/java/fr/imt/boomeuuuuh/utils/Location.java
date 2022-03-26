@@ -1,4 +1,4 @@
-package fr.imt.boomeuuuuh.players;
+package fr.imt.boomeuuuuh.utils;
 
 public class Location {
 
@@ -7,6 +7,10 @@ public class Location {
     public Location(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static Location fromBytesArray(byte[] array) {
+        return new Location(array[0], array[1]);
     }
 
     public byte[] toByteArray() {
@@ -22,10 +26,6 @@ public class Location {
 
     public int getY() {
         return y;
-    }
-
-    public boolean comprisedInExcludingBorder(int minx, int maxx, int miny, int maxy){
-        return (minx < x && x < maxx && miny < y && y < maxy);
     }
 
     @Override
@@ -44,9 +44,5 @@ public class Location {
         int result = x;
         result = 31 * result + y;
         return result;
-    }
-
-    public static Location fromBytesArray(byte[] array) {
-        return new Location(array[0], array[1]);
     }
 }

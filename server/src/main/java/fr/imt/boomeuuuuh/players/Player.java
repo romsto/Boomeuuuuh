@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.players;
 
+import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.entities.PlayerEntity;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
@@ -16,7 +17,8 @@ public class Player {
 
     private int id;
     private String name;
-    private final boolean authentified = false;
+    private PlayerData playerData;
+    private boolean authentified = false;
     private boolean online = true;
 
     private Lobby lobby;
@@ -59,10 +61,22 @@ public class Player {
     }
 
     public boolean authenticate(String username, String password) {
-        // TODO MANAGE THE AUTHENTICATION
+        boolean success = Boomeuuuuh.database.login(username, password);
 
-        this.serverConnection.send(new PlayerDataPacket(this));
-        return true;
+        if (success) {
+            authentified = true;
+            playerData = Boomeuuuuh.database.getPlayerData(username);
+            playerData.setPlayer(this);
+
+            this.serverConnection.send(new PlayerDataPacket(this));
+            return true;
+        }
+
+        return false;
+    }
+
+    public PlayerData getPlayerData() {
+        return playerData;
     }
 
     public int getPort() {
@@ -124,8 +138,13 @@ public class Player {
     PlayerEntity myEntity;
     boolean inGame;
 
-    public void setEntity(PlayerEntity e){ myEntity = e;}
-    public PlayerEntity getEntity(){return myEntity;}
+    public PlayerEntity getEntity() {
+        return myEntity;
+    }
+
+    public void setEntity(PlayerEntity e) {
+        myEntity = e;
+    }
     //-----------------------------------------------------
 }
 

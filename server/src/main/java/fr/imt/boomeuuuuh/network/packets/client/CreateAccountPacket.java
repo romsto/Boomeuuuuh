@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.client;
 
+import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
@@ -29,13 +30,13 @@ public class CreateAccountPacket extends Packet {
         if (player.isAuthentified())
             return;
 
-        // TODO MANAGE ACCOUNT CREATION
-        if (true /* TODO check if possible */) {
-            DeclinePacket packet = new DeclinePacket("Here goes the reason why it's not possible to create the account");
+        if (Boomeuuuuh.database.usernameAlreadyExists(username)) {
+            DeclinePacket packet = new DeclinePacket("Username already taken...");
             player.serverConnection.send(packet);
             return;
         }
 
+        Boomeuuuuh.database.createAccount(username, password);
         player.authenticate(username, password);
     }
 }

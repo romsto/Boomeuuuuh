@@ -19,16 +19,17 @@ public class MainMenuScreen implements Screen {
 
     private final MyGame game;
     private final Stage stage;
-    //private BombeStandard st;
-    //public SpriteBatch batch;
-    //public float   temps;
+   // private BombeStandard st;
+    //private BombeStandard st1;
+   // public SpriteBatch batch;
+   // public float   temps;
 
     public MainMenuScreen(MyGame game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         //batch= new SpriteBatch();
-       // temps = 0.0F;
+        //temps = 0.0F;
     }
 
     @Override
@@ -54,7 +55,9 @@ public class MainMenuScreen implements Screen {
         table.row();
         table.add(exit).fillX().uniformX();
         //st = new BombeStandard(50);
-       // st.setX_screen(150);st.setY_screen(150);st.setPower(6);
+        //st1 = new BombeStandard(51);
+        //st.setX_screen(150);st.setY_screen(150);st.setPower(6);
+        //st.setX_screen(250);st.setY_screen(150);st.setPower(6);
 
         // create button listeners
         exit.addListener(new ChangeListener() {
@@ -90,11 +93,12 @@ public class MainMenuScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-       // temps += Gdx.graphics.getDeltaTime();
-        //batch.begin();
-        //st.draw(batch,temps );
+       //temps += Gdx.graphics.getDeltaTime();
+       // batch.begin();
+       // st.draw(batch,temps );
+       // st1.draw(batch,temps );
         //Game.draw(batch,temps);//
-        //batch.end();
+       // batch.end();
 
     }
 
