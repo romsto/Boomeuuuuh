@@ -11,6 +11,7 @@ import fr.imt.boomeuuuuh.entities.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
