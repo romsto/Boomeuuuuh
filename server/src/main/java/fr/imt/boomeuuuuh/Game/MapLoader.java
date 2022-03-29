@@ -17,7 +17,7 @@ public class MapLoader {
     // eg . 0,50,50,0,0,50,...
     //      0,50,0,0,0,...
     //      ...
-    static public Collection<Entity> LoadMap(String mapName, GameManager man) {
+    static public Map LoadMap(String mapName, GameManager man) {
         File f = new File(mapName); //TODO : Put proper path
         FileReader fl;
         try {
@@ -31,6 +31,7 @@ public class MapLoader {
         Collection<Entity> E = new ArrayList<>();
         String st;
         int y = 0;
+        int x = 0;
         while (true) {
             try {
                 st = bf.readLine();
@@ -43,7 +44,7 @@ public class MapLoader {
                 break;
 
             String[] s = st.split(",");
-            int x = 0;
+            x = 0;
             for (String p : s) {
                 Entity e = null;
                 switch (Integer.parseInt(p)) {
@@ -59,8 +60,9 @@ public class MapLoader {
                 }
                 x += 1;
             }
+            y += 1;
         }
 
-        return E;
+        return new Map(x + 1, y + 1, E);
     }
 }

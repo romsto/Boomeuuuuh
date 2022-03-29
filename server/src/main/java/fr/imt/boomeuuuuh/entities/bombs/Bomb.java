@@ -36,6 +36,7 @@ public class Bomb extends DynamicEntity {
 
     //-------------------------GET-------------------------
     public int getPower() { return power; }
+    public PlayerEntity getPlayerEntity(){ return parentPlayer.getEntity(); }
     //-----------------------------------------------------
 
     public void checkExplosion(Collection<Entity> entityList, GameManager manager){
@@ -51,7 +52,7 @@ public class Bomb extends DynamicEntity {
             if (e instanceof SoftBlock || e instanceof PowerUp)
                 manager.destroyEntity(e);
             if (e instanceof PlayerEntity)
-                ((PlayerEntity) e).Kill();
+                ((PlayerEntity) e).Kill(manager, this);
         }
     }
 
