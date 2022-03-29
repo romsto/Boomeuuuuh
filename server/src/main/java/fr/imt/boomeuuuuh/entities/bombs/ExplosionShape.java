@@ -5,6 +5,7 @@ import fr.imt.boomeuuuuh.entities.HardBlock;
 import fr.imt.boomeuuuuh.entities.SoftBlock;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ExplosionShape {
@@ -18,7 +19,7 @@ public class ExplosionShape {
         this.up = up; this.down = down; this.right = right; this.left = left;
     }
 
-    public List<Entity> calcExplosion(List<Entity> entityList, int mapHeight, int mapWidth, int bx, int by){
+    public List<Entity> calcExplosion(Collection<Entity> entityList, int mapHeight, int mapWidth, int bx, int by){
         //  Make sure explosion in map
         int[] bounds = {Math.min(mapHeight - 1, by + up),
                 Math.min(mapWidth - 1, bx + right),

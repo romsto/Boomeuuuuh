@@ -11,6 +11,7 @@ import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.entities.bombs.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,7 @@ public class GameManager {
 
     //Global references
     private final Lobby lobby;
-    private final List<Entity> entityList;
+    private final Collection<Entity> entityList;
 
     //Time references
     private final long minimumTimePerUpdate = 50; //ms
@@ -36,11 +37,10 @@ public class GameManager {
     public GameManager(Lobby lobby, String mapID){
         //Set vars
         this.lobby = lobby;
-        entityList = new ArrayList<>();
 
         //Load Map
         this.mapID = mapID;
-        //TODO : Load Map from mapID
+        entityList = MapLoader.LoadMap(mapID, this);
         mapWidth = 100;
         mapHeight = 100;
     }
