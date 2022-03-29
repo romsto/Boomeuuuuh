@@ -1,7 +1,10 @@
 package fr.imt.boomeuuuuh.network.packets.both;
 
+import com.badlogic.gdx.Screen;
+import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.screens.LoginScreen;
 
 import java.nio.charset.StandardCharsets;
 
@@ -21,6 +24,12 @@ public class DeclinePacket extends Packet {
 
     @Override
     public void handle() {
-        System.out.println(reason);
+        Screen currentScreen = MyGame.getInstance().getCurrentScreen();
+
+        if (currentScreen instanceof LoginScreen) {
+            LoginScreen loginScreen = (LoginScreen) currentScreen;
+
+            loginScreen.label.setText(reason);
+        }
     }
 }

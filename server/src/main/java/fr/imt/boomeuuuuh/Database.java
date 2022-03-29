@@ -50,6 +50,9 @@ public class Database {
     }
 
     public boolean login(String username, String password) {
+        if (!usernameAlreadyExists(username))
+            return false;
+
         String resultPassword = null;
         // Encrypt password
         messageDigest.update(password.getBytes());
@@ -67,6 +70,7 @@ public class Database {
             resultPassword = rs.getString("MdP");
         } catch (SQLException e) {
             Boomeuuuuh.logger.severe("Impossible to prepare the statement to the database : " + e.getMessage());
+            e.printStackTrace();
         }
 
         return encryptedPassword.equals(resultPassword);

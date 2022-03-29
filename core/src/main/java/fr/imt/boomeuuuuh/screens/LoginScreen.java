@@ -3,12 +3,22 @@ package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.google.common.base.CharMatcher;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.network.packets.client.CreateAccountPacket;
+import fr.imt.boomeuuuuh.network.packets.client.LogInPacket;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginScreen implements Screen {
+
+    private static final Pattern illegalChars = Pattern.compile("[~#@*+%{}<>\\[\\]|\"\\_^ ]");
 
     private final MyGame game;
     private final Stage stage;
@@ -33,8 +43,8 @@ public class LoginScreen implements Screen {
 
         //create elements
         label = new Label("Connection page", skin);
-        TextField username = new TextField("Username", skin);
-        TextField password = new TextField("Password", skin);
+        final TextField username = new TextField("Username", skin);
+        final TextField password = new TextField("Password", skin);
         TextButton login = new TextButton("Log-In", skin);
         TextButton register = new TextButton("Register", skin);
 
@@ -51,7 +61,45 @@ public class LoginScreen implements Screen {
         table.add(register).fillX().uniformX();
 
         // create button listeners
+        login.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String text = username.getText();
+                String passwordText = password.getText();
+                if (text == null || passwordText == null)
+                    return;
+                if (text.length() <= 3 || passwordText.length() <= 3) {
+                    label.setText("Your username or password is too short...");
+                    return;
+                }
+                if (containsIllegalChars(text) || containsIllegalChars(passwordText)) {
+                    label.setText("Your username or password contains invalid characters...");
+                    return;
+                }
 
+                MyGame.getInstance().serverConnection.send(new LogInPacket(username.getText(), password.getText()));
+            }
+        });
+
+        register.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String text = username.getText();
+                String passwordText = password.getText();
+                if (text == null || passwordText == null)
+                    return;
+                if (text.length() <= 3 || passwordText.length() <= 3) {
+                    label.setText("Your username or password is too short...");
+                    return;
+                }
+                if (containsIllegalChars(text) || containsIllegalChars(passwordText)) {
+                    label.setText("Your username or password contains invalid characters...");
+                    return;
+                }
+
+                MyGame.getInstance().serverConnection.send(new CreateAccountPacket(username.getText(), password.getText()));
+            }
+        });
     }
 
     @Override
@@ -93,6 +141,11 @@ public class LoginScreen implements Screen {
     public void dispose() {
         // dispose of assets when not needed anymore
         stage.dispose();
+    }
+
+    private boolean containsIllegalChars(String str) {
+        Matcher matcher = illegalChars.matcher(str);
+        return matcher.find() || !CharMatcher.ascii().matchesAllOf(str);
     }
 
 }

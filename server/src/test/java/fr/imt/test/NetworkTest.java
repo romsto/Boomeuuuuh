@@ -18,7 +18,7 @@ public class NetworkTest {
 
     @Test
     public void testTestPacket() throws UnknownHostException {
-        TestPacket destruct = new TestPacket("Ceci est test");
+        TestPacket destruct = new TestPacket("nothing");
         byte[] bytes = destruct.getBytes();
         TestPacket reconstruct = (TestPacket) Packet.getFromBytes(bytes, InetAddress.getLocalHost());
         Assertions.assertEquals(destruct.getMessage(), reconstruct.getMessage());
@@ -61,5 +61,9 @@ public class NetworkTest {
         String message = "This is a spécial message with UTF-8 chars";
         byte[] messageToBytes = message.getBytes(StandardCharsets.UTF_8);
         Assertions.assertEquals(message, new String(messageToBytes, StandardCharsets.UTF_8));
+
+
+        String test = "test" + "Ǝ" + "tes4";
+        Assertions.assertEquals(test, new String(test.getBytes()));
     }
 }

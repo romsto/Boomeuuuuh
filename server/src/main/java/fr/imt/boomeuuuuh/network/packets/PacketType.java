@@ -107,16 +107,16 @@ public enum PacketType {
     LOGIN {
         @Override
         public Packet make(byte[] data, Player player) {
-            String str = new String(data, StandardCharsets.UTF_16);
-            String[] split = str.split("Ǝ");
+            String str = new String(data);
+            String[] split = str.split("[|]");
             return new LogInPacket(player, split[0], split[1]);
         }
     },
     CREATE_ACCOUNT {
         @Override
         public Packet make(byte[] data, Player player) {
-            String str = new String(data, StandardCharsets.UTF_16);
-            String[] split = str.split("Ǝ");
+            String str = new String(data);
+            String[] split = str.split("[|]");
             return new CreateAccountPacket(player, split[0], split[1]);
         }
     },
@@ -129,17 +129,7 @@ public enum PacketType {
         This method won't be used : Server can't receive server packets
          */
 
-        return new Packet(TEST) {
-            @Override
-            protected byte[] encode() {
-                return null;
-            }
-
-            @Override
-            public void handle() {
-                // Nothing
-            }
-        };
+        return new TestPacket("nothing");
     }
 
     public Packet make(byte[] data, Player player) {
@@ -147,16 +137,7 @@ public enum PacketType {
         This method won't be used : Server can't receive server packets
          */
 
-        return new Packet(TEST) {
-            @Override
-            protected byte[] encode() {
-                return null;
-            }
 
-            @Override
-            public void handle() {
-                // Nothing
-            }
-        };
+        return new TestPacket("nothing");
     }
 }

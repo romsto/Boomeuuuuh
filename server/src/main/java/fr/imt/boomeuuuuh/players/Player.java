@@ -62,11 +62,11 @@ public class Player {
 
     public boolean authenticate(String username, String password) {
         boolean success = Boomeuuuuh.database.login(username, password);
-
         if (success) {
             authentified = true;
             playerData = Boomeuuuuh.database.getPlayerData(username);
             playerData.setPlayer(this);
+            name = username;
 
             this.serverConnection.send(new PlayerDataPacket(this));
             return true;

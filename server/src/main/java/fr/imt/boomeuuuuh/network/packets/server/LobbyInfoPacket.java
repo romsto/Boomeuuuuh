@@ -12,13 +12,12 @@ public class LobbyInfoPacket extends Packet {
     private final String rawData;
 
     public LobbyInfoPacket(Lobby lobby) {
-        // TODO CHANGE CLIENT ID WITH CLIENT USERNAME
         super(PacketType.LOBBY_INFO);
-        StringBuilder builder = new StringBuilder(lobby.getName()).append("ǥ").append(lobby.getOwner().getId()).append("ǥ").append(lobby.isOpen() ? 1 : 0).append("ǥ");
+        StringBuilder builder = new StringBuilder(lobby.getName()).append("|").append(lobby.getOwner().getName()).append("|").append(lobby.isOpen() ? 1 : 0).append("|");
         String delimiter = "";
         for (Player player : lobby.getPlayers()) {
             builder.append(delimiter).append(player.getName());
-            delimiter = "ǭ";
+            delimiter = "/";
         }
         this.rawData = builder.toString();
     }
