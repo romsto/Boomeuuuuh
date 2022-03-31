@@ -31,7 +31,6 @@ public class LobbyConnection extends Thread {
             DatagramPacket incomingPacket = new DatagramPacket(new byte[28], 28); // TODO change buffer size to optimize
             try {
                 socket.receive(incomingPacket);
-                System.out.println("New PAcket");
                 Packet packet = Packet.getFromBytes(incomingPacket.getData());
                 packet.handle();
             } catch (IOException e) {
