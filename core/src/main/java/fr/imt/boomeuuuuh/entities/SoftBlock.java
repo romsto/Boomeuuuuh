@@ -1,11 +1,13 @@
 package fr.imt.boomeuuuuh.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
+import fr.imt.boomeuuuuh.utils.Location;
 
 public class SoftBlock extends Bloc {
 
-    public SoftBlock(int id) {
-        super(id);
+    public SoftBlock(int id, Location location, World world) {
+        super(id, location, world);
     }
 
     @Override
@@ -13,8 +15,8 @@ public class SoftBlock extends Bloc {
 
     }
 
-    /* Animate the disappearing of the block*/
-    public void disappear(){
+    @Override
+    public void dispose() {
+        super.dispose();
     }
-
 }

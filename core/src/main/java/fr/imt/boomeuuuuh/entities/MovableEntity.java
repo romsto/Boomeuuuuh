@@ -1,11 +1,14 @@
 package fr.imt.boomeuuuuh.entities;
 
 
-public class MovableEntity extends Entity{
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
+import fr.imt.boomeuuuuh.utils.Location;
 
-    public MovableEntity (int id){
-        super(id);
+public abstract class MovableEntity extends Entity {
+
+    public MovableEntity(int id, Location location, World world) {
+        super(id, location, world, BodyDef.BodyType.DynamicBody);
     }
-
 
 }
