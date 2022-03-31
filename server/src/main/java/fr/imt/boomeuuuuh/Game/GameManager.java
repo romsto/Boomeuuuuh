@@ -3,9 +3,7 @@ package fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.entities.*;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
-import fr.imt.boomeuuuuh.network.packets.server.BombPlacedPacket;
-import fr.imt.boomeuuuuh.network.packets.server.EntityCreatePacket;
-import fr.imt.boomeuuuuh.network.packets.server.EntityDestroyPacket;
+import fr.imt.boomeuuuuh.network.packets.server.*;
 import fr.imt.boomeuuuuh.players.Location;
 import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.entities.bombs.*;
@@ -21,12 +19,8 @@ public class GameManager {
     //Global references
     private final Lobby lobby;
     private final Collection<Entity> entityList;
-    private final Collection<PlayerEntity> players;
+    private final Collection<PlayerEntity> livePlayers;
     private final Collection<PlayerEntity> deadPlayers;
-
-    //Time references
-    private final long minimumTimePerUpdate = 50; //ms
-    private long currentUpdateStartTime;
 
     //Map references
     String mapID;
@@ -42,9 +36,10 @@ public class GameManager {
 
         //Load Map
         this.mapID = mapID;
-        Map m = MapLoader.LoadMap(mapID, this);
+        MapLoader loader = new MapLoader();
+        Map m = loader.LoadMap(mapID, this);
         if(m == null){
-            entityList = null; mapWidth = 0; mapHeight = 0; players = null; deadPlayers = null;
+            entityList = null; mapWidth = 0; mapHeight = 0; livePlayers = null; deadPlayers = null;
             endGame();
             return;
         }
@@ -52,34 +47,41 @@ public class GameManager {
         mapWidth = m.Width;
         mapHeight = m.Height;
 
-        //Broadcast map
-        broadcastEntities();
-
         //Add players to map
-        players = new ArrayList<>();
         deadPlayers = new ArrayList<>();
-        for (Player p : lobby.getPlayers())
-            players.add(new PlayerEntity(p, getNewID())); //TODO : Add spawn positions
+        livePlayers = new ArrayList<>();
+        for (Player p : lobby.getPlayers()){
+            PlayerEntity e = new PlayerEntity(p, getNewID());
+            e.setPos(m.nextSpawn());
+            p.setEntity(e);
+            entityList.add(e);
+            livePlayers.add(e);
+        }
+
+        //Broadcast map
+        broadcastEntities(); //TODO : Broadcast players correctly?
     }
 
     //-----------------------------------------------------
-    private void Update(){
-        //Set time
-        currentUpdateStartTime = System.currentTimeMillis();
-
+    public void Update(){
         //---Bombs---
         for (Entity e : entityList) {
             if(e instanceof Bomb)
                 ((Bomb) e).checkExplosion(entityList, this);//Faille possible
         }
         //-----------
+    }
 
-        try{ TimeUnit.MILLISECONDS.sleep(System.currentTimeMillis() + minimumTimePerUpdate - currentUpdateStartTime);}
-        catch (Exception e) { Boomeuuuuh.logger.severe(e.getMessage()); } //NOTE : THAT SHIT SHOULD BE DONE FROM LOBBY, THAT DUDE TAKES CARE OF THE THREAD NO?
+    public void UpdatePlayersPos(){
+        for (PlayerEntity e : livePlayers){
+            EntityMovePacket p = new EntityMovePacket(e.getId(), e.getPos());
+            lobby.broadcastExcept(true, e.getPlayer(), p);
+        }
     }
 
     private void endGame(){
-
+        //Tell lobby to stop the game
+        lobby.stopGame();
     }
     //-----------------------------------------------------
     //------------------------BOMBS------------------------
@@ -90,6 +92,7 @@ public class GameManager {
 
         //Place bomb
         Bomb b = new Bomb(getNewID(), origin); //Need to fix this when we know more about comm and what type of bomb
+        b.setPos(pos);
         entityList.add(b);
 
         BombPlacedPacket packet = new BombPlacedPacket(b.getId(), b.getPower(), b.getPos());
@@ -124,22 +127,20 @@ public class GameManager {
         }
     }
     public void destroyEntity(Entity e){
-        if(e instanceof PlayerEntity)
-            ((PlayerEntity) e).Kill(this, null);
-
         //Create destruction package and sent TCP
         EntityDestroyPacket p = new EntityDestroyPacket(e.getId());
         lobby.broadcastToAll(false, p);
 
         //Remove from manager
         entityList.remove(e);
-    }
-    public void removePlayer(PlayerEntity p){
-        if(!p.getDead())
-            return;
 
-        players.remove(p);
-        deadPlayers.add(p);
+        if(e instanceof PlayerEntity){
+            deadPlayers.add((PlayerEntity) e);
+            livePlayers.remove((PlayerEntity) e);
+        }
+    }
+    public void removePlayer(PlayerEntity e){
+        destroyEntity(e);
     }
     //-----------------------------------------------------
     //-------------------------GET-------------------------

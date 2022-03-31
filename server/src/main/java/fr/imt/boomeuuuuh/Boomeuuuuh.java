@@ -1,5 +1,8 @@
 package fr.imt.boomeuuuuh;
 
+import fr.imt.boomeuuuuh.Game.GameManager;
+import fr.imt.boomeuuuuh.lobbies.Lobby;
+
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -21,5 +24,11 @@ public class Boomeuuuuh {
         } catch (IOException e) {
             logger.severe("Impossible to start the server on port " + port + " : " + e.getMessage());
         }
+
+        //Test
+//        try{
+//        Lobby l = new Lobby(0, "Test", null);
+//        l.startGame("map1");
+//        }catch (Exception e){Boomeuuuuh.logger.severe(e.toString());}
     }
 }

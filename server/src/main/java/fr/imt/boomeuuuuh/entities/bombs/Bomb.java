@@ -51,8 +51,10 @@ public class Bomb extends DynamicEntity {
                 ((Bomb) e).forceExplode(entityList, manager);
             if (e instanceof SoftBlock || e instanceof PowerUp)
                 manager.destroyEntity(e);
-            if (e instanceof PlayerEntity)
-                ((PlayerEntity) e).Kill(manager, this);
+            if (e instanceof PlayerEntity){
+                parentPlayer.getEntity().addKill((PlayerEntity) e); //Add kill to parent player
+                manager.destroyEntity(e);
+            }
         }
     }
 

@@ -1,6 +1,8 @@
 package fr.imt.boomeuuuuh.lobbies;
 
+import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.Game.GameManager;
+import fr.imt.boomeuuuuh.network.packets.server.EndGamePacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
 import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
@@ -10,6 +12,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 //Class for a lobby
 //  -> Repertories players connected to it (and the subsequent game)
@@ -31,6 +34,8 @@ public class Lobby {
     private boolean open = true;
 
     private GameManager gameManager;
+    private final long minimumTimePerUpdate = 50; //ms
+    private final long minimumTimePerPosUpdate = 100; //ms
     private LobbyState state = LobbyState.WAITING;
 
     public Lobby(int lobbyID, String name, Player owner) throws SocketException {
@@ -100,17 +105,43 @@ public class Lobby {
         this.owner = owner;
     }
 
-    public void startGame() {
-        // TODO start the game
+    //------------------------GAME-------------------------
+    public void startGame(String mapID) {
+        gameManager = new GameManager(this, mapID);
+
         open = false;
         state = LobbyState.PLAYING;
+
+        runUpdate(); //TODO : I feel like there is a couille here
+    }
+
+    //Update cycle
+    void runUpdate(){ //TODO : PUT THIS SHIT IN THE PROPER RUN METHOD
+        long currentUpdatePosStartTime = System.currentTimeMillis();
+        while(state == LobbyState.PLAYING){
+            //Run Update
+            long currentUpdateStartTime = System.currentTimeMillis();
+            gameManager.Update();
+
+            //Run pos Update
+            if (System.currentTimeMillis() - currentUpdatePosStartTime > minimumTimePerPosUpdate)
+                gameManager.UpdatePlayersPos();
+
+            //Wait
+            try{ TimeUnit.MILLISECONDS.sleep(System.currentTimeMillis() + minimumTimePerUpdate - currentUpdateStartTime);}
+            catch (Exception e) { Boomeuuuuh.logger.severe(e.getMessage()); }
+        }
     }
 
     public void stopGame() {
-        // TODO stop the game
+        //Broadcast end of game
+        EndGamePacket p = new EndGamePacket();
+        broadcastToAll(false, p);
+
         open = true;
         state = LobbyState.WAITING;
     }
+    //-----------------------------------------------------
 
     public void addPlayer(Player player) {
         players.add(player);

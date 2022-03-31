@@ -9,7 +9,6 @@ import java.util.Collection;
 
 public class PlayerEntity extends DynamicEntity {
     final Player playerRep;
-    boolean dead = false;
 
     final Collection<PlayerEntity> kills;
 
@@ -20,17 +19,7 @@ public class PlayerEntity extends DynamicEntity {
         kills = new ArrayList<>();
     }
 
-    public void Kill(GameManager man, Entity origin){ //Big vulnerability!!!!
-        //Remove from manager
-        dead = true;
-        man.removePlayer(this);
+    public Player getPlayer(){ return playerRep; } //The big faille
 
-        //Top up points
-        if(origin instanceof Bomb)
-            ((Bomb) origin).getPlayerEntity().addKill(this);
-
-        //TODO : Finish this func
-    }
     public void addKill(PlayerEntity t){ kills.add(t); }
-    public boolean getDead(){ return dead; }
 }
