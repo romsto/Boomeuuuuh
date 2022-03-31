@@ -52,7 +52,7 @@ public class Game {
     }
 
     public void loadMap() {
-        map = new TmxMapLoader().load("map/map1.tmx");
+        map = new TmxMapLoader().load("map/map1Final.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera(480, 480);
         camera.position.x = 240;
