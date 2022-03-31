@@ -7,6 +7,7 @@ import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
@@ -107,12 +108,13 @@ public class MyGame extends Game {
 
         changeScreen(ScreenType.MAIN_MENU);
 
-        /*try {
+        try {
             serverConnection = new ServerConnection(SERVER_ADDRESS, SERVER_PORT_TCP);
             //serverConnection.send(new LogInPacket("test", "tes3"));
             //serverConnection.send(new LogInPacket("test", "test"));
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }
+

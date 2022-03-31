@@ -6,7 +6,13 @@ public class Entity {
 
     private final int id;
     private float x_screen, y_screen;
-    private int x,y;
+    private int x;
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    private int y;
 
     public int getX() {
         return x;

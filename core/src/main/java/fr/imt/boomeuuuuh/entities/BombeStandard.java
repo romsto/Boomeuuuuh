@@ -19,7 +19,37 @@ public class BombeStandard extends Bomb {
     private long t;
     Animation img = new Animation(0.25F, tabRegion);//Obj Animation qui contient le tableau de frame et le temps de chaque frame
     private TextureRegion regionCourante; // la frame actuelle, qui est une région de la sheet contenant toutes les frames
-    int right = 0, left = 0, up = 0, down = 0;
+    int right;
+    int left;
+    int up;
+    int down ;
+
+    public int getUp() {
+        return up;
+    }
+    public void setUp(int up) {
+        this.up = up;
+    }
+    public int getDown() {
+        return down;
+    }
+    public void setDown(int down) {
+        this.down = down;
+    }
+    public int getRight() {
+        return right;
+    }
+    public void setRight(int right) {
+        this.right = right;
+    }
+    public int getLeft() {
+        return left;
+    }
+    public void setLeft(int left) {
+        this.left = left;
+    }
+
+
 
     public long getT() {
         return t;
@@ -46,9 +76,15 @@ public class BombeStandard extends Bomb {
     }
 
 
-    public BombeStandard(int id) {
+    public BombeStandard(int id, int xc, int yc,int pow) {
         super(id);
+        this.setX(xc);this.setY(yc);
+        this.setPower(pow);
         this.setT(System.nanoTime());
+        this.setUp(this.getY()+32*power);
+        this.setDown(this.getY()-32*power);
+        this.setLeft(this.getX()-32*power);
+        this.setRight(this.getX()+32*power);
         for (int j = 0; j < 32; j++) {
             tabRegion[index++] = tmp[0][j];
         } // on parcours les regions
@@ -56,34 +92,32 @@ public class BombeStandard extends Bomb {
 
     public void draw(SpriteBatch batch, float temps) {
         if (isClign()) {
+
             regionCourante = (TextureRegion) img.getKeyFrame(temps, false); // On choisi la region correspondant au temps t
-            regionCourante.setRegion(regionCourante, 0, 0, 32, 32);// on set
-            batch.draw(regionCourante, this.getX_screen(), this.getY_screen()); // on dessine cette image , aux coordonnées
+            regionCourante.setRegion(regionCourante,0, 0, 32, 32);// on set
+            batch.draw(regionCourante, this.getX(), this.getY()); // on dessine cette image , aux coordonnées
             if (System.nanoTime() - this.getT() > 3e9) {
-                this.setClign(false);
                 this.setFeu(true);
+                this.setClign(false);
             }
         }
-
-
         if (isFeu()) {
-            this.setT(System.nanoTime());
-            for (Entity E : Game.entities) {
+            for (Entity E : Game.getInstance().getEntities()) {
                 if (E instanceof Bloc) {
                     if (E.getY() == this.getY()) {
                         if ((this.getX() - power <= E.getX()) & (E.getX() <= this.getX() - 1)) {
-                            left = Math.max(left, E.getX());
+                            this.setLeft( Math.max(this.getLeft(), E.getX()));
                         }
                         if ((this.getX() + power >= E.getX()) & (E.getX() >= this.getX() + 1)) {
-                            right = Math.min(right, E.getX());
+                            this.setRight(Math.min(this.getRight(), E.getX()));
                         }
                     }
                     if (E.getX() == this.getX()) {
                         if ((this.getY() - power <= E.getY()) & (E.getY() <= this.getY() - 1)) {
-                            down = Math.max(down, E.getY());
+                            this.setDown(Math.max(this.getDown(), E.getY()));
                         }
                         if ((this.getY() + power >= E.getY()) & (E.getY() >= this.getY() + 1)) {
-                            up = Math.min(up, E.getY());
+                            this.setUp(Math.min(this.getUp(), E.getY()));
                         }
                     }
                 }
@@ -91,20 +125,20 @@ public class BombeStandard extends Bomb {
             }
 
             for (int k = 0; k < this.power; k++) {
-                if (this.getX() + k <= Math.min(this.getX() + power, right)) {
-                    batch.draw(explosion_horiz, this.getX_screen() + (32 * k), this.getY_screen());
+                if (this.getX() + k <= Math.min(this.getX() + power, this.getRight())) {
+                    batch.draw(explosion_horiz, this.getX() + (32 * k), this.getY());
                 }
-                if (this.getX() - k >= Math.max(this.getX() - power, left)) {
-                    batch.draw(explosion_horiz, this.getX_screen() - (32 * k), this.getY_screen());
+                if (this.getX() - k >= Math.max(this.getX() - power, this.getLeft())) {
+                    batch.draw(explosion_horiz, this.getX() - (32 * k), this.getY());
                 }
-                if (this.getY() + k <= Math.min(this.getY() + power, up)) {
-                    batch.draw(explosion_verti, this.getX_screen(), this.getY_screen() + (32 * k));
+                if (this.getY() + k <= Math.min(this.getY() + power,this.getUp())) {
+                    batch.draw(explosion_verti, this.getX(), this.getY() + (32 * k));
                 }
-                if (this.getY() - k >= Math.max(this.getY() - power, down)) {
-                    batch.draw(explosion_verti, this.getX_screen(), this.getY_screen() - (32 * k));
+                if (this.getY() - k >= Math.max(this.getY() - power,this.getDown())) {
+                    batch.draw(explosion_verti, this.getX(), this.getY() - (32 * k));
                 }
             }
-            for (Entity B : Game.entities) {
+            for (Entity B : Game.getInstance().getEntities()) {
                 if (B instanceof BombeStandard) {
 
                     ;
@@ -115,7 +149,7 @@ public class BombeStandard extends Bomb {
                     }
                 }
             }
-            if (System.nanoTime() - this.getT() > 5e8) {
+            if (System.nanoTime() - this.getT() > 35e8) {
                 feu = false;
             }
         }
