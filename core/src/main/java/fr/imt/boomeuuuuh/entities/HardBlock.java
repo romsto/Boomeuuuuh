@@ -1,11 +1,13 @@
 package fr.imt.boomeuuuuh.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
+import fr.imt.boomeuuuuh.utils.Location;
 
-public class HardBlock extends Entity{
+public class HardBlock extends Bloc {
 
-    public HardBlock(int id) {
-        super(id);
+    public HardBlock(int id, Location location, World world) {
+        super(id, location, world);
     }
 
     @Override
@@ -13,5 +15,8 @@ public class HardBlock extends Entity{
 
     }
 
-
+    @Override
+    public void dispose() {
+        super.dispose();
+    }
 }

@@ -1,57 +1,67 @@
 package fr.imt.boomeuuuuh.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.*;
+import fr.imt.boomeuuuuh.utils.Location;
 
-public class Entity {
+public abstract class Entity {
+
+    public static short PLAYER_CATEGORY = 0x0001;
+    public static short SOLID_CATEGORY = 0x0002;
 
     private final int id;
-    private float x_screen, y_screen;
-    private int x;
+    private final Body body;
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    private int y;
-
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-
-
-    public Entity(int id) {
+    public Entity(int id, Location location, World world, BodyDef.BodyType bodyType) {
         this.id = id;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = bodyType;
+        bodyDef.position.x = (location.getX() * 32 + 16) / 100f;
+        bodyDef.position.y = (location.getY() * 32 + 16) / 100f;
+
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(16f / 100f, 16f / 100f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.filter.categoryBits = categoryBits();
+        fixtureDef.filter.maskBits = maskBits();
+        fixtureDef.shape = shape;
+        body.createFixture(fixtureDef);
+        shape.dispose();
     }
 
-    public float getX_screen() {
-        return x_screen;
+    public float getPixelX() {
+        return (body.getPosition().x * 100) - 16;
     }
 
-    public float getY_screen() {
-        return y_screen;
+    public float getPixelY() {
+        return (body.getPosition().y * 100) - 16;
+    }
+
+    public int getBlocX() {
+        return (int) (getPixelX() / 32);
+    }
+
+    public int getBlocY() {
+        return (int) (getPixelY() / 32);
     }
 
     public int getId() {
         return id;
     }
 
-    public void setX_screen(float x_screen) {
-        this.x_screen = x_screen;
+    public Body getBody() {
+        return body;
     }
 
-    public void setY_screen(float y_screen) {
-        this.y_screen = y_screen;
+    public void draw(SpriteBatch batch, float delta) {
     }
 
-    public  void draw(SpriteBatch batch, float temps){
-
+    public void dispose() {
     }
+
+    public abstract short categoryBits();
+
+    public abstract short maskBits();
 }
