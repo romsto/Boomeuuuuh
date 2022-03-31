@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.screens.ScreenType;
+import fr.imt.boomeuuuuh.utils.AppPreferences;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,6 +26,8 @@ public class MyGame extends Game {
     private ScreenType currentScreenType;
     private ScreenType lastScreenType;
 
+    private AppPreferences preferences;
+
     static {
         try {
             SERVER_ADDRESS = InetAddress.getByName("localhost");
@@ -43,6 +46,7 @@ public class MyGame extends Game {
 
     public MyGame() {
         instance = this;
+        preferences = new AppPreferences();
     }
 
     /**
@@ -83,6 +87,10 @@ public class MyGame extends Game {
         return screens.get(screenType);
     }
 
+    public AppPreferences getPreferences() {
+        return preferences;
+    }
+
     public void changeScreen(ScreenType screenType) {
         lastScreenType = currentScreenType;
 
@@ -106,7 +114,7 @@ public class MyGame extends Game {
     public void create() {
         batch = new SpriteBatch();
 
-        changeScreen(ScreenType.MAIN_MENU);
+        changeScreen(ScreenType.LOBBY_SELECTION);
 
         try {
             serverConnection = new ServerConnection(SERVER_ADDRESS, SERVER_PORT_TCP);

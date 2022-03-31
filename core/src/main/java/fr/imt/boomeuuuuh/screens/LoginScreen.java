@@ -47,6 +47,8 @@ public class LoginScreen implements Screen {
         final TextField password = new TextField("Password", skin);
         TextButton login = new TextButton("Log-In", skin);
         TextButton register = new TextButton("Register", skin);
+        final TextButton backButton = new TextButton("Back", skin); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+
 
         //add buttons to table
         table.add(label).fillX().uniformX();
@@ -59,8 +61,17 @@ public class LoginScreen implements Screen {
         table.add(login).fillX().uniformX();
         table.row();
         table.add(register).fillX().uniformX();
+        table.row();
+        table.add(backButton).fillX().uniformX();
 
         // create button listeners
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(ScreenType.MAIN_MENU);
+            }
+        });
+
         login.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -101,6 +112,7 @@ public class LoginScreen implements Screen {
             }
         });
     }
+
 
     @Override
     public void render(float delta) {

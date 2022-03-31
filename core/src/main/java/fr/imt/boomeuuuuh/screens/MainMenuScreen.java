@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.entities.BombeStandard;
 
@@ -19,10 +18,10 @@ public class MainMenuScreen implements Screen {
 
     private final MyGame game;
     private final Stage stage;
-    //private BombeStandard st;
+   // private BombeStandard st;
     //private BombeStandard st1;
-    //public SpriteBatch batch;
-    //public float   temps;
+   // public SpriteBatch batch;
+   // public float   temps;
 
     public MainMenuScreen(MyGame game) {
         this.game = game;
@@ -51,12 +50,13 @@ public class MainMenuScreen implements Screen {
         //add buttons to table
         table.add(newGame).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
-        table.add(preferences).fillX().uniformX();
-        table.row();
         table.add(exit).fillX().uniformX();
-        //st = new BombeStandard(50,250,250,6);
-        //st1 = new BombeStandard(51,250,150,6);
 
+        stage.addActor(preferences);
+        //st = new BombeStandard(50);
+        //st1 = new BombeStandard(51);
+        //st.setX_screen(150);st.setY_screen(150);st.setPower(6);
+        //st.setX_screen(250);st.setY_screen(150);st.setPower(6);
 
         // create button listeners
         exit.addListener(new ChangeListener() {
@@ -92,12 +92,12 @@ public class MainMenuScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        /*temps += Gdx.graphics.getDeltaTime();
-        batch.begin();
-        st.draw(batch,temps );
-        st1.draw(batch,temps );
-        //Game.draw(batch,temps);
-        batch.end();*/
+       //temps += Gdx.graphics.getDeltaTime();
+       // batch.begin();
+       // st.draw(batch,temps );
+       // st1.draw(batch,temps );
+        //Game.draw(batch,temps);//
+       // batch.end();
 
     }
 
