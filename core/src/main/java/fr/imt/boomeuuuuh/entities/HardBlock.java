@@ -12,7 +12,7 @@ public class HardBlock extends Bloc {
 
     @Override
     public void draw(SpriteBatch batch, float temps) {
-
+        // There is no rendering because it is already drawn on the map.
     }
 
     @Override

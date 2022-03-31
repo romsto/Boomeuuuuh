@@ -17,16 +17,18 @@ public abstract class Entity {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
+        bodyDef.fixedRotation = true;
         bodyDef.position.x = (location.getX() * 32 + 16) / 100f;
         bodyDef.position.y = (location.getY() * 32 + 16) / 100f;
 
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(16f / 100f, 16f / 100f);
+        shape.setAsBox(14f / 100f, 14f / 100f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.filter.categoryBits = categoryBits();
         fixtureDef.filter.maskBits = maskBits();
         fixtureDef.shape = shape;
+        fixtureDef.friction = 0f;
         body.createFixture(fixtureDef);
         shape.dispose();
     }

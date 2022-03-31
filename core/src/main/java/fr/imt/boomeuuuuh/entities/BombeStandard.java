@@ -14,12 +14,10 @@ public class BombeStandard extends Bomb {
     private static final Texture sheetTexture = new Texture("Bomb/Clignx16.png");
     private static final Texture explosion_verti = new Texture("Bomb/fire_verti.png");
     private static final Texture explosion_horiz = new Texture("Bomb/fire_horiz.png");
-    private static TextureRegion[] tabRegion = new TextureRegion[32];
-    private final Animation animation;
+    private final Animation<TextureRegion> animation;
     public boolean calculateExplosion = false;
     private boolean explode = false;
     private long time;
-    private TextureRegion currentRegion;
 
     private int right;
     private int left;
@@ -31,8 +29,8 @@ public class BombeStandard extends Bomb {
 
         time = System.nanoTime();
 
-        tabRegion = TextureRegion.split(sheetTexture, 32, sheetTexture.getHeight())[0];
-        animation = new Animation(0.25F, tabRegion);
+        TextureRegion[] tabRegion = TextureRegion.split(sheetTexture, 32, sheetTexture.getHeight())[0];
+        animation = new Animation<TextureRegion>(0.25F, tabRegion);
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -47,7 +45,7 @@ public class BombeStandard extends Bomb {
             return;
         }
 
-        currentRegion = (TextureRegion) animation.getKeyFrame(delta, false);
+        TextureRegion currentRegion = animation.getKeyFrame(delta, false);
         currentRegion.setRegion(currentRegion, 0, 0, 32, 32);
         batch.draw(currentRegion, this.getPixelX(), this.getPixelY());
         if (System.nanoTime() - time > 3e9) calculateExplosion();
