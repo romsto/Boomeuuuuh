@@ -3,8 +3,6 @@ package fr.imt.boomeuuuuh.network.packets.client;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 
-import java.nio.charset.StandardCharsets;
-
 public class LogInPacket extends Packet {
 
     private final String username, password;
@@ -18,7 +16,7 @@ public class LogInPacket extends Packet {
 
     @Override
     protected byte[] encode() {
-        return (username + "Ǝ" + password).getBytes(StandardCharsets.UTF_16);
+        return (username + "|" + password).getBytes();
     }
 
     @Override

@@ -11,6 +11,7 @@ import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.entities.bombs.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,9 @@ public class GameManager {
 
     //Global references
     private final Lobby lobby;
-    private final List<Entity> entityList;
+    private final Collection<Entity> entityList;
+    private final Collection<PlayerEntity> players;
+    private final Collection<PlayerEntity> deadPlayers;
 
     //Time references
     private final long minimumTimePerUpdate = 50; //ms
@@ -27,8 +30,8 @@ public class GameManager {
 
     //Map references
     String mapID;
-    int mapHeight;
-    int mapWidth;
+    final int mapHeight;
+    final int mapWidth;
 
     //Id references
     private int lastID;
@@ -36,13 +39,27 @@ public class GameManager {
     public GameManager(Lobby lobby, String mapID){
         //Set vars
         this.lobby = lobby;
-        entityList = new ArrayList<>();
 
         //Load Map
         this.mapID = mapID;
-        //TODO : Load Map from mapID
-        mapWidth = 100;
-        mapHeight = 100;
+        Map m = MapLoader.LoadMap(mapID, this);
+        if(m == null){
+            entityList = null; mapWidth = 0; mapHeight = 0; players = null; deadPlayers = null;
+            endGame();
+            return;
+        }
+        entityList = m.mapEntities;
+        mapWidth = m.Width;
+        mapHeight = m.Height;
+
+        //Broadcast map
+        broadcastEntities();
+
+        //Add players to map
+        players = new ArrayList<>();
+        deadPlayers = new ArrayList<>();
+        for (Player p : lobby.getPlayers())
+            players.add(new PlayerEntity(p, getNewID())); //TODO : Add spawn positions
     }
 
     //-----------------------------------------------------
@@ -58,7 +75,11 @@ public class GameManager {
         //-----------
 
         try{ TimeUnit.MILLISECONDS.sleep(System.currentTimeMillis() + minimumTimePerUpdate - currentUpdateStartTime);}
-        catch (Exception e) { Boomeuuuuh.logger.severe(e.getMessage()); }
+        catch (Exception e) { Boomeuuuuh.logger.severe(e.getMessage()); } //NOTE : THAT SHIT SHOULD BE DONE FROM LOBBY, THAT DUDE TAKES CARE OF THE THREAD NO?
+    }
+
+    private void endGame(){
+
     }
     //-----------------------------------------------------
     //------------------------BOMBS------------------------
@@ -103,9 +124,8 @@ public class GameManager {
         }
     }
     public void destroyEntity(Entity e){
-        if(e instanceof PlayerEntity){
-            //TODO : Manage destruction of a player entity
-        }
+        if(e instanceof PlayerEntity)
+            ((PlayerEntity) e).Kill(this, null);
 
         //Create destruction package and sent TCP
         EntityDestroyPacket p = new EntityDestroyPacket(e.getId());
@@ -113,6 +133,13 @@ public class GameManager {
 
         //Remove from manager
         entityList.remove(e);
+    }
+    public void removePlayer(PlayerEntity p){
+        if(!p.getDead())
+            return;
+
+        players.remove(p);
+        deadPlayers.add(p);
     }
     //-----------------------------------------------------
     //-------------------------GET-------------------------

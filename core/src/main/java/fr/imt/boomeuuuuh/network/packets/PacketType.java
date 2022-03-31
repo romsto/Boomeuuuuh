@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.network.packets;
 
 import com.google.common.primitives.Ints;
+import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.server.*;
 import fr.imt.boomeuuuuh.utils.Location;
 
@@ -10,8 +11,18 @@ import java.util.Arrays;
 public enum PacketType {
 
     TEST,
-    DECLINE,
-    LOBBY_LIST,
+    DECLINE {
+        @Override
+        public Packet make(byte[] data) {
+            return new DeclinePacket(new String(data, StandardCharsets.UTF_8));
+        }
+    },
+    LOBBY_LIST {
+        @Override
+        public Packet make(byte[] data) {
+            return new LobbyListPacket(new String(data, StandardCharsets.UTF_8));
+        }
+    },
     REQUEST_LOBBY_LIST,
     JOIN_LOBBY,
     LOBBY_INFO {
@@ -21,14 +32,34 @@ public enum PacketType {
         }
     },
     SEND_CHAT,
-    RECEIVE_CHAT,
+    RECEIVE_CHAT {
+        @Override
+        public Packet make(byte[] data) {
+            return new ReceiveChatPacket(new String(data, StandardCharsets.UTF_8));
+        }
+    },
     CREATE_LOBBY,
-    KICK,
+    KICK {
+        @Override
+        public Packet make(byte[] data) {
+            return new KickPacket(new String(data, StandardCharsets.UTF_8));
+        }
+    },
     LEAVE,
     DISCONNECT,
     INITIALIZE_LOBBY_CONNECTION,
-    SUCCESSFULLY_JOINED,
-    LOBBY_CREDENTIALS,
+    SUCCESSFULLY_JOINED {
+        @Override
+        public Packet make(byte[] data) {
+            return new SuccessfullyJoinedPacket();
+        }
+    },
+    LOBBY_CREDENTIALS {
+        @Override
+        public Packet make(byte[] data) {
+            return new LobbyCredentialsPacket(Ints.fromByteArray(data));
+        }
+    },
     ENTITY_CREATE {
         @Override
         public Packet make(byte[] data) {
@@ -44,8 +75,22 @@ public enum PacketType {
             return new EntityDestroyPacket(Ints.fromByteArray(data));
         }
     },
-    ENTITY_MOVE,
-    PLAYER_REFERENCE,
+    ENTITY_MOVE {
+        @Override
+        public Packet make(byte[] data) {
+            byte[] id = Arrays.copyOfRange(data, 0, 4);
+            byte[] location = Arrays.copyOfRange(data, 4, 6);
+            return new EntityMovePacket(Ints.fromByteArray(id), Location.fromBytesArray(location));
+        }
+    },
+    PLAYER_REFERENCE {
+        @Override
+        public Packet make(byte[] data) {
+            byte[] id = Arrays.copyOfRange(data, 0, 4);
+            byte[] playerName = Arrays.copyOfRange(data, 4, data.length);
+            return new PlayerReferencePacket(Ints.fromByteArray(id), new String(playerName, StandardCharsets.UTF_8));
+        }
+    },
     BOMB_PLACE,
     BOMB_PLACED {
         @Override
@@ -56,7 +101,12 @@ public enum PacketType {
             return new BombPlacedPacket(Ints.fromByteArray(id), power, Location.fromBytesArray(location));
         }
     },
-    START_GAME,
+    START_GAME {
+        @Override
+        public Packet make(byte[] data) {
+            return new StartGamePacket();
+        }
+    },
     END_GAME {
         @Override
         public Packet make(byte[] data) {
@@ -66,15 +116,25 @@ public enum PacketType {
     READY,
     CHANGE_LOBBY_NAME,
     LAUNCH_GAME,
-    PLAYER_INFO,
+    PLAYER_INFO {
+        @Override
+        public Packet make(byte[] data) {
+            return new PlayerInfoPacket();
+        }
+    },
     LOGIN,
     CREATE_ACCOUNT,
-    PLAYER_DATA;
+    PLAYER_DATA {
+        @Override
+        public Packet make(byte[] data) {
+            return new PlayerDataPacket(data);
+        }
+    };
 
     public Packet make(byte[] data) {
 
         /*
-        This method won't be used : Server can't receive server packets
+        This method won't be used
          */
 
         return new Packet(TEST) {

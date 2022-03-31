@@ -4,6 +4,7 @@ import fr.imt.boomeuuuuh.Game.GameManager;
 import fr.imt.boomeuuuuh.entities.*;
 import fr.imt.boomeuuuuh.players.Player;
 
+import java.util.Collection;
 import java.util.List;
 
 public class Bomb extends DynamicEntity {
@@ -35,22 +36,23 @@ public class Bomb extends DynamicEntity {
 
     //-------------------------GET-------------------------
     public int getPower() { return power; }
+    public PlayerEntity getPlayerEntity(){ return parentPlayer.getEntity(); }
     //-----------------------------------------------------
 
-    public void checkExplosion(List<Entity> entityList, GameManager manager){
+    public void checkExplosion(Collection<Entity> entityList, GameManager manager){
         if (!(endTime < System.currentTimeMillis()))
             Explode(entityList, manager);
     }
-    public void forceExplode(List<Entity> entityList, GameManager manager){ Explode(entityList, manager); }
+    public void forceExplode(Collection<Entity> entityList, GameManager manager){ Explode(entityList, manager); }
 
-    private void Explode(List<Entity> entityList, GameManager manager){
+    private void Explode(Collection<Entity> entityList, GameManager manager){
         for (Entity e : expShape.calcExplosion(entityList, manager.getMapHeight(), manager.getMapWidth(), pos.getX(), pos.getY())){
             if (e instanceof Bomb)
                 ((Bomb) e).forceExplode(entityList, manager);
             if (e instanceof SoftBlock || e instanceof PowerUp)
                 manager.destroyEntity(e);
             if (e instanceof PlayerEntity)
-                ((PlayerEntity) e).Kill();
+                ((PlayerEntity) e).Kill(manager, this);
         }
     }
 

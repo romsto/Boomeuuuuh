@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.client;
 
+import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 
@@ -13,6 +14,7 @@ public class JoinLobbyPacket extends Packet {
         super(PacketType.JOIN_LOBBY);
 
         this.name = name;
+        MyGame.getInstance().lobby = null;
     }
 
     @Override

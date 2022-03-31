@@ -2,7 +2,9 @@ package fr.imt.boomeuuuuh.network;
 
 import fr.imt.boomeuuuuh.network.packets.Packet;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -14,9 +16,8 @@ public class ServerConnection extends Thread {
     private final DataOutputStream writer;
     private boolean stop = false;
 
-    public ServerConnection(String ipAddress) throws IOException {
-        String[] address = ipAddress.split(":");
-        this.serverSocket = new Socket(InetAddress.getByName(address[0]), Integer.parseInt(address[1]));
+    public ServerConnection(InetAddress ipAddress, int port) throws IOException {
+        this.serverSocket = new Socket(ipAddress, port);
         this.reader = new DataInputStream(serverSocket.getInputStream());
         this.writer = new DataOutputStream(serverSocket.getOutputStream());
         this.start();

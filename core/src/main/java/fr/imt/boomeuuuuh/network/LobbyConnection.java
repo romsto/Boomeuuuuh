@@ -1,6 +1,8 @@
 package fr.imt.boomeuuuuh.network;
 
+import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.network.packets.client.InitializeLobbyConnectionPacket;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -20,7 +22,7 @@ public class LobbyConnection extends Thread {
         this.udpPort = port;
         this.address = address;
         this.start();
-        //send(new InitializeLobbyConnectionPacket(socket.getLocalPort()));
+        MyGame.getInstance().serverConnection.send(new InitializeLobbyConnectionPacket(socket.getLocalPort()));
     }
 
     @Override
