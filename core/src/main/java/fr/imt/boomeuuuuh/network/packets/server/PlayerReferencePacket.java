@@ -40,6 +40,6 @@ public class PlayerReferencePacket extends Packet {
         if (playerName.equalsIgnoreCase(MyGame.getInstance().username))
             game.player = (Player) entity;
 
-        ((Player) entity).reffer(playerName, skin);
+        ((Player) entity).refer(playerName, skin);
     }
 }

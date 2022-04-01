@@ -1,9 +1,11 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.screens.ScreenType;
 
 import java.net.SocketException;
 
@@ -27,8 +29,14 @@ public class LobbyCredentialsPacket extends Packet {
         try {
             MyGame.getInstance().lobby.lobbyConnection = new LobbyConnection(MyGame.SERVER_ADDRESS, port);
         } catch (SocketException e) {
-            e.printStackTrace();
-            // TODO Manage this error
+            System.out.println("Error while connecting to the server " + e.getCause());
+
+            MyGame myGame = MyGame.getInstance();
+            myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+
+            Lobby lobby = myGame.lobby;
+            lobby.game = null;
+            myGame.lobby = null;
         }
     }
 }

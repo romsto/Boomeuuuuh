@@ -4,6 +4,7 @@ import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.screens.ScreenType;
 
 public class KickPacket extends Packet {
 
@@ -23,8 +24,17 @@ public class KickPacket extends Packet {
 
     @Override
     public void handle() {
-        // TODO LEAVE LOBBY
-        Lobby lobby = MyGame.getInstance().lobby;
+        MyGame myGame = MyGame.getInstance();
+        myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+
+        Lobby lobby = myGame.lobby;
+        if (lobby == null)
+            return;
         lobby.lobbyConnection.close();
+        if (lobby.game != null)
+            lobby.game.dispose();
+        lobby.game = null;
+
+        myGame.lobby = null;
     }
 }

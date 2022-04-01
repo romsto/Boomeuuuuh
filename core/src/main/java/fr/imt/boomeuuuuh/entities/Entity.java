@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import fr.imt.boomeuuuuh.utils.Location;
 
@@ -55,6 +56,10 @@ public abstract class Entity {
 
     public Body getBody() {
         return body;
+    }
+
+    public void teleport(Location location) {
+        body.setTransform(new Vector2((location.getX() * 32 + 16) / 100f, (location.getY() * 32 + 16) / 100f), 0);
     }
 
     public void draw(SpriteBatch batch, float delta) {

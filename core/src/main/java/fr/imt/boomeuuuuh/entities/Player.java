@@ -1,20 +1,25 @@
 package fr.imt.boomeuuuuh.entities;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import fr.imt.boomeuuuuh.utils.Location;
 
 public class Player extends MovableEntity {
 
-    private boolean reffered = false;
+    private final BitmapFont font = new BitmapFont();
     private String name;
     private String skin;
+    private boolean referred = false;
+    private float fontWidth;
 
     public Player(int id, Location location, World world) {
         super(id, location, world);
     }
 
-    public boolean isReffered() {
-        return reffered;
+    public boolean isReferred() {
+        return referred;
     }
 
     public String getName() {
@@ -25,10 +30,14 @@ public class Player extends MovableEntity {
         return skin;
     }
 
-    public void reffer(String name, String skin) {
-        this.reffered = true;
+    public void refer(String name, String skin) {
+        this.referred = true;
         this.name = name;
         this.skin = skin;
+
+        GlyphLayout glyphLayout = new GlyphLayout();
+        glyphLayout.setText(font, name);
+        fontWidth = glyphLayout.width;
     }
 
     @Override
@@ -39,5 +48,15 @@ public class Player extends MovableEntity {
     @Override
     public short maskBits() {
         return SOLID_CATEGORY;
+    }
+
+    @Override
+    public void draw(SpriteBatch batch, float delta) {
+        super.draw(batch, delta);
+
+        if (referred) {
+            font.setColor(1f, 1f, 1f, 0.8f);
+            font.draw(batch, name, getPixelX() + 16 - fontWidth / 2, getPixelY() + 45);
+        }
     }
 }

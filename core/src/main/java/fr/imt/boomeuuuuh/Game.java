@@ -71,7 +71,9 @@ public class Game implements InputProcessor {
         spawnEntity(new HardBlock(2, new Location(2, 5), world));
 
         player = new Player(3, new Location(1, 1), world);
+        player.refer("RomSto", "test");
         spawnEntity(player);
+        player.isAffected = false;
     }
 
     /**

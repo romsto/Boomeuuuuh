@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.client;
 
+import fr.imt.boomeuuuuh.lobbies.LobbyState;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
@@ -37,6 +38,11 @@ public class LaunchGamePacket extends Packet {
             return;
         }
 
-        // TODO tries to launch the game
+        if (player.getLobby().getState() == LobbyState.PLAYING) {
+            player.serverConnection.send(new DeclinePacket("The game is already running."));
+            return;
+        }
+
+        player.getLobby().startGame("map1");
     }
 }
