@@ -1,5 +1,8 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import fr.imt.boomeuuuuh.Game;
+import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.entities.BombeStandard;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.utils.Location;
@@ -24,6 +27,11 @@ public class BombPlacedPacket extends Packet {
 
     @Override
     public void handle() {
-        // TODO
+        Game game = Game.getInstance();
+
+        if (!MyGame.getInstance().logged || MyGame.getInstance().lobby == null || game == null)
+            return;
+
+        game.spawnEntity(new BombeStandard(entityId, location, game.getWorld(), power));
     }
 }

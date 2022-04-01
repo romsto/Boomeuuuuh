@@ -33,7 +33,7 @@ public class Game implements InputProcessor {
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
-    private final Player player;
+    public Player player;
 
     public Game() {
         loadMap();
@@ -132,6 +132,12 @@ public class Game implements InputProcessor {
         toBeRemovedEntities.add(entity);
     }
 
+    public void removeEntity(int entityId) {
+        Entity entity = getEntity(entityId);
+        if (entity != null)
+            removeEntity(entity);
+    }
+
     private void removeEntities() {
         for (Entity entity : toBeRemovedEntities) {
             world.destroyBody(entity.getBody());
@@ -147,6 +153,10 @@ public class Game implements InputProcessor {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public void handleMovements() {

@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import fr.imt.boomeuuuuh.Game;
+import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 
@@ -20,6 +22,11 @@ public class EntityDestroyPacket extends Packet {
 
     @Override
     public void handle() {
-        // TODO
+        Game game = Game.getInstance();
+
+        if (!MyGame.getInstance().logged || MyGame.getInstance().lobby == null || game == null)
+            return;
+
+        game.removeEntity(entityId);
     }
 }

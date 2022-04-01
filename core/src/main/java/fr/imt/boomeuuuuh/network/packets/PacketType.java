@@ -87,8 +87,9 @@ public enum PacketType {
         @Override
         public Packet make(byte[] data) {
             byte[] id = Arrays.copyOfRange(data, 0, 4);
-            byte[] playerName = Arrays.copyOfRange(data, 4, data.length);
-            return new PlayerReferencePacket(Ints.fromByteArray(id), new String(playerName, StandardCharsets.UTF_8));
+            byte[] string = Arrays.copyOfRange(data, 4, data.length);
+            String[] split = new String(string, StandardCharsets.UTF_8).split("[|]");
+            return new PlayerReferencePacket(Ints.fromByteArray(id), split[0], split[1]);
         }
     },
     BOMB_PLACE,

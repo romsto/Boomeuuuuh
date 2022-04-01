@@ -1,18 +1,15 @@
 package fr.imt.boomeuuuuh.Game;
 
-import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.entities.*;
+import fr.imt.boomeuuuuh.entities.bombs.Bomb;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
+import fr.imt.boomeuuuuh.network.packets.both.ReadyPacket;
 import fr.imt.boomeuuuuh.network.packets.server.*;
 import fr.imt.boomeuuuuh.players.Location;
 import fr.imt.boomeuuuuh.players.Player;
-import fr.imt.boomeuuuuh.entities.bombs.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-import java.util.concurrent.TimeUnit;
 
 public class GameManager {
 
@@ -50,7 +47,7 @@ public class GameManager {
         //Add players to map
         deadPlayers = new ArrayList<>();
         livePlayers = new ArrayList<>();
-        for (Player p : lobby.getPlayers()){
+        for (Player p : lobby.getPlayers()) {
             PlayerEntity e = new PlayerEntity(p, getNewID());
             e.setPos(m.nextSpawn());
             p.setEntity(e);
@@ -58,8 +55,15 @@ public class GameManager {
             livePlayers.add(e);
         }
 
+
         //Broadcast map
-        broadcastEntities(); //TODO : Broadcast players correctly?
+        lobby.broadcastToAll(false, new StartGamePacket());
+
+        broadcastEntities();
+
+        broadcastReferences();
+
+        lobby.broadcastToAll(false, new ReadyPacket());
     }
 
     //-----------------------------------------------------
@@ -116,9 +120,10 @@ public class GameManager {
     private void placeEntityLocal(Entity e){
         entityList.add(e);
     }
-    private void broadcastEntities(Player... players){
+
+    private void broadcastEntities(Player... players) {
         boolean all = players.length == 0;
-        for(Entity e : entityList){
+        for (Entity e : entityList) {
             EntityCreatePacket p = new EntityCreatePacket(e.getId(), getEntityRef(e), e.getPos());
             if (all)
                 lobby.broadcastToAll(false, p);
@@ -126,7 +131,18 @@ public class GameManager {
                 lobby.broadcastTo(false, p, players);
         }
     }
-    public void destroyEntity(Entity e){
+
+    private void broadcastReferences() {
+        for (Entity entity : entityList) {
+            if (!(entity instanceof PlayerEntity))
+                continue;
+            PlayerEntity playerEntity = (PlayerEntity) entity;
+            PlayerReferencePacket packet = new PlayerReferencePacket(entity.getId(), playerEntity.getPlayer().getName(), playerEntity.getPlayer().getPlayerData().getCurrentSkin());
+            lobby.broadcastToAll(false, packet);
+        }
+    }
+
+    public void destroyEntity(Entity e) {
         //Create destruction package and sent TCP
         EntityDestroyPacket p = new EntityDestroyPacket(e.getId());
         lobby.broadcastToAll(false, p);
@@ -134,7 +150,7 @@ public class GameManager {
         //Remove from manager
         entityList.remove(e);
 
-        if(e instanceof PlayerEntity){
+        if (e instanceof PlayerEntity) {
             deadPlayers.add((PlayerEntity) e);
             livePlayers.remove((PlayerEntity) e);
         }
@@ -146,7 +162,9 @@ public class GameManager {
     //-------------------------GET-------------------------
     public int getMapHeight(){ return mapHeight; }
     public int getMapWidth(){ return mapWidth; }
-    private int getEntityRef(Entity e){
+    private int getEntityRef(Entity e) {
+        if (e instanceof PlayerEntity)
+            return 60;
         if (e instanceof SoftBlock)
             return 50;
         if (e instanceof HardBlock)

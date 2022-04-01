@@ -11,18 +11,20 @@ public class PlayerReferencePacket extends Packet {
 
     private final int entityId;
     private final String playerName;
+    private final String skin;
 
-    public PlayerReferencePacket(int entityId, String playerName) {
+    public PlayerReferencePacket(int entityId, String playerName, String skin) {
         super(PacketType.PLAYER_REFERENCE);
         this.entityId = entityId;
         this.playerName = playerName;
+        this.skin = skin;
     }
 
     @Override
     protected byte[] encode() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         baos.writeBytes(Ints.toByteArray(entityId));
-        baos.writeBytes(playerName.getBytes(StandardCharsets.UTF_8));
+        baos.writeBytes((playerName + "|" + skin).getBytes(StandardCharsets.UTF_8));
         return baos.toByteArray();
     }
 
