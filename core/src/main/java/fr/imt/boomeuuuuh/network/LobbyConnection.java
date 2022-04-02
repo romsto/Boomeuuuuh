@@ -1,8 +1,10 @@
 package fr.imt.boomeuuuuh.network;
 
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.client.InitializeLobbyConnectionPacket;
+import fr.imt.boomeuuuuh.screens.ScreenType;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -34,7 +36,19 @@ public class LobbyConnection extends Thread {
                 Packet packet = Packet.getFromBytes(incomingPacket.getData());
                 packet.handle();
             } catch (IOException e) {
-                // TODO manage this error
+                System.out.println("Connection lost to lobby");
+                MyGame myGame = MyGame.getInstance();
+                myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+
+                Lobby lobby = myGame.lobby;
+                if (lobby == null)
+                    return;
+                close();
+                if (lobby.game != null)
+                    lobby.game.dispose();
+                lobby.game = null;
+
+                myGame.lobby = null;
             }
         }
     }
@@ -61,7 +75,19 @@ public class LobbyConnection extends Thread {
             try {
                 socket.send(new DatagramPacket(packed, packed.length, address, udpPort));
             } catch (IOException e) {
-                // TODO Manage this error
+                System.out.println("Connection lost to lobby");
+                MyGame myGame = MyGame.getInstance();
+                myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+
+                Lobby lobby = myGame.lobby;
+                if (lobby == null)
+                    return;
+                close();
+                if (lobby.game != null)
+                    lobby.game.dispose();
+                lobby.game = null;
+
+                myGame.lobby = null;
             }
         }
     }

@@ -5,7 +5,6 @@ import fr.imt.boomeuuuuh.entities.*;
 import fr.imt.boomeuuuuh.players.Player;
 
 import java.util.Collection;
-import java.util.List;
 
 public class Bomb extends DynamicEntity {
 
@@ -56,6 +55,7 @@ public class Bomb extends DynamicEntity {
                 manager.destroyEntity(e);
             }
         }
+        parentPlayer.currentBombs--;
     }
 
 }

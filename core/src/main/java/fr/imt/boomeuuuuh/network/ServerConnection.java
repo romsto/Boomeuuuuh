@@ -1,13 +1,14 @@
 package fr.imt.boomeuuuuh.network;
 
+import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.screens.ScreenType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 
 public class ServerConnection extends Thread {
 
@@ -29,8 +30,11 @@ public class ServerConnection extends Thread {
             try {
                 int length = reader.readInt();
                 if (length <= 0) {
-                    // TODO close connection
+                    System.out.println("Connection lost to server");
+                    MyGame.getInstance().connected = false;
                     close();
+                    MyGame.getInstance().serverConnection = null;
+                    MyGame.getInstance().changeScreen(ScreenType.PLAY);
                     break;
                 }
                 byte[] incomingBytes = new byte[length];
@@ -38,11 +42,11 @@ public class ServerConnection extends Thread {
                 Packet packet = Packet.getFromBytes(incomingBytes);
                 packet.handle();
             } catch (IOException e) {
-                if (e instanceof SocketTimeoutException)
-                    System.out.println("to be replaced"); // TODO Timeout
-                else
-                    System.out.println("to be replaced"); // TODO Manage error
+                System.out.println("Connection lost to server");
+                MyGame.getInstance().connected = false;
                 close();
+                MyGame.getInstance().serverConnection = null;
+                MyGame.getInstance().changeScreen(ScreenType.PLAY);
                 break;
             }
         }
@@ -60,8 +64,10 @@ public class ServerConnection extends Thread {
                 writer.writeInt(bytes.length);
                 writer.write(bytes);
             } catch (IOException e) {
-                e.printStackTrace();
-                // TODO Manage exception
+                System.out.println("Connection lost to server");
+                MyGame.getInstance().connected = false;
+                close();
+                MyGame.getInstance().serverConnection = null;
             }
         }
     }
@@ -74,7 +80,6 @@ public class ServerConnection extends Thread {
         try {
             this.serverSocket.close();
         } catch (IOException e) {
-            // TODO Manage this exception
         }
     }
 }

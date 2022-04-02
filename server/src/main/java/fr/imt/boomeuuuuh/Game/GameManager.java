@@ -91,8 +91,13 @@ public class GameManager {
     //------------------------BOMBS------------------------
     public void placeBomb(Player origin, Location pos){// Later inclune multiple bomb types
         //Check if position is possible
-        if(!checkPosition(pos)) //TODO : Check that delays in placement are not too quick
+        if (!checkPosition(pos)) //TODO : Check that delays in placement are not too quick
             return;
+
+        if (origin.maxBombs >= origin.currentBombs)
+            return;
+
+        origin.currentBombs++;
 
         //Place bomb
         Bomb b = new Bomb(getNewID(), origin); //Need to fix this when we know more about comm and what type of bomb

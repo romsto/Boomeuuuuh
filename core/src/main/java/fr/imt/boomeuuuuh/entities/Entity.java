@@ -23,8 +23,7 @@ public abstract class Entity {
         bodyDef.position.y = (location.getY() * 32 + 16) / 100f;
 
         body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(14f / 100f, 14f / 100f);
+        Shape shape = createShape();
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.filter.categoryBits = categoryBits();
         fixtureDef.filter.maskBits = maskBits();
@@ -71,4 +70,10 @@ public abstract class Entity {
     public abstract short categoryBits();
 
     public abstract short maskBits();
+
+    public Shape createShape() {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(16f / 100f, 16f / 100f);
+        return shape;
+    }
 }

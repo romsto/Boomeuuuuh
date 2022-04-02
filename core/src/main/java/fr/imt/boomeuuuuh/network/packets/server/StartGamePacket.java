@@ -6,6 +6,7 @@ import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.lobbies.LobbyState;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.screens.ScreenType;
 
 public class StartGamePacket extends Packet {
 
@@ -27,6 +28,6 @@ public class StartGamePacket extends Packet {
 
         lobby.game = new Game();
         lobby.state = LobbyState.LOADING;
-        // TODO change to loading screen
+        MyGame.getInstance().changeScreen(ScreenType.LOADING);
     }
 }

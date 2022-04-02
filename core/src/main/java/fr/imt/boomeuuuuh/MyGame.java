@@ -8,7 +8,6 @@ import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 import fr.imt.boomeuuuuh.utils.AppPreferences;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
@@ -26,11 +25,9 @@ public class MyGame extends Game {
     private ScreenType currentScreenType;
     private ScreenType lastScreenType;
 
-    private AppPreferences preferences;
-
     static {
         try {
-            SERVER_ADDRESS = InetAddress.getByName("localhost");
+            SERVER_ADDRESS = InetAddress.getByName("193.26.14.30");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -38,11 +35,14 @@ public class MyGame extends Game {
         SERVER_PORT_TCP = 301;
     }
 
+    private final AppPreferences preferences;
+
     public ServerConnection serverConnection;
     public Lobby lobby;
     public String username;
     public boolean logged = false;
     public PlayerData playerData;
+    public boolean connected = false;
 
     public MyGame() {
         instance = this;
@@ -114,15 +114,14 @@ public class MyGame extends Game {
     public void create() {
         batch = new SpriteBatch();
 
-        changeScreen(ScreenType.LOBBY_SELECTION);
+        changeScreen(ScreenType.PLAY);
 
-        try {
+        /*try {
             serverConnection = new ServerConnection(SERVER_ADDRESS, SERVER_PORT_TCP);
             //serverConnection.send(new LogInPacket("test", "tes3"));
             //serverConnection.send(new LogInPacket("test", "test"));
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            connected = false;
+        }*/
     }
 }
-

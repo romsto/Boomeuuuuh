@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import fr.imt.boomeuuuuh.entities.Entity;
 import fr.imt.boomeuuuuh.entities.HardBlock;
 import fr.imt.boomeuuuuh.entities.Player;
+import fr.imt.boomeuuuuh.entities.SoftBlock;
+import fr.imt.boomeuuuuh.network.packets.client.BombPlacePacket;
 import fr.imt.boomeuuuuh.utils.Location;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class Game implements InputProcessor {
     private final List<Entity> entities;
     private final List<Entity> toBeRemovedEntities;
     private final SpriteBatch batch;
+    private final SpriteBatch hudBatch;
     private final World world;
     private final Box2DDebugRenderer debugRenderer;
     private TiledMap map;
@@ -35,15 +38,35 @@ public class Game implements InputProcessor {
 
     public Player player;
 
+    public int player_bomb = 1;
+    public int player_speed = 1;
+
     public Game() {
         loadMap();
         batch = new SpriteBatch();
+        hudBatch = new SpriteBatch();
         debugRenderer = new Box2DDebugRenderer();
         world = new World(new Vector2(), false);
 
         entities = new ArrayList<>();
         toBeRemovedEntities = new ArrayList<>();
 
+        Gdx.input.setInputProcessor(this);
+
+        createWorldBorders();
+
+        spawnEntity(new HardBlock(0, new Location(2, 2), world));
+        spawnEntity(new HardBlock(1, new Location(2, 4), world));
+        spawnEntity(new HardBlock(2, new Location(2, 5), world));
+        spawnEntity(new SoftBlock(4, new Location(3, 4), world));
+
+        player = new Player(3, new Location(1, 1), world);
+        player.refer("RomSto", "test");
+        spawnEntity(player);
+        player.isAffected = false;
+    }
+
+    private void createWorldBorders() {
         BodyDef borders = new BodyDef();
         borders.position.set(new Vector2());
 
@@ -65,15 +88,6 @@ public class Game implements InputProcessor {
         bordersBody.createFixture(fixtureBorders);
 
         edgeShape.dispose();
-
-        spawnEntity(new HardBlock(0, new Location(2, 2), world));
-        spawnEntity(new HardBlock(1, new Location(2, 4), world));
-        spawnEntity(new HardBlock(2, new Location(2, 5), world));
-
-        player = new Player(3, new Location(1, 1), world);
-        player.refer("RomSto", "test");
-        spawnEntity(player);
-        player.isAffected = false;
     }
 
     /**
@@ -108,6 +122,9 @@ public class Game implements InputProcessor {
         }
         batch.end();
 
+        hudBatch.begin();
+        hudBatch.end();
+
         removeEntities();
     }
 
@@ -124,6 +141,8 @@ public class Game implements InputProcessor {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+        batch.dispose();
+        hudBatch.dispose();
     }
 
     public void spawnEntity(Entity entity) {
@@ -168,14 +187,14 @@ public class Game implements InputProcessor {
         boolean up = Gdx.input.isKeyPressed(Input.Keys.Z);
 
         player.getBody().setLinearVelocity(new Vector2());
-        player.getBody().applyLinearImpulse(new Vector2((left ? -1f : 0f) + (right ? 1f : 0f), (down ? -1f : 0f) + (up ? 1f : 0f)), player.getBody().getWorldCenter(), false);
+        player.getBody().applyLinearImpulse(new Vector2((left ? -1f : 0.0005f) + (right ? 1f : -0.0006f), (down ? -1f : 0.0005f) + (up ? 1f : -0.0006f)), player.getBody().getWorldCenter(), true);
     }
 
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case (Input.Keys.SPACE):
-                // TODO Place a bomb
+                MyGame.getInstance().serverConnection.send(new BombPlacePacket(new Location(player.getBlocX(), player.getBlocY())));
         }
         return true;
     }

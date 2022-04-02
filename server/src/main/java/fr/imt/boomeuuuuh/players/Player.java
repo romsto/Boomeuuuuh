@@ -25,6 +25,9 @@ public class Player {
     private LobbyJoiningState joinedLobby = LobbyJoiningState.DISCONNETED;
     private int port;
 
+    public int maxBombs = 1;
+    public int currentBombs = 1;
+
     private final InetAddress address;
     private final Socket serverSocket;
     public final ServerConnection serverConnection;
