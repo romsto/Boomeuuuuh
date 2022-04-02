@@ -27,11 +27,12 @@ public class BombPlacePacket extends Packet {
 
     @Override
     public void handle() {
-        if (!player.isInLobby() || player.getLobby().getState() == LobbyState.PLAYING) {
+        if (!player.isInLobby() || player.getLobby().getState() != LobbyState.PLAYING) { //TODO : I changed the == to !=, check if it makes sense
             // decline
             player.serverConnection.send(new DeclinePacket("You are not currently playing"));
+            return;
         }
-
-        // TODO Check if player can place a bomb and place a bomb
+        //Send request to game manager
+        player.getLobby().getGameManager().placeBomb(player, location);
     }
 }

@@ -136,7 +136,6 @@ public class Player {
 
     //-------------------------GAME------------------------
     PlayerEntity myEntity;
-    boolean inGame;
 
     public PlayerEntity getEntity() {
         return myEntity;

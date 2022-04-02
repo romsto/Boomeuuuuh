@@ -34,8 +34,6 @@ public class Lobby {
     private boolean open = true;
 
     private GameManager gameManager;
-    private final long minimumTimePerUpdate = 50; //ms
-    private final long minimumTimePerPosUpdate = 100; //ms
     private LobbyState state = LobbyState.WAITING;
 
     public Lobby(int lobbyID, String name, Player owner) throws SocketException {
@@ -46,6 +44,8 @@ public class Lobby {
         this.players = new ArrayList<>();
         this.owner = owner;
         this.name = name;
+
+        //TODO : Create lobby executor
     }
 
     //-------------------------GET-------------------------
@@ -104,39 +104,23 @@ public class Lobby {
     public void setOwner(Player owner) {
         this.owner = owner;
     }
-
+    //-----------------------------------------------------
     //------------------------GAME-------------------------
     public void startGame(String mapID) {
         gameManager = new GameManager(this, mapID);
 
         open = false;
         state = LobbyState.PLAYING;
-
-        runUpdate(); //TODO : I feel like there is a couille here
     }
 
-    //Update cycle
-    void runUpdate(){ //TODO : PUT THIS SHIT IN THE PROPER RUN METHOD
-        long currentUpdatePosStartTime = System.currentTimeMillis();
-        while(state == LobbyState.PLAYING){
-            //Run Update
-            long currentUpdateStartTime = System.currentTimeMillis();
-            gameManager.Update();
-
-            //Run pos Update
-            if (System.currentTimeMillis() - currentUpdatePosStartTime > minimumTimePerPosUpdate)
-                gameManager.UpdatePlayersPos();
-
-            //Wait
-            try{ TimeUnit.MILLISECONDS.sleep(System.currentTimeMillis() + minimumTimePerUpdate - currentUpdateStartTime);}
-            catch (Exception e) { Boomeuuuuh.logger.severe(e.getMessage()); }
-        }
-    }
+    //Update cycle is in LobbyExecutor
 
     public void stopGame() {
         //Broadcast end of game
         EndGamePacket p = new EndGamePacket();
         broadcastToAll(false, p);
+
+        players.forEach(pl -> pl.setEntity(null));//Lose game entity reference
 
         open = true;
         state = LobbyState.WAITING;
@@ -159,6 +143,8 @@ public class Lobby {
             close();
             return;
         }
+
+        player.setEntity(null);//If he was in game, lose entity reference
 
         if (owner.equals(player))
             owner = players.stream().findAny().get(); // Change owner if the player was online
@@ -232,7 +218,13 @@ public class Lobby {
                         broadcastToAll(true, lobbyInfoPacket);
                     }
 
-
+                    //-------GAME-------
+                    if(state == LobbyState.PLAYING){
+                        gameManager.Update();
+                        if (currentTick == 20) //Should we change this to a different tick rate?
+                            gameManager.UpdatePlayersPos();
+                    }
+                    //------------------
 
                     if (currentTick >= 20)
                         currentTick = 0;

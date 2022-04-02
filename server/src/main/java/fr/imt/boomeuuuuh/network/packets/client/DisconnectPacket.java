@@ -22,6 +22,6 @@ public class DisconnectPacket extends Packet {
 
     @Override
     public void handle() {
-        // TODO Handle this packet
+        player.disconnect();//Handled by player initially
     }
 }
