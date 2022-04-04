@@ -8,6 +8,7 @@ import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 import fr.imt.boomeuuuuh.utils.AppPreferences;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class MyGame extends Game {
 
     static {
         try {
-            SERVER_ADDRESS = InetAddress.getByName("193.26.14.30");
+            SERVER_ADDRESS = InetAddress.getByName("localhost");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -93,9 +94,13 @@ public class MyGame extends Game {
 
     public void changeScreen(ScreenType screenType) {
         lastScreenType = currentScreenType;
+        if (lastScreenType != null && screens.containsKey(lastScreenType)) {
+            screens.get(lastScreenType).dispose();
+            screens.remove(lastScreenType);
+        }
 
         Screen screen = null;
-        if (screens.containsKey(screenType)) {
+        if (!screens.containsKey(screenType)) {
             screen = screenType.instantiate(this);
             screens.put(screenType, screen);
         } else {
@@ -114,14 +119,13 @@ public class MyGame extends Game {
     public void create() {
         batch = new SpriteBatch();
 
-        changeScreen(ScreenType.PLAY);
+        changeScreen(ScreenType.MAIN_MENU);
 
-        /*try {
+        try {
             serverConnection = new ServerConnection(SERVER_ADDRESS, SERVER_PORT_TCP);
-            //serverConnection.send(new LogInPacket("test", "tes3"));
-            //serverConnection.send(new LogInPacket("test", "test"));
+            connected = true;
         } catch (IOException e) {
             connected = false;
-        }*/
+        }
     }
 }

@@ -12,15 +12,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import fr.imt.boomeuuuuh.entities.Entity;
-import fr.imt.boomeuuuuh.entities.HardBlock;
-import fr.imt.boomeuuuuh.entities.Player;
-import fr.imt.boomeuuuuh.entities.SoftBlock;
+import fr.imt.boomeuuuuh.entities.*;
 import fr.imt.boomeuuuuh.network.packets.client.BombPlacePacket;
 import fr.imt.boomeuuuuh.utils.Location;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game implements InputProcessor {
 
@@ -42,6 +40,8 @@ public class Game implements InputProcessor {
     public int player_speed = 1;
 
     public Game() {
+        instance = this;
+
         loadMap();
         batch = new SpriteBatch();
         hudBatch = new SpriteBatch();
@@ -195,6 +195,7 @@ public class Game implements InputProcessor {
         switch (keycode) {
             case (Input.Keys.SPACE):
                 MyGame.getInstance().serverConnection.send(new BombPlacePacket(new Location(player.getBlocX(), player.getBlocY())));
+                spawnEntity(new BombeStandard(new Random().nextInt(100), new Location(player.getBlocX(), player.getBlocY()), world, 5));
         }
         return true;
     }

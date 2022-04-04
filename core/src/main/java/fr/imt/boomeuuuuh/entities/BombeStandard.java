@@ -54,16 +54,16 @@ public class BombeStandard extends Bomb {
     public void calculateExplosion() {
         if (calculateExplosion) return;
 
-        up = Math.min(15, this.getBlocX() + power);
-        down = Math.max(0, this.getBlocY() - power);
-        left = Math.max(0, this.getBlocX() - power);
-        right = Math.min(15, this.getBlocX() + power);
+        up = Math.min(14, this.getBlocX() + power);
+        down = Math.max(1, this.getBlocY() - power);
+        left = Math.max(1, this.getBlocX() - power);
+        right = Math.min(14, this.getBlocX() + power);
 
         calculateExplosion = true;
         explode = false;
         for (Entity E : Game.getInstance().getEntities()) {
             if (!(E instanceof Bloc)) continue;
-
+            boolean hard = E instanceof HardBlock;
             if (E.getBlocY() == this.getBlocY()) {
                 if ((this.getBlocX() - power <= E.getBlocX()) & (E.getBlocX() <= this.getBlocX() - 1)) {
                     left = Math.max(left, E.getBlocX());

@@ -25,7 +25,8 @@ public class KickPacket extends Packet {
     @Override
     public void handle() {
         MyGame myGame = MyGame.getInstance();
-        myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+        if (myGame.getCurrentScreenType() == ScreenType.LOBBY)
+            myGame.changeScreen(ScreenType.LOBBY_SELECTION);
 
         Lobby lobby = myGame.lobby;
         if (lobby == null)

@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.both;
 
+import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
@@ -31,6 +32,11 @@ public class ReadyPacket extends Packet {
             return;
 
         lobby.state = LobbyState.PLAYING;
-        MyGame.getInstance().changeScreen(ScreenType.PLAY);
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                MyGame.getInstance().changeScreen(ScreenType.PLAY);
+            }
+        });
     }
 }

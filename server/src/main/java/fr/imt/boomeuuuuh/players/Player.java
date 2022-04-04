@@ -1,10 +1,12 @@
 package fr.imt.boomeuuuuh.players;
 
 import fr.imt.boomeuuuuh.Boomeuuuuh;
+import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.entities.PlayerEntity;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.lobbies.LobbyJoiningState;
 import fr.imt.boomeuuuuh.network.ServerConnection;
+import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.server.KickPacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyCredentialsPacket;
 import fr.imt.boomeuuuuh.network.packets.server.PlayerDataPacket;
@@ -64,6 +66,16 @@ public class Player {
     }
 
     public boolean authenticate(String username, String password) {
+        if (Server.getPlayers().stream().anyMatch(player -> {
+            System.out.println(player.isAuthentified());
+            System.out.println(player.getName() != null);
+            if (player.getName() != null)
+                System.out.println(player.getName());
+            return player.isAuthentified() && player.getName() != null && player.getName().equalsIgnoreCase(username);
+        })) {
+            serverConnection.send(new DeclinePacket("You are already connected..."));
+            return false;
+        }
         boolean success = Boomeuuuuh.database.login(username, password);
         if (success) {
             authentified = true;
@@ -74,7 +86,7 @@ public class Player {
             this.serverConnection.send(new PlayerDataPacket(this));
             return true;
         }
-
+        serverConnection.send(new DeclinePacket("Wrong credentials..."));
         return false;
     }
 

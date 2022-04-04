@@ -1,30 +1,32 @@
 package fr.imt.boomeuuuuh.screens;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.network.packets.client.CreateLobbyPacket;
+import fr.imt.boomeuuuuh.network.packets.client.RequestLobbyListPacket;
+import fr.imt.boomeuuuuh.utils.LobbyInfoList;
 
-import javax.swing.border.TitledBorder;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LobbySelectionScreen implements Screen {
 
 
-    private MyGame game; // Note it's "MyGame" not "Game"
-    private Stage stage;
-    private Label titleLabel;
+    private final MyGame game; // Note it's "MyGame" not "Game"
+    private final Stage stage;
+    public Label titleLabel;
+    public List<LobbyInfoList> lobbies = new ArrayList<>();
+    public Table scrollTable;
 
     // constructor to keep a reference to the main Game class
-    public LobbySelectionScreen(MyGame game){
+    public LobbySelectionScreen(MyGame game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -52,39 +54,20 @@ public class LobbySelectionScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
-        titleLabel = new Label("Lobby Selection",skin);
+        titleLabel = new Label("Lobby Selection", skin);
 
         // called when this screen is set as the screen with game.setScreen();
-        final TextButton backButton = new TextButton("Back", skin);
+        final TextButton backButton = new TextButton("Disconnect", skin);
+        final TextButton refreshButton = new TextButton("Refresh the list", skin);
+        final TextButton createButton = new TextButton("Create a lobby", skin);
 
 
-        Table scrollTable = new Table();
+        scrollTable = new Table();
         scrollTable.setFillParent(true);
         scrollTable.setDebug(true);
         stage.addActor(scrollTable);
 
-        //for(get the lobby List){
-        for (int i = 0; i<5;i++){
-            scrollTable.row().pad(10, 0, 10, 0);
-            final TextButton button = new TextButton("Number" + i, skin);
-            button.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // do stuff
-                }});
-            scrollTable.add(button).fillX().uniformX();
-            // add a picture
-            /*
-            if (the lobby is public){
-                Image img = new Image(new Texture("Lobby/open.png"));}
-            else(the lobby is not public){
-                Image img = new Image(new Texture("Lobby/locked.png"));}
-            */
-            Image img = new Image(new Texture("Lobby/open.png"));
-            scrollTable.add(img).width(32).height(40);
-            // finish a row
-        }
-        ScrollPane lobbyScroll = new ScrollPane(null,skin);
+        ScrollPane lobbyScroll = new ScrollPane(null, skin);
 
         ScrollPane.ScrollPaneStyle lobbyScrollStyle = new ScrollPane.ScrollPaneStyle();
         lobbyScroll.setActor(scrollTable);
@@ -95,28 +78,37 @@ public class LobbySelectionScreen implements Screen {
         stage.addActor(table);
 
         table.add(titleLabel).fillX().uniformX().colspan(2);
-        table.row().pad(10,10,10,10);
+        table.row().pad(10, 10, 10, 10);
         table.add(lobbyScroll).fillX().uniformX();
-        table.row().pad(10,10,10,10);
+        table.row().pad(10, 10, 10, 10);
+        table.add(refreshButton).fillX().uniformX();
+        table.row().pad(10, 10, 10, 10);
+        table.add(createButton).fillX().uniformX();
+        table.row().pad(10, 10, 10, 10);
         table.add(backButton).fillX().uniformX();
 
         stage.addActor(table);
 
-        /*
-        ArrayList<String> lobbyArray = new ArrayList<String>();
-        for (int i = 0; i<5;i++){
-            lobbyArray.add("Lobby " + i);
-        }
-        lobbyList.item
-        */
+        game.serverConnection.send(new RequestLobbyListPacket());
 
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.LOG_IN);
+                Gdx.app.exit();
             }
         });
-
+        refreshButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.serverConnection.send(new RequestLobbyListPacket());
+            }
+        });
+        createButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.serverConnection.send(new CreateLobbyPacket(game.username));
+            }
+        });
     }
 
     @Override

@@ -1,18 +1,16 @@
 package fr.imt.boomeuuuuh.lobbies;
 
-import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.Game.GameManager;
+import fr.imt.boomeuuuuh.network.LobbyConnection;
+import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.server.EndGamePacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
 import fr.imt.boomeuuuuh.players.Player;
-import fr.imt.boomeuuuuh.network.LobbyConnection;
-import fr.imt.boomeuuuuh.network.packets.Packet;
 
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 //Class for a lobby
 //  -> Repertories players connected to it (and the subsequent game)
@@ -33,6 +31,8 @@ public class Lobby {
     private String name;
     private boolean open = true;
 
+    private final LobbyExecutor lobbyExecutor;
+
     private GameManager gameManager;
     private LobbyState state = LobbyState.WAITING;
 
@@ -41,11 +41,13 @@ public class Lobby {
         this.udpPort = lobbyConnection.getPort();
         this.lobbyID = lobbyID;
 
-        this.players = new ArrayList<>();
+        this.players = new ConcurrentLinkedQueue<>();
         this.owner = owner;
         this.name = name;
 
         //TODO : Create lobby executor
+        lobbyExecutor = new LobbyExecutor();
+        lobbyExecutor.start();
     }
 
     //-------------------------GET-------------------------
@@ -140,7 +142,7 @@ public class Lobby {
         players.remove(player);
         if (players.size() <= 0) {
             // There is no more players. Closing lobby
-            close();
+            LobbyManager.endLobby(name);
             return;
         }
 
@@ -213,7 +215,7 @@ public class Lobby {
         public void run() {
             while (running) {
                 if (System.nanoTime() - lastTick < 5e7) {
-                    if (currentTick == 20) {
+                    if (currentTick >= 20) {
                         LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
                         broadcastToAll(true, lobbyInfoPacket);
                     }
@@ -221,7 +223,7 @@ public class Lobby {
                     //-------GAME-------
                     if(state == LobbyState.PLAYING){
                         gameManager.Update();
-                        if (currentTick == 20) //Should we change this to a different tick rate?
+                        if (currentTick % 4 == 0) //Should we change this to a different tick rate?
                             gameManager.UpdatePlayersPos();
                     }
                     //------------------

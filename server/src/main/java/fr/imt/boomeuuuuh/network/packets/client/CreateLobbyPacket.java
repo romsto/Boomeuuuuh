@@ -39,7 +39,7 @@ public class CreateLobbyPacket extends Packet {
             player.serverConnection.send(declinePacket);
             return;
         }
-        lobby.setName(name);
+        //lobby.setName(name);
         lobby.addPlayer(player);
     }
 }

@@ -1,11 +1,14 @@
 package fr.imt.boomeuuuuh.network;
 
 import fr.imt.boomeuuuuh.Boomeuuuuh;
-import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.players.Player;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
 
 public class LobbyConnection extends Thread {
 
@@ -28,7 +31,7 @@ public class LobbyConnection extends Thread {
                 Packet packet = Packet.getFromBytes(incomingPacket.getData(), incomingPacket.getAddress());
                 packet.handle();
             } catch (IOException e) {
-                Boomeuuuuh.logger.severe("Error while reading incoming UDP packets : " + e.getMessage());
+                Boomeuuuuh.logger.severe("Error while reading incoming UDP packets from : " + e.getMessage());
             }
         }
     }

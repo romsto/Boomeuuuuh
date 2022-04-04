@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh.entities;
 
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import fr.imt.boomeuuuuh.utils.Location;
 
@@ -28,5 +30,12 @@ public class Bomb extends MovableEntity {
     @Override
     public short maskBits() {
         return SOLID_CATEGORY;
+    }
+
+    @Override
+    public Shape createShape() {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(14 / 100f, 14 / 100f);
+        return shape;
     }
 }

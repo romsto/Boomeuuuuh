@@ -42,11 +42,11 @@ public abstract class Entity {
     }
 
     public int getBlocX() {
-        return (int) (getPixelX() / 32);
+        return (int) ((getPixelX() + 16) / 32);
     }
 
     public int getBlocY() {
-        return (int) (getPixelY() / 32);
+        return (int) ((getPixelY() + 16) / 32);
     }
 
     public int getId() {

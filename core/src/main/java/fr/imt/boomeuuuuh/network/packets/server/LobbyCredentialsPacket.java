@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
@@ -27,12 +28,24 @@ public class LobbyCredentialsPacket extends Packet {
     @Override
     public void handle() {
         try {
+            MyGame.getInstance().lobby = new Lobby();
             MyGame.getInstance().lobby.lobbyConnection = new LobbyConnection(MyGame.SERVER_ADDRESS, port);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    MyGame.getInstance().changeScreen(ScreenType.LOBBY);
+                }
+            });
         } catch (SocketException e) {
             System.out.println("Error while connecting to the server " + e.getCause());
 
-            MyGame myGame = MyGame.getInstance();
-            myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+            final MyGame myGame = MyGame.getInstance();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+                }
+            });
 
             Lobby lobby = myGame.lobby;
             lobby.game = null;

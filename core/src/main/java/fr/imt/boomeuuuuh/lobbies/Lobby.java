@@ -9,8 +9,8 @@ import java.util.Collection;
 public class Lobby {
 
     public LobbyState state = LobbyState.WAITING;
-    public String name;
-    public String owner;
+    public String name = "";
+    public String owner = "";
     public boolean open = true;
     public boolean isOwner = false;
     public Collection<String> players = new ArrayList<>();

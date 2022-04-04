@@ -1,10 +1,12 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import com.badlogic.gdx.Gdx;
 import com.google.common.primitives.Ints;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.PlayerData;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.screens.ScreenType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -50,5 +52,12 @@ public class PlayerDataPacket extends Packet {
         playerData.level = level;
         playerData.currentSkin = currentSkin;
         playerData.unlockedSkins = skins;
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                MyGame.getInstance().changeScreen(ScreenType.LOBBY_SELECTION);
+            }
+        });
     }
 }

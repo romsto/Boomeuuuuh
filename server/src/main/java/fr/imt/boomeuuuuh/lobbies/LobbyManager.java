@@ -1,12 +1,12 @@
 package fr.imt.boomeuuuuh.lobbies;
 
+import fr.imt.boomeuuuuh.Boomeuuuuh;
+import fr.imt.boomeuuuuh.players.Player;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
-import fr.imt.boomeuuuuh.Boomeuuuuh;
-import fr.imt.boomeuuuuh.players.Player;
 
 //Class for lobby manager
 //  -> Has reference to lobbies
@@ -43,7 +43,6 @@ public class LobbyManager {
         } catch (Exception e) {
             Boomeuuuuh.logger.severe(e.toString());
         }
-        
         return nLobby;
     }
 

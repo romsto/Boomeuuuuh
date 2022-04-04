@@ -88,6 +88,11 @@ public class LoginScreen implements Screen {
                     return;
                 }
 
+                if (!game.connected) {
+                    label.setText("You are not connected to the server. Please try again later.");
+                    return;
+                }
+
                 MyGame.getInstance().serverConnection.send(new LogInPacket(username.getText(), password.getText()));
             }
         });
@@ -105,6 +110,11 @@ public class LoginScreen implements Screen {
                 }
                 if (containsIllegalChars(text) || containsIllegalChars(passwordText)) {
                     label.setText("Your username or password contains invalid characters...");
+                    return;
+                }
+
+                if (!game.connected) {
+                    label.setText("You are not connected to the server. Please try again later.");
                     return;
                 }
 

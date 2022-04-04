@@ -35,7 +35,6 @@ public class LobbyInfoPacket extends Packet {
     public void handle() {
         if (MyGame.getInstance().lobby == null)
             MyGame.getInstance().lobby = new Lobby();
-
         Lobby lobby = MyGame.getInstance().lobby;
         lobby.name = name;
         lobby.owner = owner;

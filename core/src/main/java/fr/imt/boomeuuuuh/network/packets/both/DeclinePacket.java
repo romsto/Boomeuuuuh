@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.screens.LobbySelectionScreen;
 import fr.imt.boomeuuuuh.screens.LoginScreen;
 
 import java.nio.charset.StandardCharsets;
@@ -30,6 +31,10 @@ public class DeclinePacket extends Packet {
             LoginScreen loginScreen = (LoginScreen) currentScreen;
 
             loginScreen.label.setText(reason);
+        } else if (currentScreen instanceof LobbySelectionScreen) {
+            LobbySelectionScreen lobbySelectionScreen = (LobbySelectionScreen) currentScreen;
+
+            lobbySelectionScreen.titleLabel.setText(reason);
         }
     }
 }

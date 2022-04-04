@@ -17,8 +17,8 @@ public class LobbyListPacket extends Packet {
         StringBuilder builder = new StringBuilder();
         String delimiter = "";
         for (Lobby lobby : LobbyManager.getLobbies()) {
-            builder.append(delimiter).append(lobby.getName()).append("|`").append(lobby.getPlayers().size()).append("|`").append(lobby.isOpen() ? 1 : 0);
-            delimiter = "~`|";
+            builder.append(delimiter).append(lobby.getName()).append("|").append(lobby.getPlayers().size()).append("|").append(lobby.isOpen() ? 1 : 0);
+            delimiter = "/";
         }
 
         this.rawString = builder.toString();

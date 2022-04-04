@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network;
 
+import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.screens.ScreenType;
@@ -34,7 +35,12 @@ public class ServerConnection extends Thread {
                     MyGame.getInstance().connected = false;
                     close();
                     MyGame.getInstance().serverConnection = null;
-                    MyGame.getInstance().changeScreen(ScreenType.PLAY);
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyGame.getInstance().changeScreen(ScreenType.MAIN_MENU);
+                        }
+                    });
                     break;
                 }
                 byte[] incomingBytes = new byte[length];
@@ -46,7 +52,12 @@ public class ServerConnection extends Thread {
                 MyGame.getInstance().connected = false;
                 close();
                 MyGame.getInstance().serverConnection = null;
-                MyGame.getInstance().changeScreen(ScreenType.PLAY);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyGame.getInstance().changeScreen(ScreenType.MAIN_MENU);
+                    }
+                });
                 break;
             }
         }
@@ -68,6 +79,12 @@ public class ServerConnection extends Thread {
                 MyGame.getInstance().connected = false;
                 close();
                 MyGame.getInstance().serverConnection = null;
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyGame.getInstance().changeScreen(ScreenType.MAIN_MENU);
+                    }
+                });
             }
         }
     }

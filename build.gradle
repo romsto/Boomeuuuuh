@@ -56,6 +56,14 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         api "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core-gamejolt:1.0.2"
     }
+
+    jar {
+        manifest {
+            attributes(
+                    'Main-Class': 'fr.imt.boomeuuuuh.desktop.DesktopLauncher'
+            )
+        }
+    }
 }
 
 project(":core") {
