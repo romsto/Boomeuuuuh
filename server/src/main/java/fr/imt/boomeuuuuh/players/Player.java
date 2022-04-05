@@ -68,7 +68,7 @@ public class Player {
     }
 
     public boolean authenticate(String username, String password) {
-        if (Server.getPlayers().stream().anyMatch(player -> player.isAuthentified() && player.getName() != null && player.getName().equalsIgnoreCase(username))) {
+        if (Server.getPlayers().stream().anyMatch(player -> player.isAuthentified() && player.getName().equalsIgnoreCase(username))) {
             serverConnection.send(new DeclinePacket("You are already connected..."));
             return false;
         }

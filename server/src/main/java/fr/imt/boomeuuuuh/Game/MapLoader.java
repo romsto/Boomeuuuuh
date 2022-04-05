@@ -5,15 +5,14 @@ import fr.imt.boomeuuuuh.entities.Entity;
 import fr.imt.boomeuuuuh.entities.HardBlock;
 import fr.imt.boomeuuuuh.entities.PowerUp;
 import fr.imt.boomeuuuuh.entities.SoftBlock;
-import fr.imt.boomeuuuuh.entities.bombs.Bomb;
 import fr.imt.boomeuuuuh.players.Location;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 
 public class MapLoader {
     //Map format -> Only represents entities
@@ -22,26 +21,11 @@ public class MapLoader {
     //      0,50,0,0,0,...
     //      ...
     public Map LoadMap(String mapName, GameManager man) {
-        URL rPath = getClass().getClassLoader().getResource("Maps/" + mapName + ".txt");
-        File f;
-        try{
-            if (rPath != null)
-                f = new File(rPath.toURI());
-            else
-                return null;
-        }catch (URISyntaxException e){
-            e.printStackTrace();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Maps/" + mapName + ".txt");
+        if (inputStream == null)
             return null;
-        }
-
-        FileReader fl;
-        try {
-            fl = new FileReader(f);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        BufferedReader bf = new BufferedReader(fl);
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        BufferedReader bf = new BufferedReader(reader);
 
         Collection<Entity> E = new ArrayList<>();
         ArrayList<Location> spawn = new ArrayList<>();

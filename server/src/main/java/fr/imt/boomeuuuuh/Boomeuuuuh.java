@@ -1,7 +1,6 @@
 package fr.imt.boomeuuuuh;
 
-import fr.imt.boomeuuuuh.Game.GameManager;
-import fr.imt.boomeuuuuh.lobbies.Lobby;
+import fr.imt.boomeuuuuh.utils.ConfigFile;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -16,7 +15,7 @@ public class Boomeuuuuh {
         database = new Database();
 
         // Server startup
-        int port = 301;
+        int port = ConfigFile.PORT;
 
         try {
             Server server = new Server(port);

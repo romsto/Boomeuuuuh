@@ -7,17 +7,17 @@ import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 import fr.imt.boomeuuuuh.utils.AppPreferences;
+import fr.imt.boomeuuuuh.utils.ConfigFile;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MyGame extends Game {
 
-    public static InetAddress SERVER_ADDRESS;
-    public static int SERVER_PORT_TCP;
+    public static InetAddress SERVER_ADDRESS = ConfigFile.ADDRESS;
+    public static int SERVER_PORT_TCP = ConfigFile.PORT;
     private static MyGame instance;
 
     private SpriteBatch batch;
@@ -25,16 +25,6 @@ public class MyGame extends Game {
     private final Map<ScreenType, Screen> screens = new ConcurrentHashMap<>();
     private ScreenType currentScreenType;
     private ScreenType lastScreenType;
-
-    static {
-        try {
-            SERVER_ADDRESS = InetAddress.getByName("localhost");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        SERVER_PORT_TCP = 301;
-    }
 
     private final AppPreferences preferences;
 
