@@ -57,7 +57,7 @@ public class Player extends MovableEntity {
         super.draw(batch, delta);
 
         if (referred) {
-            font.setColor(1f, 1f, 1f, 0.8f);
+            font.setColor(1f, (isAffected ? 1f : 0), (isAffected ? 1f : 0), 0.8f);
             font.draw(batch, name, getPixelX() + 16 - fontWidth / 2, getPixelY() + 45);
         }
     }

@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.lobbies;
 
 import fr.imt.boomeuuuuh.Boomeuuuuh;
+import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.players.Player;
 
 import java.util.ArrayList;
@@ -75,6 +76,10 @@ public class LobbyManager {
     }
 
     private static void connectPlayer(Player pl, Lobby targetLobby) {
+        if (!targetLobby.isOpen()) {
+            pl.serverConnection.send(new DeclinePacket("Lobby is closed..."));
+            return;
+        }
         targetLobby.addPlayer(pl);
     }
 

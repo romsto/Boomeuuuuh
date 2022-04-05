@@ -1,4 +1,5 @@
 package fr.imt.boomeuuuuh.screens;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
@@ -6,18 +7,17 @@ import fr.imt.boomeuuuuh.MyGame;
 public class PlayScreen implements Screen {
 
 
-    private final MyGame game; // Note it's "MyGame" not "Game"
-    private final Game gameTemp;
+    private final Game game; // Note it's "MyGame" not "Game"
 
     // constructor to keep a reference to the main Game class
     public PlayScreen(MyGame game) {
-        this.game = game;
-        this.gameTemp = new Game();
+        this.game = Game.getInstance();
+        Gdx.input.setInputProcessor(this.game);
     }
 
     @Override
     public void render(float delta) {
-        gameTemp.draw(delta);
+        game.draw(delta);
         /* Make all the possibilities for the screen to lead to another one
         if (Gdx.input.justTouched()) // Criterion
             game.setScreen(game.anotherScreen);  // Screen to change
@@ -49,7 +49,7 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         // never called automatically
-        gameTemp.dispose();
+        game.dispose();
     }
 
 }

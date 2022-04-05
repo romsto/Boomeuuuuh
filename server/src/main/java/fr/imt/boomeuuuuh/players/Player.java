@@ -27,8 +27,10 @@ public class Player {
     private LobbyJoiningState joinedLobby = LobbyJoiningState.DISCONNETED;
     private int port;
 
-    public int maxBombs = 1;
-    public int currentBombs = 1;
+    public int maxBombs = 3;
+    public int bombPower = 3;
+    public int speed = 1;
+    public int currentBombs = 0;
 
     private final InetAddress address;
     private final Socket serverSocket;
@@ -66,13 +68,7 @@ public class Player {
     }
 
     public boolean authenticate(String username, String password) {
-        if (Server.getPlayers().stream().anyMatch(player -> {
-            System.out.println(player.isAuthentified());
-            System.out.println(player.getName() != null);
-            if (player.getName() != null)
-                System.out.println(player.getName());
-            return player.isAuthentified() && player.getName() != null && player.getName().equalsIgnoreCase(username);
-        })) {
+        if (Server.getPlayers().stream().anyMatch(player -> player.isAuthentified() && player.getName() != null && player.getName().equalsIgnoreCase(username))) {
             serverConnection.send(new DeclinePacket("You are already connected..."));
             return false;
         }
@@ -141,12 +137,12 @@ public class Player {
 
         Player player = (Player) o;
 
-        return id == player.id;
+        return name.equalsIgnoreCase(player.name);
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return name.hashCode();
     }
 
     //-------------------------GAME------------------------

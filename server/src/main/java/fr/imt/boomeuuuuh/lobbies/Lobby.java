@@ -109,16 +109,20 @@ public class Lobby {
     //-----------------------------------------------------
     //------------------------GAME-------------------------
     public void startGame(String mapID) {
+        open = false;
         gameManager = new GameManager(this, mapID);
 
-        open = false;
         state = LobbyState.PLAYING;
+
+        players.forEach(player -> player.currentBombs = 0);
     }
 
     //Update cycle is in LobbyExecutor
 
     public void stopGame() {
         //Broadcast end of game
+        gameManager = null;
+
         EndGamePacket p = new EndGamePacket();
         broadcastToAll(false, p);
 
@@ -139,6 +143,11 @@ public class Lobby {
     }
 
     public void removePlayer(Player player) {
+        if (state == LobbyState.PLAYING) {
+            if (player.getEntity() != null)
+                gameManager.destroyEntity(player.getEntity());
+        }
+
         players.remove(player);
         if (players.size() <= 0) {
             // There is no more players. Closing lobby
@@ -221,10 +230,13 @@ public class Lobby {
                     }
 
                     //-------GAME-------
-                    if(state == LobbyState.PLAYING){
-                        gameManager.Update();
-                        if (currentTick % 4 == 0) //Should we change this to a different tick rate?
-                            gameManager.UpdatePlayersPos();
+                    if (state == LobbyState.PLAYING && gameManager != null && gameManager.ready) {
+                        if (gameManager != null)
+                            gameManager.Update();
+                        if (currentTick % 5 == 0) //Should we change this to a different tick rate?
+                            if (gameManager != null) gameManager.UpdatePlayersPos();
+                        if (currentTick >= 20)
+                            if (gameManager != null) gameManager.UpdatePlayersInfos();
                     }
                     //------------------
 

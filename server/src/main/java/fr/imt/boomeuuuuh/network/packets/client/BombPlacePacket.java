@@ -32,6 +32,7 @@ public class BombPlacePacket extends Packet {
             player.serverConnection.send(new DeclinePacket("You are not currently playing"));
             return;
         }
+
         //Send request to game manager
         player.getLobby().getGameManager().placeBomb(player, location);
     }

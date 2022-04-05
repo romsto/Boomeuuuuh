@@ -12,13 +12,14 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import fr.imt.boomeuuuuh.entities.*;
+import fr.imt.boomeuuuuh.entities.Entity;
+import fr.imt.boomeuuuuh.entities.Player;
 import fr.imt.boomeuuuuh.network.packets.client.BombPlacePacket;
+import fr.imt.boomeuuuuh.network.packets.client.PlayerChangeBlocPacket;
 import fr.imt.boomeuuuuh.utils.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Game implements InputProcessor {
 
@@ -37,7 +38,12 @@ public class Game implements InputProcessor {
     public Player player;
 
     public int player_bomb = 1;
+    public int player_bomb_power = 3;
     public int player_speed = 1;
+    public int player_kills = 0;
+
+    public int lastBlocX = 0;
+    public int lastBlocY = 0;
 
     public Game() {
         instance = this;
@@ -51,11 +57,9 @@ public class Game implements InputProcessor {
         entities = new ArrayList<>();
         toBeRemovedEntities = new ArrayList<>();
 
-        Gdx.input.setInputProcessor(this);
-
         createWorldBorders();
 
-        spawnEntity(new HardBlock(0, new Location(2, 2), world));
+        /*spawnEntity(new HardBlock(0, new Location(2, 2), world));
         spawnEntity(new HardBlock(1, new Location(2, 4), world));
         spawnEntity(new HardBlock(2, new Location(2, 5), world));
         spawnEntity(new SoftBlock(4, new Location(3, 4), world));
@@ -63,7 +67,7 @@ public class Game implements InputProcessor {
         player = new Player(3, new Location(1, 1), world);
         player.refer("RomSto", "test");
         spawnEntity(player);
-        player.isAffected = false;
+        player.isAffected = false;*/
     }
 
     private void createWorldBorders() {
@@ -129,7 +133,7 @@ public class Game implements InputProcessor {
     }
 
     public void loadMap() {
-        map = new TmxMapLoader().load("map/map1.tmx");
+        map = new TmxMapLoader().load("map/map1Final.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera(480, 480);
         camera.setToOrtho(false);
@@ -169,7 +173,14 @@ public class Game implements InputProcessor {
     }
 
     public Entity getEntity(int id) {
-        return entities.get(id);
+        Entity found = null;
+        for (Entity entity : entities) {
+            if (entity.getId() == id) {
+                found = entity;
+                break;
+            }
+        }
+        return found;
     }
 
     public List<Entity> getEntities() {
@@ -181,6 +192,17 @@ public class Game implements InputProcessor {
     }
 
     public void handleMovements() {
+        if (player == null)
+            return;
+
+        int currentBlocX = player.getBlocX();
+        int currentBlocY = player.getBlocY();
+        if (lastBlocX != currentBlocX || lastBlocY != currentBlocY) {
+            MyGame.getInstance().serverConnection.send(new PlayerChangeBlocPacket(new Location(currentBlocX, currentBlocY)));
+            lastBlocX = currentBlocX;
+            lastBlocY = currentBlocY;
+        }
+
         boolean left = Gdx.input.isKeyPressed(Input.Keys.Q);
         boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
         boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
@@ -192,10 +214,12 @@ public class Game implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case (Input.Keys.SPACE):
-                MyGame.getInstance().serverConnection.send(new BombPlacePacket(new Location(player.getBlocX(), player.getBlocY())));
-                spawnEntity(new BombeStandard(new Random().nextInt(100), new Location(player.getBlocX(), player.getBlocY()), world, 5));
+        if (player == null)
+            return true;
+
+        if (keycode == Input.Keys.SPACE) {
+            MyGame.getInstance().serverConnection.send(new BombPlacePacket(new Location(player.getBlocX(), player.getBlocY())));
+            //spawnEntity(new BombeStandard(new Random().nextInt(100), new Location(player.getBlocX(), player.getBlocY()), world, 5));
         }
         return true;
     }

@@ -120,7 +120,13 @@ public enum PacketType {
             return new CreateAccountPacket(player, split[0], split[1]);
         }
     },
-    PLAYER_DATA;
+    PLAYER_DATA,
+    CHANGE_BLOC {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new PlayerChangeBlocPacket(player, Location.fromBytesArray(data));
+        }
+    };
 
 
     public Packet make(byte[] data) {

@@ -1,11 +1,13 @@
 package fr.imt.boomeuuuuh.network;
 
 import fr.imt.boomeuuuuh.Boomeuuuuh;
-import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.players.Player;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
@@ -63,8 +65,7 @@ public class ServerConnection extends Thread {
                 writer.writeInt(bytes.length);
                 writer.write(bytes);
             } catch (IOException e) {
-                e.printStackTrace();
-                // TODO Manage error
+                close();
             }
         }
     }

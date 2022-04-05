@@ -1,11 +1,11 @@
 package fr.imt.boomeuuuuh.network.packets;
 
-import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.Server;
+import fr.imt.boomeuuuuh.players.Player;
 
 import java.net.InetAddress;
 
-public abstract class   Packet {
+public abstract class Packet {
 
     private final PacketType packetType;
 
@@ -47,6 +47,25 @@ public abstract class   Packet {
         Packet instance = packetType.make(data);
         if (instance.packetType == PacketType.TEST)
             instance = packetType.make(data, Server.getPlayer(address));
+        return instance;
+    }
+
+    /**
+     * Transforms a byte raw data to a Packet
+     *
+     * @param packet raw data
+     * @param port   port
+     * @return Packet built
+     */
+    public static Packet getFromBytes(byte[] packet, InetAddress address, int port) {
+        int type = packet[0] + 126;
+        int size = packet[1] + 126;
+        byte[] data = extractData(packet, size);
+        PacketType packetType = PacketType.values()[type];
+
+        Packet instance = packetType.make(data);
+        if (instance.packetType == PacketType.TEST)
+            instance = packetType.make(data, Server.getPlayer(address, port));
         return instance;
     }
 

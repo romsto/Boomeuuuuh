@@ -58,6 +58,16 @@ public class Server extends Thread {
     }
 
     /**
+     * Returns a player according to its address
+     *
+     * @param address query
+     * @return found player
+     */
+    public static Player getPlayer(InetAddress address, int port) {
+        return players.values().stream().filter(player -> player.getAddress().equals(address) && player.getPort() == port).findFirst().get();
+    }
+
+    /**
      * Checks if a payer with an address already exists
      *
      * @param address to check

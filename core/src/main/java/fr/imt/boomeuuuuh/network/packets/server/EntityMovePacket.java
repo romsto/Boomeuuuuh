@@ -32,7 +32,7 @@ public class EntityMovePacket extends Packet {
         if (!MyGame.getInstance().logged || MyGame.getInstance().lobby == null || game == null)
             return;
 
-        if (entityId == game.player.getId())
+        if (game.player != null && entityId == game.player.getId())
             return;
 
         Entity entity = game.getEntity(entityId);

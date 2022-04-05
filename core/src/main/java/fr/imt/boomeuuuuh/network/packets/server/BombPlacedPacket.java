@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.entities.BombeStandard;
@@ -27,11 +28,16 @@ public class BombPlacedPacket extends Packet {
 
     @Override
     public void handle() {
-        Game game = Game.getInstance();
+        final Game game = Game.getInstance();
 
         if (!MyGame.getInstance().logged || MyGame.getInstance().lobby == null || game == null)
             return;
 
-        game.spawnEntity(new BombeStandard(entityId, location, game.getWorld(), power));
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.spawnEntity(new BombeStandard(entityId, location, game.getWorld(), power));
+            }
+        });
     }
 }

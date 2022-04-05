@@ -23,15 +23,15 @@ public class StartGamePacket extends Packet {
 
     @Override
     public void handle() {
-        Lobby lobby = MyGame.getInstance().lobby;
+        final Lobby lobby = MyGame.getInstance().lobby;
         if (!MyGame.getInstance().logged || lobby == null)
             return;
 
-        lobby.game = new Game();
-        lobby.state = LobbyState.LOADING;
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
+                lobby.game = new Game();
+                lobby.state = LobbyState.LOADING;
                 MyGame.getInstance().changeScreen(ScreenType.LOADING);
             }
         });

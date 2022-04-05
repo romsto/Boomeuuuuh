@@ -2,6 +2,7 @@ package fr.imt.boomeuuuuh.network.packets;
 
 import com.google.common.primitives.Ints;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
+import fr.imt.boomeuuuuh.network.packets.both.ReadyPacket;
 import fr.imt.boomeuuuuh.network.packets.server.*;
 import fr.imt.boomeuuuuh.utils.Location;
 
@@ -114,13 +115,22 @@ public enum PacketType {
             return new EndGamePacket();
         }
     },
-    READY,
+    READY {
+        @Override
+        public Packet make(byte[] data) {
+            return new ReadyPacket();
+        }
+    },
     CHANGE_LOBBY_NAME,
     LAUNCH_GAME,
     PLAYER_INFO {
         @Override
         public Packet make(byte[] data) {
-            return new PlayerInfoPacket();
+            byte[] maxBomb = Arrays.copyOfRange(data, 0, 4);
+            byte[] power = Arrays.copyOfRange(data, 4, 8);
+            byte[] speed = Arrays.copyOfRange(data, 8, 12);
+            byte[] kills = Arrays.copyOfRange(data, 12, 16);
+            return new PlayerInfoPacket(Ints.fromByteArray(maxBomb), Ints.fromByteArray(power), Ints.fromByteArray(speed), Ints.fromByteArray(kills));
         }
     },
     LOGIN,
@@ -130,7 +140,8 @@ public enum PacketType {
         public Packet make(byte[] data) {
             return new PlayerDataPacket(data);
         }
-    };
+    },
+    CHANGE_BLOC;
 
     public Packet make(byte[] data) {
 

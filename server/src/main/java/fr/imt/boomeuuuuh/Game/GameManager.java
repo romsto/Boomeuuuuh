@@ -10,6 +10,7 @@ import fr.imt.boomeuuuuh.players.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class GameManager {
 
@@ -27,7 +28,9 @@ public class GameManager {
     //Id references
     private int lastID;
 
-    public GameManager(Lobby lobby, String mapID){
+    public boolean ready = false;
+
+    public GameManager(Lobby lobby, String mapID) {
         //Set vars
         this.lobby = lobby;
 
@@ -35,8 +38,12 @@ public class GameManager {
         this.mapID = mapID;
         MapLoader loader = new MapLoader();
         Map m = loader.LoadMap(mapID, this);
-        if(m == null){
-            entityList = null; mapWidth = 0; mapHeight = 0; livePlayers = null; deadPlayers = null;
+        if (m == null) {
+            entityList = null;
+            mapWidth = 0;
+            mapHeight = 0;
+            livePlayers = null;
+            deadPlayers = null;
             endGame();
             return;
         }
@@ -59,42 +66,76 @@ public class GameManager {
         //Broadcast map
         lobby.broadcastToAll(false, new StartGamePacket());
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
         broadcastEntities();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
 
         broadcastReferences();
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
+
         lobby.broadcastToAll(false, new ReadyPacket());
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+
+        ready = true;
     }
 
     //-----------------------------------------------------
-    public void Update(){
+    public void Update() {
         //---Bombs---
-        for (Entity e : entityList) {
-            if(e instanceof Bomb)
+        List<Entity> copiedList = new ArrayList<>(entityList);
+        for (Entity e : copiedList) {
+            if (e instanceof Bomb)
                 ((Bomb) e).checkExplosion(entityList, this);//Faille possible
         }
         //-----------
     }
 
-    public void UpdatePlayersPos(){
-        for (PlayerEntity e : livePlayers){
-            EntityMovePacket p = new EntityMovePacket(e.getId(), e.getPos());
-            lobby.broadcastExcept(true, e.getPlayer(), p);
+    public void UpdatePlayersInfos() {
+        for (PlayerEntity livePlayer : new ArrayList<>(livePlayers)) {
+            Player player = livePlayer.getPlayer();
+            lobby.getLobbyConnection().send(player, new PlayerInfoPacket(player));
         }
     }
 
-    private void endGame(){
+    public void UpdatePlayersPos() {
+        for (PlayerEntity e : new ArrayList<>(livePlayers)) {
+            if (!e.hasMovedSinceLastTick)
+                continue;
+            e.hasMovedSinceLastTick = false;
+            EntityMovePacket p = new EntityMovePacket(e.getId(), e.getPos());
+            lobby.broadcastExcept(false, e.getPlayer(), p);
+        }
+    }
+
+    private void endGame() {
         //Tell lobby to stop the game
         lobby.stopGame();
     }
+
     //-----------------------------------------------------
     //------------------------BOMBS------------------------
-    public void placeBomb(Player origin, Location pos){// Later inclune multiple bomb types
+    public void placeBomb(Player origin, Location pos) {// Later inclune multiple bomb types
         //Check if position is possible
         if (!checkPosition(pos)) //TODO : Check that delays in placement are not too quick
             return;
 
-        if (origin.maxBombs >= origin.currentBombs)
+        if (origin.maxBombs <= origin.currentBombs)
             return;
 
         origin.currentBombs++;
@@ -107,22 +148,29 @@ public class GameManager {
         BombPlacedPacket packet = new BombPlacedPacket(b.getId(), b.getPower(), b.getPos());
         lobby.broadcastToAll(false, packet);
     }
+
     //-----------------------------------------------------
     //------------------ENTITY MANAGEMENT------------------
-    public int getNewID(){ lastID++; return lastID - 1;}
-    public boolean checkPosition(Location pos){
+    public int getNewID() {
+        lastID++;
+        return lastID - 1;
+    }
+
+    public boolean checkPosition(Location pos) {
         for (Entity e : entityList)
-            if(e instanceof Bomb || e instanceof SoftBlock || e instanceof HardBlock)
-                if(pos.equals(e.getPos()))
+            if (e instanceof Bomb || e instanceof SoftBlock || e instanceof HardBlock)
+                if (pos.equals(e.getPos()))
                     return false;
         return pos.comprisedInExcludingBorder(-1, mapWidth, -1, mapHeight);
     }
-    private void placeEntity(Entity e){
+
+    private void placeEntity(Entity e) {
         entityList.add(e);
         EntityCreatePacket p = new EntityCreatePacket(e.getId(), getEntityRef(e), e.getPos());
         lobby.broadcastToAll(false, p);
     }
-    private void placeEntityLocal(Entity e){
+
+    private void placeEntityLocal(Entity e) {
         entityList.add(e);
     }
 
@@ -148,6 +196,9 @@ public class GameManager {
     }
 
     public void destroyEntity(Entity e) {
+        if (!entityList.contains(e))
+            return;
+
         //Create destruction package and sent TCP
         EntityDestroyPacket p = new EntityDestroyPacket(e.getId());
         lobby.broadcastToAll(false, p);
@@ -158,15 +209,26 @@ public class GameManager {
         if (e instanceof PlayerEntity) {
             deadPlayers.add((PlayerEntity) e);
             livePlayers.remove((PlayerEntity) e);
+
+            if (livePlayers.size() <= 1)
+                endGame();
         }
     }
-    public void removePlayer(PlayerEntity e){
+
+    public void removePlayer(PlayerEntity e) {
         destroyEntity(e);
     }
+
     //-----------------------------------------------------
     //-------------------------GET-------------------------
-    public int getMapHeight(){ return mapHeight; }
-    public int getMapWidth(){ return mapWidth; }
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
     private int getEntityRef(Entity e) {
         if (e instanceof PlayerEntity)
             return 60;
@@ -180,7 +242,7 @@ public class GameManager {
             return 10;
         if (e instanceof DynamicEntity)
             return 2;
-        if(e instanceof StaticEntity)
+        if (e instanceof StaticEntity)
             return 1;
         return 0;
     }

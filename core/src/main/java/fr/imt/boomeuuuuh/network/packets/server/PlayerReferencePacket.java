@@ -37,8 +37,12 @@ public class PlayerReferencePacket extends Packet {
         if (!(entity instanceof Player))
             return;
 
-        if (playerName.equalsIgnoreCase(MyGame.getInstance().username))
+        if (playerName.equalsIgnoreCase(MyGame.getInstance().username)) {
             game.player = (Player) entity;
+            ((Player) entity).isAffected = false;
+            game.lastBlocX = entity.getBlocX();
+            game.lastBlocY = entity.getBlocY();
+        }
 
         ((Player) entity).refer(playerName, skin);
     }

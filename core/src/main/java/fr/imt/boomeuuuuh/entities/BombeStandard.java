@@ -39,22 +39,22 @@ public class BombeStandard extends Bomb {
 
             if (System.nanoTime() - time > 6e8) {
                 explode = false;
-                Game.getInstance().removeEntity(this);
+                //Game.getInstance().removeEntity(this);
             }
 
             return;
         }
 
-        TextureRegion currentRegion = animation.getKeyFrame(delta, false);
+        TextureRegion currentRegion = animation.getKeyFrame(delta, true);
         currentRegion.setRegion(currentRegion, 0, 0, 32, 32);
         batch.draw(currentRegion, this.getPixelX(), this.getPixelY());
-        if (System.nanoTime() - time > 3e9) calculateExplosion();
+        if (System.nanoTime() - time > 26e8) calculateExplosion();
     }
 
     public void calculateExplosion() {
         if (calculateExplosion) return;
 
-        up = Math.min(14, this.getBlocX() + power);
+        up = Math.min(14, this.getBlocY() + power);
         down = Math.max(1, this.getBlocY() - power);
         left = Math.max(1, this.getBlocX() - power);
         right = Math.min(14, this.getBlocX() + power);

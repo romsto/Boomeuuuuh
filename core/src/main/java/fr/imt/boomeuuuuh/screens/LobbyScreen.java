@@ -1,4 +1,5 @@
 package fr.imt.boomeuuuuh.screens;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
+import fr.imt.boomeuuuuh.network.packets.client.LaunchGamePacket;
 import fr.imt.boomeuuuuh.network.packets.client.LeavePacket;
 
 public class LobbyScreen implements Screen {
@@ -22,6 +24,7 @@ public class LobbyScreen implements Screen {
     private Label lobbyname;
     private Label players;
     private Label owner;
+    public Label info;
     private Lobby lobby;
     // private BombeStandard st;
     //private BombeStandard st1;
@@ -52,6 +55,7 @@ public class LobbyScreen implements Screen {
         lobbyname = new Label("In Lobby " + lobby.name, skin);
         players = new Label("Current players : " + lobby.players, skin);
         owner = new Label(lobby.isOwner ? "You are owner of the lobby" : " ", skin);
+        info = new Label("", skin);
         TextButton start = new TextButton("Start the game", skin);
         TextButton leave = new TextButton("Leave the game", skin);
 
@@ -62,6 +66,8 @@ public class LobbyScreen implements Screen {
         table.row().pad(10, 0, 10, 0);
         table.add(owner).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
+        table.add(info).fillX().uniformX();
+        table.row().pad(10, 0, 10, 0);
         table.add(start).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(leave).fillX().uniformX();
@@ -70,7 +76,7 @@ public class LobbyScreen implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                game.serverConnection.send(new LaunchGamePacket());
             }
         });
 

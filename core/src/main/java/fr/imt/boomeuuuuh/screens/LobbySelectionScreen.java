@@ -9,10 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.client.CreateLobbyPacket;
 import fr.imt.boomeuuuuh.network.packets.client.RequestLobbyListPacket;
 import fr.imt.boomeuuuuh.utils.LobbyInfoList;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +91,17 @@ public class LobbySelectionScreen implements Screen {
 
         stage.addActor(table);
 
-        game.serverConnection.send(new RequestLobbyListPacket());
+        if (game.connected) {
+            game.serverConnection.send(new RequestLobbyListPacket());
+        } else {
+            try {
+                game.serverConnection = new ServerConnection(MyGame.SERVER_ADDRESS, MyGame.SERVER_PORT_TCP);
+                game.connected = true;
+                game.serverConnection.send(new RequestLobbyListPacket());
+            } catch (IOException e) {
+                game.connected = false;
+            }
+        }
 
         backButton.addListener(new ChangeListener() {
             @Override
@@ -100,13 +112,13 @@ public class LobbySelectionScreen implements Screen {
         refreshButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.serverConnection.send(new RequestLobbyListPacket());
+                if (game.connected) game.serverConnection.send(new RequestLobbyListPacket());
             }
         });
         createButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.serverConnection.send(new CreateLobbyPacket(game.username));
+                if (game.connected) game.serverConnection.send(new CreateLobbyPacket(game.username));
             }
         });
     }

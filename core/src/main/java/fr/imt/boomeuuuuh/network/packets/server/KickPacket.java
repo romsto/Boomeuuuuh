@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.Packet;
@@ -24,9 +25,14 @@ public class KickPacket extends Packet {
 
     @Override
     public void handle() {
-        MyGame myGame = MyGame.getInstance();
+        final MyGame myGame = MyGame.getInstance();
         if (myGame.getCurrentScreenType() == ScreenType.LOBBY)
-            myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+                }
+            });
 
         Lobby lobby = myGame.lobby;
         if (lobby == null)

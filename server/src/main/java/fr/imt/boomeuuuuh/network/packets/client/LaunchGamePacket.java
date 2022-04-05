@@ -43,6 +43,11 @@ public class LaunchGamePacket extends Packet {
             return;
         }
 
+        if (player.getLobby().getPlayers().size() <= 1) {
+            player.serverConnection.send(new DeclinePacket("There is not enough player..."));
+            return;
+        }
+
         player.getLobby().startGame("map1");
     }
 }

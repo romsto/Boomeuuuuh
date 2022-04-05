@@ -10,16 +10,19 @@ import java.util.List;
 
 public class ExplosionShape {
     //Explosion geometry
-    private final int up;
-    private final int down;
-    private final int right;
-    private final int left;
+    protected final int up;
+    protected final int down;
+    protected final int right;
+    protected final int left;
 
-    public ExplosionShape(int up, int down, int right, int left){
-        this.up = up; this.down = down; this.right = right; this.left = left;
+    public ExplosionShape(int up, int down, int right, int left) {
+        this.up = up;
+        this.down = down;
+        this.right = right;
+        this.left = left;
     }
 
-    public List<Entity> calcExplosion(Collection<Entity> entityList, int mapHeight, int mapWidth, int bx, int by){
+    public List<Entity> calcExplosion(Collection<Entity> entityList, int mapHeight, int mapWidth, int bx, int by) {
         //  Make sure explosion in map
         int[] bounds = {Math.min(mapHeight - 1, by + up),
                 Math.min(mapWidth - 1, bx + right),

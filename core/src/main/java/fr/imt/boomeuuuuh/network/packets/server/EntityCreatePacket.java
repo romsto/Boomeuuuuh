@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
@@ -31,30 +32,40 @@ public class EntityCreatePacket extends Packet {
 
     @Override
     public void handle() {
+        if (!MyGame.getInstance().logged || MyGame.getInstance().lobby == null)
+            return;
+
         Game game = Game.getInstance();
 
-        if (!MyGame.getInstance().logged || MyGame.getInstance().lobby == null || game == null)
-            return;
-
-        World world = game.getWorld();
-
-        Entity e = null;
-
-        switch (entityType) {
-            case 60:
-                e = new Player(entityId, location, world);
-                break;
-            case 50:
-                e = new SoftBlock(entityId, location, world);
-                break;
-            case 40:
-                e = new HardBlock(entityId, location, world);
-                break;
+        while ((game = Game.getInstance()) == null) {
         }
 
-        if (e == null)
-            return;
+        final Game finalGame = game;
 
-        game.spawnEntity(e);
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                World world = finalGame.getWorld();
+
+                Entity e = null;
+
+                switch (entityType) {
+                    case 60:
+                        e = new Player(entityId, location, world);
+                        break;
+                    case 50:
+                        e = new SoftBlock(entityId, location, world);
+                        break;
+                    case 40:
+                        e = new HardBlock(entityId, location, world);
+                        break;
+                }
+
+                if (e == null)
+                    return;
+
+                finalGame.spawnEntity(e);
+            }
+        });
     }
 }
