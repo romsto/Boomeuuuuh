@@ -208,8 +208,7 @@ public class Game implements InputProcessor {
         boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
         boolean up = Gdx.input.isKeyPressed(Input.Keys.Z);
 
-        player.getBody().setLinearVelocity(new Vector2());
-        player.getBody().applyLinearImpulse(new Vector2((left ? -1f : 0.0005f) + (right ? 1f : -0.0006f), (down ? -1f : 0.0005f) + (up ? 1f : -0.0006f)), player.getBody().getWorldCenter(), true);
+        player.getBody().setLinearVelocity(new Vector2((left ? -1f : 0f) + (right ? 1f : 0f), (up ? 1f : 0) + (down ? -1f : 0f)).nor().scl(1 + (player_speed - 1) / 2f));
     }
 
     @Override
@@ -217,10 +216,8 @@ public class Game implements InputProcessor {
         if (player == null)
             return true;
 
-        if (keycode == Input.Keys.SPACE) {
+        if (keycode == Input.Keys.SPACE)
             MyGame.getInstance().serverConnection.send(new BombPlacePacket(new Location(player.getBlocX(), player.getBlocY())));
-            //spawnEntity(new BombeStandard(new Random().nextInt(100), new Location(player.getBlocX(), player.getBlocY()), world, 5));
-        }
         return true;
     }
 

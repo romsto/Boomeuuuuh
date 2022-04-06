@@ -3,7 +3,7 @@ package fr.imt.boomeuuuuh.entities;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import fr.imt.boomeuuuuh.utils.Location;
@@ -57,15 +57,15 @@ public class Player extends MovableEntity {
         super.draw(batch, delta);
 
         if (referred) {
-            font.setColor(1f, (isAffected ? 1f : 0), (isAffected ? 1f : 0), 0.8f);
+            font.setColor(1f, (!isAffected ? 1f : 0), (!isAffected ? 1f : 0), 0.8f);
             font.draw(batch, name, getPixelX() + 16 - fontWidth / 2, getPixelY() + 45);
         }
     }
 
     @Override
     public Shape createShape() {
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(14 / 100f, 14 / 100f);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(14 / 100f);
         return shape;
     }
 }

@@ -26,7 +26,7 @@ public abstract class MovableEntity extends Entity {
 
     public void setToBlocX(int toBlocX) {
         this.toBlocX = toBlocX;
-        this.elapsed = 0;
+        //this.elapsed = 0;
     }
 
     public int getToBlocY() {
@@ -35,7 +35,7 @@ public abstract class MovableEntity extends Entity {
 
     public void setToBlocY(int toBlocY) {
         this.toBlocY = toBlocY;
-        this.elapsed = 0;
+        //this.elapsed = 0;
     }
 
     public void setToBloc(Location location) {
@@ -56,10 +56,12 @@ public abstract class MovableEntity extends Entity {
 
         if (!alreadyInDestination()) {
             elapsed += delta;
-            if (elapsed >= 2)
+            if (elapsed >= 2) {
                 teleport(new Location(getToBlocX(), getToBlocY()));
-            else
-                getBody().applyForceToCenter(new Vector2((toBlocX * 32 - getPixelX()), (toBlocY * 32 - getPixelY())).scl(2), true);
+                getBody().setLinearVelocity(new Vector2());
+                elapsed = 0;
+            } else
+                getBody().setLinearVelocity(new Vector2((toBlocX * 32 - getPixelX()), (toBlocY * 32 - getPixelY())).nor());
         } else {
             elapsed = 0;
             getBody().setLinearVelocity(new Vector2());
