@@ -37,6 +37,9 @@ public class Bomb extends Entity {
 
     @Override
     public short maskBits() {
+        if (Game.getInstance() == null || Game.getInstance().player == null)
+            return PLAYER_CATEGORY;
+
         boolean inPlayer = getBlocX() == Game.getInstance().player.getBlocX() && getBlocY() == Game.getInstance().player.getBlocY();
         return inPlayer ? SOLID_CATEGORY : PLAYER_CATEGORY;
     }

@@ -7,6 +7,7 @@ import fr.imt.boomeuuuuh.players.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Bomb extends DynamicEntity {
 
@@ -83,16 +84,18 @@ public class Bomb extends DynamicEntity {
         List<Entity> explosion = classicShape.calcExplosion(entityList, this, manager.getMapHeight(), manager.getMapWidth(), pos.getX(), pos.getY());
         List<Entity> copied = new ArrayList<>(entityList);
         copied.remove(this);
-        copied.removeAll(explosion);
+        copied.removeAll(explosion.stream().filter(entity -> entity instanceof Bomb || entity instanceof PlayerEntity || entity instanceof SoftBlock).collect(Collectors.toList()));
         for (Entity entity : explosion) {
             if (entity instanceof Bomb)
                 ((Bomb) entity).forceExplode(copied, manager);
             if (entity instanceof SoftBlock || entity instanceof PowerUp)
                 manager.destroyEntity(entity);
             if (entity instanceof PlayerEntity) {
-                if (entity.getId() != parentPlayer.getEntity().getId())
+                if (entity == null)
+                    continue;
+                if (entity != null && entity.getId() != parentPlayer.getEntity().getId())
                     parentPlayer.getEntity().addKill();
-                manager.destroyEntity(entity);
+                if (entity != null) manager.destroyEntity(entity);
             }
         }
         parentPlayer.currentBombs--;

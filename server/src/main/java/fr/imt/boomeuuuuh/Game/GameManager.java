@@ -17,7 +17,7 @@ public class GameManager {
     //Global references
     private final Lobby lobby;
     private final Collection<Entity> entityList;
-    private final Collection<PlayerEntity> livePlayers;
+    private final List<PlayerEntity> livePlayers;
     private final Collection<PlayerEntity> deadPlayers;
 
     //Map references
@@ -210,8 +210,13 @@ public class GameManager {
             deadPlayers.add((PlayerEntity) e);
             livePlayers.remove((PlayerEntity) e);
 
-            if (livePlayers.size() <= 1)
+            if (livePlayers.size() <= 1) {
+                if (livePlayers.size() == 1) {
+                    ReceiveChatPacket receiveChatPacket = new ReceiveChatPacket("\n\n" + livePlayers.get(0).getPlayer().getName() + " won the game with " + livePlayers.get(0).getKills() + " kills !");
+                    lobby.broadcastToAll(false, receiveChatPacket);
+                }
                 endGame();
+            }
         }
     }
 
