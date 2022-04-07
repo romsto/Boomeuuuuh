@@ -9,6 +9,9 @@ public abstract class Entity {
 
     public static short PLAYER_CATEGORY = 0x0001;
     public static short SOLID_CATEGORY = 0x0002;
+    public static short BOMB_CATEGORY = 0x0003;
+    public static short ENEMY_CATEGORY = 0x0004;
+    public static short VOID_CATEGORY = 0x0005;
 
     private final int id;
     private final Body body;

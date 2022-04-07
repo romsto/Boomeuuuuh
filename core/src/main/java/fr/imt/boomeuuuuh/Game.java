@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import fr.imt.boomeuuuuh.entities.Bomb;
 import fr.imt.boomeuuuuh.entities.Entity;
 import fr.imt.boomeuuuuh.entities.Player;
 import fr.imt.boomeuuuuh.network.packets.client.BombPlacePacket;
@@ -36,6 +37,8 @@ public class Game implements InputProcessor {
     private OrthographicCamera camera;
 
     public Player player;
+
+    public List<Bomb> toChangeCollision = new ArrayList<>();
 
     public int player_bomb = 1;
     public int player_bomb_power = 3;
@@ -201,6 +204,20 @@ public class Game implements InputProcessor {
             MyGame.getInstance().serverConnection.send(new PlayerChangeBlocPacket(new Location(currentBlocX, currentBlocY)));
             lastBlocX = currentBlocX;
             lastBlocY = currentBlocY;
+
+            if (!toChangeCollision.isEmpty()) {
+                List<Bomb> toRemove = new ArrayList<>();
+
+                for (Bomb bomb : toChangeCollision) {
+                    if (bomb.getBlocY() != currentBlocY || bomb.getBlocX() != currentBlocX) {
+                        bomb.getBody().getFixtureList().get(0).getFilterData().categoryBits = Entity.SOLID_CATEGORY;
+                        bomb.getBody().getFixtureList().get(0).getFilterData().maskBits = Entity.PLAYER_CATEGORY;
+                        toRemove.add(bomb);
+                    }
+                }
+
+                toChangeCollision.removeAll(toRemove);
+            }
         }
 
         boolean left = Gdx.input.isKeyPressed(Input.Keys.Q);

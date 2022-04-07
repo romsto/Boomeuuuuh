@@ -1,5 +1,6 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
+import com.badlogic.gdx.physics.box2d.Filter;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.entities.Entity;
@@ -42,6 +43,9 @@ public class PlayerReferencePacket extends Packet {
             ((Player) entity).isAffected = false;
             game.lastBlocX = entity.getBlocX();
             game.lastBlocY = entity.getBlocY();
+            Filter filter = game.player.getBody().getFixtureList().get(0).getFilterData();
+            filter.categoryBits = Entity.PLAYER_CATEGORY;
+            filter.maskBits = Entity.SOLID_CATEGORY;
         }
 
         ((Player) entity).refer(playerName, skin);
