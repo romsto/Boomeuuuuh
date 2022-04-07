@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh.lobbies;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 
@@ -17,4 +19,10 @@ public class Lobby {
     public String chat = "";
     public LobbyConnection lobbyConnection;
     public Game game;
+
+    public String collectChat(){
+        String r = chat;
+        chat = "";
+        return r;
+    }
 }
