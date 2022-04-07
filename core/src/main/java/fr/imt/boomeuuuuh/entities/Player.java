@@ -44,12 +44,12 @@ public class Player extends MovableEntity {
 
     @Override
     public short categoryBits() {
-        return PLAYER_CATEGORY;
+        return ENEMY_CATEGORY;
     }
 
     @Override
     public short maskBits() {
-        return SOLID_CATEGORY;
+        return VOID_CATEGORY;
     }
 
     @Override
