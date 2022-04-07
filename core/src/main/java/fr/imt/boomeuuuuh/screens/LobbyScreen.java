@@ -130,9 +130,9 @@ public class LobbyScreen implements Screen {
 
         chat_input.addListener(new InputListener() {
             @Override
-            public boolean keyDown(InputEvent event, int keycode) {
+            public boolean keyUp(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.ENTER){
-                    SendChatPacket p = new SendChatPacket(chat_input.getText());
+                    SendChatPacket p = new SendChatPacket(chat_input.getText().replaceAll("\n", ""));
                     MyGame.getInstance().serverConnection.send(p);
                     chat_input.setText("");
                 }
