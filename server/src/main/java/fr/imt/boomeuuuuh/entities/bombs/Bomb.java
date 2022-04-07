@@ -91,11 +91,9 @@ public class Bomb extends DynamicEntity {
             if (entity instanceof SoftBlock || entity instanceof PowerUp)
                 manager.destroyEntity(entity);
             if (entity instanceof PlayerEntity) {
-                if (entity == null)
-                    continue;
-                if (entity != null && entity.getId() != parentPlayer.getEntity().getId())
+                if (parentPlayer != null && parentPlayer.getEntity() != null && entity.getId() != parentPlayer.getEntity().getId())
                     parentPlayer.getEntity().addKill();
-                if (entity != null) manager.destroyEntity(entity);
+                manager.destroyEntity(entity);
             }
         }
         parentPlayer.currentBombs--;
