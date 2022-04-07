@@ -55,7 +55,7 @@ public class LoadingScreen implements Screen {
         table.row().pad(10, 0, 10, 0);
 
         Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/meuh.wav"));
-        wavSound.play();
+        wavSound.play(1.0f);
         wavSound.dispose();
     }
 
