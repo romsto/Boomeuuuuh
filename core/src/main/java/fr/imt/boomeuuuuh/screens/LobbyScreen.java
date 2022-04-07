@@ -121,6 +121,7 @@ public class LobbyScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 SendChatPacket p = new SendChatPacket(chat_input.getText());
                 MyGame.getInstance().serverConnection.send(p);
+                chat_input.setText("");
             }
         });
 
