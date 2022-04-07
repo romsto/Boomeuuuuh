@@ -17,6 +17,7 @@ public class Player extends MovableEntity {
     private final BitmapFont font = new BitmapFont();
     private String name;
     private String skin;
+    private String bomb = "3";
     private boolean referred = false;
     private float fontWidth;
     private static final Texture skin1 = new Texture("skin/skinDown1.png");
@@ -69,6 +70,7 @@ public class Player extends MovableEntity {
         if (referred) {
             font.setColor(1f, (!isAffected ? 1f : 0), (!isAffected ? 1f : 0), 0.8f);
             font.draw(batch, name, getPixelX() + 16 - fontWidth / 2, getPixelY() + 45);
+            font.draw(batch,bomb,15,15);
             batch.draw(skin1,getPixelX(),getPixelY(),32,32);
 
 
