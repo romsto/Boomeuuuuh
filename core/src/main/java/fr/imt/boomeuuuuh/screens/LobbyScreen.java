@@ -2,6 +2,7 @@ package fr.imt.boomeuuuuh.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +16,7 @@ import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.client.LaunchGamePacket;
 import fr.imt.boomeuuuuh.network.packets.client.LeavePacket;
+import com.badlogic.gdx.audio.Sound;
 
 public class LobbyScreen implements Screen {
 
@@ -76,6 +78,9 @@ public class LobbyScreen implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/meuh.wav"));
+                wavSound.play();
+                wavSound.dispose();
                 game.serverConnection.send(new LaunchGamePacket());
             }
         });
