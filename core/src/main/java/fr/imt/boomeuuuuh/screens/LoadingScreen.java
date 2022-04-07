@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -52,6 +53,10 @@ public class LoadingScreen implements Screen {
         //add buttons to table
         table.add(loading).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
+
+        Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/meuh.wav"));
+        wavSound.play();
+        wavSound.dispose();
     }
 
     @Override
