@@ -3,6 +3,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
+import com.badlogic.gdx.audio.Sound;
 
 public class PlayScreen implements Screen {
 
@@ -11,6 +12,11 @@ public class PlayScreen implements Screen {
 
     // constructor to keep a reference to the main Game class
     public PlayScreen(MyGame game) {
+
+        Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/bomb.wav"));
+        wavSound.play();
+        wavSound.dispose();
+
         this.game = Game.getInstance();
         Gdx.input.setInputProcessor(this.game);
     }
