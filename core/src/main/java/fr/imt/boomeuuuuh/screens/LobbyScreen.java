@@ -1,9 +1,12 @@
 package fr.imt.boomeuuuuh.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -122,6 +125,18 @@ public class LobbyScreen implements Screen {
                 SendChatPacket p = new SendChatPacket(chat_input.getText());
                 MyGame.getInstance().serverConnection.send(p);
                 chat_input.setText("");
+            }
+        });
+
+        chat_input.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ENTER){
+                    SendChatPacket p = new SendChatPacket(chat_input.getText());
+                    MyGame.getInstance().serverConnection.send(p);
+                    chat_input.setText("");
+                }
+                return true;
             }
         });
 
