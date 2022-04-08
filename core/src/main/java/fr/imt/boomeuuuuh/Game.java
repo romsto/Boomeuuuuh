@@ -38,6 +38,8 @@ public class Game implements InputProcessor {
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
+    private final HUD hud;
+
     public Player player;
 
     public List<Bomb> toChangeCollision = new ArrayList<>();
@@ -63,6 +65,18 @@ public class Game implements InputProcessor {
         toBeRemovedEntities = new ArrayList<>();
 
         createWorldBorders();
+
+        hud = new HUD();
+
+        /*spawnEntity(new HardBlock(0, new Location(2, 2), world));
+        spawnEntity(new HardBlock(1, new Location(2, 4), world));
+        spawnEntity(new HardBlock(2, new Location(2, 5), world));
+        spawnEntity(new SoftBlock(4, new Location(3, 4), world));
+
+        player = new Player(3, new Location(1, 1), world);
+        player.refer("RomSto", "test");
+        spawnEntity(player);
+        player.isAffected = false;*/
     }
 
     private void createWorldBorders() {
@@ -122,11 +136,12 @@ public class Game implements InputProcessor {
         batch.end();
 
         hudBatch.begin();
-        font.setColor(1f, 1f, 1f, 0.7f);
-        font.draw(hudBatch, player_bomb + " bombs", 15, 60);
-        font.draw(hudBatch, player_bomb_power + " power", 15, 45);
-        font.draw(hudBatch, player_speed + " speed", 15, 30);
-        font.draw(hudBatch, player_kills + " kills", 15, 15);
+        //font.setColor(1f, 1f, 1f, 0.7f);
+        //font.draw(hudBatch, player_bomb + " bombs", 15, 60);
+        //font.draw(hudBatch, player_bomb_power + " power", 15, 45);
+        //font.draw(hudBatch, player_speed + " speed", 15, 30);
+        //font.draw(hudBatch, player_kills + " kills", 15, 15);
+        hud.drawHUD(hudBatch, 480, 480);
         hudBatch.end();
 
         removeEntities();

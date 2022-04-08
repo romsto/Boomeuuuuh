@@ -1,8 +1,12 @@
 package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
+import jdk.javadoc.internal.doclets.formats.html.markup.Table;
+
+import java.awt.*;
 
 public class PlayScreen implements Screen {
 
