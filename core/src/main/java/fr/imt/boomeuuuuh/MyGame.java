@@ -5,11 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
+import fr.imt.boomeuuuuh.network.packets.both.AlivePacket;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 import fr.imt.boomeuuuuh.utils.AppPreferences;
 import fr.imt.boomeuuuuh.utils.ConfigFile;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -111,11 +111,19 @@ public class MyGame extends Game {
 
         changeScreen(ScreenType.MAIN_MENU);
 
-        try {
-            serverConnection = new ServerConnection(SERVER_ADDRESS, SERVER_PORT_TCP);
-            connected = true;
-        } catch (IOException e) {
-            connected = false;
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (connected)
+                        serverConnection.send(new AlivePacket());
+
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ex) {
+                    }
+                }
+            }
+        }).start();
     }
 }

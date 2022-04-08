@@ -58,6 +58,10 @@ public class GameManager {
             PlayerEntity e = new PlayerEntity(p, getNewID());
             e.setPos(m.nextSpawn());
             p.setEntity(e);
+            p.maxBombs = 1;
+            p.currentBombs = 0;
+            p.speed = 1;
+            p.bombPower = 1;
             entityList.add(e);
             livePlayers.add(e);
         }
@@ -148,7 +152,7 @@ public class GameManager {
         b.setPos(pos);
         entityList.add(b);
 
-        BombPlacedPacket packet = new BombPlacedPacket(b.getId(), b.getPower(), b.getPos());
+        BombPlacedPacket packet = new BombPlacedPacket(b.getId(), b.getPower() + 1, b.getPos());
         lobby.broadcastToAll(false, packet);
     }
 

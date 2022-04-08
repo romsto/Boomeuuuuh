@@ -30,28 +30,43 @@ public class HUD {
         int x = 0;
 
         int width = height;
+        font.setColor(1f, 1f, 1f, 0.9f);
         batch.draw(bomb, x, y, width, height);
         drawText(batch, String.valueOf(game.player_bomb), x + width + 4, y + height/2);
         y -= height + 5;
 
         batch.draw(power, x, y, width, height);
-        drawText(batch, String.valueOf(game.player_bomb_power), x + width + 4, y + height/2);
+        drawText(batch, String.valueOf(game.player_bomb_power), x + width + 4, y + height / 2);
         y -= height + 5;
 
         batch.draw(speed, x, y, width, height);
-        drawText(batch, String.valueOf(game.player_speed), x + width + 4, y + height/2);
+        drawText(batch, String.valueOf(game.player_speed), x + width + 4, y + height / 2);
         y -= height + 5;
 
         batch.draw(kills, x, y, width, height);
-        drawText(batch, String.valueOf(game.player_kills), x + width + 4, y + height/2);
+        drawText(batch, String.valueOf(game.player_kills), x + width + 4, y + height / 2);
+
+        if (game.player == null) {
+            font.setColor(1f, 0, 0, 1f);
+            drawTextCentered(batch, "You're dead :c", displayWidth / 2, displayHeight / 2);
+        }
     }
 
-    private int drawText(SpriteBatch batch, String txt, int x, int y){
+    private int drawText(SpriteBatch batch, String txt, int x, int y) {
         GlyphLayout glyphLayout = new GlyphLayout();
         glyphLayout.setText(font, txt);
         float fontHeight = glyphLayout.height;
 
         font.draw(batch, txt, x, y + fontHeight / 2);
         return ((int) fontHeight);
+    }
+
+    private void drawTextCentered(SpriteBatch batch, String txt, int x, int y) {
+        GlyphLayout glyphLayout = new GlyphLayout();
+        glyphLayout.setText(font, txt);
+        float fontHeight = glyphLayout.height;
+        float fontWidth = glyphLayout.width;
+
+        font.draw(batch, txt, x + fontWidth / 2, y + fontHeight / 2);
     }
 }

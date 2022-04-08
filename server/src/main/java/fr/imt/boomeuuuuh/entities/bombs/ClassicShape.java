@@ -1,9 +1,6 @@
 package fr.imt.boomeuuuuh.entities.bombs;
 
-import fr.imt.boomeuuuuh.entities.Entity;
-import fr.imt.boomeuuuuh.entities.HardBlock;
-import fr.imt.boomeuuuuh.entities.PlayerEntity;
-import fr.imt.boomeuuuuh.entities.SoftBlock;
+import fr.imt.boomeuuuuh.entities.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +54,7 @@ public class ClassicShape {
             } else if (B instanceof SoftBlock) {
                 if (((left == B.getX() || right == B.getX()) && B.getY() == by) || ((up == B.getY() || down == B.getY()) && B.getX() == bx))
                     entities.add(B);
-            } else if (B instanceof PlayerEntity) {
+            } else if (B instanceof PlayerEntity || B instanceof PowerUp) {
                 if (((left <= B.getX()) && (B.getX() <= right) && (B.getY() == by)) || ((down <= B.getY()) && (B.getY() <= up) && (B.getX() == bx)))
                     entities.add(B);
             }

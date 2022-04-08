@@ -27,8 +27,8 @@ public class Player {
     private LobbyJoiningState joinedLobby = LobbyJoiningState.DISCONNETED;
     private int port;
 
-    public int maxBombs = 3;
-    public int bombPower = 3;
+    public int maxBombs = 1;
+    public int bombPower = 2;
     public int speed = 1;
     public int currentBombs = 0;
     public boolean changed = true;

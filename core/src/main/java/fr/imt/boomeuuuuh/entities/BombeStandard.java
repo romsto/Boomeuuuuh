@@ -14,23 +14,27 @@ public class BombeStandard extends Bomb {
     private static final Texture sheetTexture = new Texture("Bomb/Clignx16.png");
     private static final Texture explosion_verti = new Texture("Bomb/fire_verti.png");
     private static final Texture explosion_horiz = new Texture("Bomb/fire_horiz.png");
-    private final Animation<TextureRegion> animation;
+    private static final Animation<TextureRegion> animation;
     public boolean calculateExplosion = false;
     private boolean explode = false;
     private long time;
+
+    static {
+        TextureRegion[] tabRegion = TextureRegion.split(sheetTexture, 32, sheetTexture.getHeight())[0];
+        animation = new Animation<TextureRegion>(0.25F, tabRegion);
+    }
 
     private int right;
     private int left;
     private int up;
     private int down;
 
+    private float animationTime = 0f;
+
     public BombeStandard(int id, Location location, World world, int power) {
         super(id, location, world, power);
 
         time = System.nanoTime();
-
-        TextureRegion[] tabRegion = TextureRegion.split(sheetTexture, 32, sheetTexture.getHeight())[0];
-        animation = new Animation<TextureRegion>(0.25F, tabRegion);
     }
 
     public void draw(SpriteBatch batch, float delta) {
@@ -45,7 +49,9 @@ public class BombeStandard extends Bomb {
             return;
         }
 
-        TextureRegion currentRegion = animation.getKeyFrame(delta, true);
+        animationTime += delta;
+
+        TextureRegion currentRegion = animation.getKeyFrame(animationTime, true);
         currentRegion.setRegion(currentRegion, 0, 0, 32, 32);
         batch.draw(currentRegion, this.getPixelX(), this.getPixelY());
         if (System.nanoTime() - time > 26e8) calculateExplosion();
@@ -66,19 +72,19 @@ public class BombeStandard extends Bomb {
             boolean hard = E instanceof HardBlock;
             if (E.getBlocY() == this.getBlocY()) {
                 if ((this.getBlocX() - power <= E.getBlocX()) & (E.getBlocX() <= this.getBlocX() - 1)) {
-                    left = Math.max(left, E.getBlocX());
+                    left = Math.max(left, E.getBlocX() + (hard ? 1 : 0));
                 }
                 if ((this.getBlocX() + power >= E.getBlocX()) & (E.getBlocX() >= this.getBlocX() + 1)) {
-                    right = Math.min(right, E.getBlocX());
+                    right = Math.min(right, E.getBlocX() + (hard ? -1 : 0));
                 }
             }
 
             if (E.getBlocX() == this.getBlocX()) {
                 if ((this.getBlocY() - power <= E.getBlocY()) & (E.getBlocY() <= this.getBlocY() - 1)) {
-                    down = Math.max(down, E.getBlocY());
+                    down = Math.max(down, E.getBlocY() + (hard ? 1 : 0));
                 }
                 if ((this.getBlocY() + power >= E.getBlocY()) & (E.getBlocY() >= this.getBlocY() + 1)) {
-                    up = Math.min(up, E.getBlocY());
+                    up = Math.min(up, E.getBlocY() + (hard ? -1 : 0));
                 }
             }
         }

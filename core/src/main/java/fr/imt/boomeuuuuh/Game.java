@@ -44,7 +44,7 @@ public class Game implements InputProcessor {
 
     public List<Bomb> toChangeCollision = new ArrayList<>();
 
-    public int player_bomb = 3;
+    public int player_bomb = 1;
     public int player_bomb_power = 1;
     public int player_speed = 1;
     public int player_kills = 0;
@@ -67,16 +67,6 @@ public class Game implements InputProcessor {
         createWorldBorders();
 
         hud = new HUD();
-
-        /*spawnEntity(new HardBlock(0, new Location(2, 2), world));
-        spawnEntity(new HardBlock(1, new Location(2, 4), world));
-        spawnEntity(new HardBlock(2, new Location(2, 5), world));
-        spawnEntity(new SoftBlock(4, new Location(3, 4), world));
-
-        player = new Player(3, new Location(1, 1), world);
-        player.refer("RomSto", "test");
-        spawnEntity(player);
-        player.isAffected = false;*/
     }
 
     private void createWorldBorders() {
@@ -238,7 +228,7 @@ public class Game implements InputProcessor {
         boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
         boolean up = Gdx.input.isKeyPressed(Input.Keys.Z) || Gdx.input.isKeyPressed(Input.Keys.W);
 
-        player.getBody().setLinearVelocity(new Vector2((left ? -1f : 0f) + (right ? 1f : 0f), (up ? 1f : 0) + (down ? -1f : 0f)).nor().scl(1 + (player_speed - 1) / 2f));
+        player.getBody().setLinearVelocity(new Vector2((left ? -1f : 0f) + (right ? 1f : 0f), (up ? 1f : 0) + (down ? -1f : 0f)).nor().scl(1 + (player_speed - 1) / 6f));
     }
 
     @Override

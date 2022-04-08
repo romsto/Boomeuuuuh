@@ -13,7 +13,8 @@ public enum ScreenType {
     LOG_IN(LoginScreen.class),
     MAIN_MENU(MainMenuScreen.class),
     PREFERENCES(PreferencesScreen.class),
-    PLAY(PlayScreen.class);
+    PLAY(PlayScreen.class),
+    CONNECT(IPAddressScreen.class);
 
     private final Class<? extends Screen> screenClass;
 

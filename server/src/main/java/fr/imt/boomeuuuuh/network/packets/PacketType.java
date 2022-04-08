@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.network.packets;
 
 import com.google.common.primitives.Ints;
+import fr.imt.boomeuuuuh.network.packets.both.AlivePacket;
 import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.both.ReadyPacket;
 import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
@@ -125,6 +126,12 @@ public enum PacketType {
         @Override
         public Packet make(byte[] data, Player player) {
             return new PlayerChangeBlocPacket(player, Location.fromBytesArray(data));
+        }
+    },
+    ALIVE {
+        @Override
+        public Packet make(byte[] data) {
+            return new AlivePacket();
         }
     };
 

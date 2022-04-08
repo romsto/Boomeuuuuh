@@ -17,7 +17,6 @@ import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.client.LaunchGamePacket;
 import fr.imt.boomeuuuuh.network.packets.client.LeavePacket;
 import fr.imt.boomeuuuuh.network.packets.client.SendChatPacket;
-import sun.tools.jconsole.Tab;
 
 public class LobbyScreen implements Screen {
 
@@ -29,10 +28,6 @@ public class LobbyScreen implements Screen {
     private Label owner;
     public Label info;
     private Lobby lobby;
-    // private BombeStandard st;
-    //private BombeStandard st1;
-    // public SpriteBatch batch;
-    // public float   temps;
 
     //Chat area
     private Label chat_label;
@@ -42,8 +37,6 @@ public class LobbyScreen implements Screen {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        //batch= new SpriteBatch();
-        //temps = 0.0F;
     }
 
     @Override
@@ -59,7 +52,7 @@ public class LobbyScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
         //create items
-        lobbyname = new Label("In Lobby " + lobby.name, skin);
+        lobbyname = new Label("[" + lobby.name + "]", skin);
         players = new Label("Current players : " + lobby.players, skin);
         owner = new Label(lobby.isOwner ? "You are owner of the lobby" : " ", skin);
         info = new Label("", skin);
@@ -98,7 +91,7 @@ public class LobbyScreen implements Screen {
         //---------CHAT AREA
         chatTable.bottom();
 
-        chat_label = new Label("START OF CHAT \n", skin);
+        chat_label = new Label("", skin);
         chat_label.setWrap(true);
         chat_label.setAlignment(Align.bottomLeft);
 
@@ -122,6 +115,8 @@ public class LobbyScreen implements Screen {
         sendChatB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if (chat_input.getText() == null || chat_input.getText().length() <= 2)
+                    return;
                 SendChatPacket p = new SendChatPacket(chat_input.getText());
                 MyGame.getInstance().serverConnection.send(p);
                 chat_input.setText("");
@@ -131,7 +126,9 @@ public class LobbyScreen implements Screen {
         chat_input.addListener(new InputListener() {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.ENTER){
+                if (keycode == Input.Keys.ENTER) {
+                    if (chat_input.getText() == null || chat_input.getText().length() <= 2)
+                        return true;
                     SendChatPacket p = new SendChatPacket(chat_input.getText().replaceAll("\n", ""));
                     MyGame.getInstance().serverConnection.send(p);
                     chat_input.setText("");
@@ -176,7 +173,7 @@ public class LobbyScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        lobbyname.setText("In Lobby " + lobby.name);
+        lobbyname.setText("[" + lobby.name + "]");
         players.setText("Current players : " + lobby.players);
         owner.setText(lobby.isOwner ? "You are owner of the lobby" : " ");
 

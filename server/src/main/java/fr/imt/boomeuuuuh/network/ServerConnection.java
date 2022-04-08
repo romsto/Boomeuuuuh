@@ -3,6 +3,7 @@ package fr.imt.boomeuuuuh.network;
 import fr.imt.boomeuuuuh.Boomeuuuuh;
 import fr.imt.boomeuuuuh.Server;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.players.Player;
 
 import java.io.DataInputStream;
@@ -62,9 +63,14 @@ public class ServerConnection extends Thread {
         for (Packet packet : packets) {
             try {
                 byte[] bytes = packet.getBytes();
+                int type = bytes[0] + 126;
+                if (type < 0 || type >= PacketType.values().length) {
+                    System.out.println("ERROR");
+                }
                 writer.writeInt(bytes.length);
                 writer.write(bytes);
             } catch (IOException e) {
+                Boomeuuuuh.logger.severe("Can't send packet to " + player.getAddress() + " : " + e.getMessage());
                 close();
             }
         }

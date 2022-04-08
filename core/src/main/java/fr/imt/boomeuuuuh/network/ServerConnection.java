@@ -3,6 +3,7 @@ package fr.imt.boomeuuuuh.network;
 import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 
 import java.io.DataInputStream;
@@ -31,7 +32,7 @@ public class ServerConnection extends Thread {
             try {
                 int length = reader.readInt();
                 if (length <= 0) {
-                    System.out.println("Connection lost to server");
+                    System.out.println("Connection lost to server length too small");
                     MyGame.getInstance().connected = false;
                     close();
                     MyGame.getInstance().serverConnection = null;
@@ -46,9 +47,11 @@ public class ServerConnection extends Thread {
                 byte[] incomingBytes = new byte[length];
                 reader.readFully(incomingBytes);
                 Packet packet = Packet.getFromBytes(incomingBytes);
+                if (packet instanceof TestPacket)
+                    System.out.println("Server");
                 packet.handle();
             } catch (IOException e) {
-                System.out.println("Connection lost to server");
+                System.out.println("Connection lost to server : " + e.getMessage());
                 MyGame.getInstance().connected = false;
                 close();
                 MyGame.getInstance().serverConnection = null;
@@ -75,7 +78,7 @@ public class ServerConnection extends Thread {
                 writer.writeInt(bytes.length);
                 writer.write(bytes);
             } catch (IOException e) {
-                System.out.println("Connection lost to server");
+                System.out.println("Connection lost to server :" + e.getMessage());
                 MyGame.getInstance().connected = false;
                 close();
                 MyGame.getInstance().serverConnection = null;

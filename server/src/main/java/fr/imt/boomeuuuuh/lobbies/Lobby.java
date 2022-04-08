@@ -101,10 +101,16 @@ public class Lobby {
 
     public void setName(String name) {
         this.name = name;
+
+        LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
+        broadcastToAll(false, lobbyInfoPacket);
     }
 
     public void setOwner(Player owner) {
         this.owner = owner;
+
+        LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
+        broadcastToAll(false, lobbyInfoPacket);
     }
     //-----------------------------------------------------
     //------------------------GAME-------------------------
@@ -130,12 +136,18 @@ public class Lobby {
 
         open = true;
         state = LobbyState.WAITING;
+
+        LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
+        broadcastToAll(false, lobbyInfoPacket);
     }
     //-----------------------------------------------------
 
     public void addPlayer(Player player) {
         players.add(player);
         player.joinLobby(this);
+
+        LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
+        broadcastToAll(false, lobbyInfoPacket);
     }
 
     public void setOpen(boolean open) {
@@ -158,7 +170,10 @@ public class Lobby {
         player.setEntity(null);//If he was in game, lose entity reference
 
         if (owner.equals(player))
-            owner = players.stream().findAny().get(); // Change owner if the player was online
+            setOwner(players.stream().findAny().get()); // Change owner if the player was online
+
+        LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
+        broadcastToAll(false, lobbyInfoPacket);
     }
 
     public void disconnectAll() {

@@ -5,10 +5,12 @@ import fr.imt.boomeuuuuh.players.Location;
 import fr.imt.boomeuuuuh.players.Player;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PlayerEntity extends DynamicEntity {
 
     private final Player playerRep;
+    private static final Random random = new Random();
 
     private int kills = 0;
 
@@ -43,7 +45,14 @@ public class PlayerEntity extends DynamicEntity {
             if (!entity.getPos().equals(pos))
                 continue;
 
-            playerRep.maxBombs++;
+            int rd = random.nextInt(10);
+            if (rd <= 1)
+                playerRep.bombPower++;
+            else if (rd <= 7)
+                playerRep.maxBombs++;
+            else
+                playerRep.speed++;
+
             playerRep.changed = true;
             manager.destroyEntity(entity);
             break;

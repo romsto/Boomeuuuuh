@@ -2,9 +2,7 @@ package fr.imt.boomeuuuuh.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -13,16 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
-import fr.imt.boomeuuuuh.entities.BombeStandard;
 
 public class MainMenuScreen implements Screen {
 
     private final MyGame game;
     private final Stage stage;
-   // private BombeStandard st;
+    // private BombeStandard st;
     //private BombeStandard st1;
-   // public SpriteBatch batch;
-   // public float   temps;
+    // public SpriteBatch batch;
+    // public float   temps;
 
     public MainMenuScreen(MyGame game) {
         this.game = game;
@@ -70,7 +67,10 @@ public class MainMenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.LOG_IN);
+                if (game.connected)
+                    game.changeScreen(ScreenType.LOG_IN);
+                else
+                    game.changeScreen(ScreenType.CONNECT);
             }
         });
 
@@ -93,12 +93,12 @@ public class MainMenuScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-       //temps += Gdx.graphics.getDeltaTime();
-       // batch.begin();
-       // st.draw(batch,temps );
-       // st1.draw(batch,temps );
+        //temps += Gdx.graphics.getDeltaTime();
+        // batch.begin();
+        // st.draw(batch,temps );
+        // st1.draw(batch,temps );
         //Game.draw(batch,temps);//
-       // batch.end();
+        // batch.end();
 
     }
 

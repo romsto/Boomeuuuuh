@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.InitializeLobbyConnectionPacket;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 
@@ -35,10 +36,13 @@ public class LobbyConnection extends Thread {
             try {
                 socket.receive(incomingPacket);
                 Packet packet = Packet.getFromBytes(incomingPacket.getData());
+                if (packet instanceof TestPacket)
+                    System.out.println("Lobby");
                 packet.handle();
             } catch (IOException e) {
-                System.out.println("Connection lost to lobby");
+                System.out.println("Connection lost to lobby 1");
                 MyGame myGame = MyGame.getInstance();
+                close();
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -49,7 +53,6 @@ public class LobbyConnection extends Thread {
                 Lobby lobby = myGame.lobby;
                 if (lobby == null)
                     return;
-                close();
                 if (lobby.game != null)
                     lobby.game.dispose();
                 lobby.game = null;
@@ -83,12 +86,17 @@ public class LobbyConnection extends Thread {
             } catch (IOException e) {
                 System.out.println("Connection lost to lobby");
                 MyGame myGame = MyGame.getInstance();
-                myGame.changeScreen(ScreenType.LOBBY_SELECTION);
+                close();
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyGame.getInstance().changeScreen(ScreenType.LOBBY_SELECTION);
+                    }
+                });
 
                 Lobby lobby = myGame.lobby;
                 if (lobby == null)
                     return;
-                close();
                 if (lobby.game != null)
                     lobby.game.dispose();
                 lobby.game = null;
