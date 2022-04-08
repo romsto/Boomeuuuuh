@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class HUD {
+
     private final BitmapFont font = new BitmapFont();
 
     private final Texture bomb;
