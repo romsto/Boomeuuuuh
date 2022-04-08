@@ -31,6 +31,7 @@ public class Player {
     public int bombPower = 3;
     public int speed = 1;
     public int currentBombs = 0;
+    public boolean changed = true;
 
     private final InetAddress address;
     private final Socket serverSocket;

@@ -1,5 +1,10 @@
 package fr.imt.boomeuuuuh.network.packets;
 
+import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
 public abstract class Packet {
 
     private final PacketType packetType;
@@ -35,12 +40,20 @@ public abstract class Packet {
     public static Packet getFromBytes(byte[] packet) {
         int type = packet[0] + 126;
         if (type < 0 || type >= PacketType.values().length)
-            type = 0;
+            return new TestPacket("Unknown Packet");
         int size = packet[1] + 126;
-        byte[] data = extractData(packet, size);
-        PacketType packetType = PacketType.values()[type];
+        try {
+            byte[] data = extractData(packet, size);
+            PacketType packetType = PacketType.values()[type];
 
-        return packetType.make(data);
+            return packetType.make(data);
+        } catch (Exception e) {
+            System.out.println("Error at packet " + type + " (" + PacketType.values()[type] + ")");
+            System.out.println("Data : " + new ArrayList<>(Collections.singletonList(packet)));
+            System.out.println("Length : " + packet.length);
+            System.out.println(e.getMessage());
+        }
+        return new TestPacket("There was an error...");
     }
 
     /**

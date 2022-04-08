@@ -57,4 +57,12 @@ public class Entity {
     public int hashCode() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "id=" + id +
+                ", pos=" + pos +
+                '}';
+    }
 }

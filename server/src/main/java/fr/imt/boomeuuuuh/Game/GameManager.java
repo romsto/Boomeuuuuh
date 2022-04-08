@@ -101,7 +101,7 @@ public class GameManager {
         List<Entity> copiedList = new ArrayList<>(entityList);
         for (Entity e : copiedList) {
             if (e instanceof Bomb)
-                ((Bomb) e).checkExplosion(entityList, this);//Faille possible
+                ((Bomb) e).checkExplosion(copiedList, this);//Faille possible
         }
         //-----------
     }
@@ -109,7 +109,10 @@ public class GameManager {
     public void UpdatePlayersInfos() {
         for (PlayerEntity livePlayer : new ArrayList<>(livePlayers)) {
             Player player = livePlayer.getPlayer();
-            lobby.getLobbyConnection().send(player, new PlayerInfoPacket(player));
+            if (player.changed) {
+                player.changed = false;
+                player.serverConnection.send(new PlayerInfoPacket(player));
+            }
         }
     }
 
@@ -164,7 +167,11 @@ public class GameManager {
         return pos.comprisedInExcludingBorder(-1, mapWidth, -1, mapHeight);
     }
 
-    private void placeEntity(Entity e) {
+    public Collection<Entity> getEntityList() {
+        return entityList;
+    }
+
+    public void placeEntity(Entity e) {
         entityList.add(e);
         EntityCreatePacket p = new EntityCreatePacket(e.getId(), getEntityRef(e), e.getPos());
         lobby.broadcastToAll(false, p);
@@ -198,7 +205,6 @@ public class GameManager {
     public void destroyEntity(Entity e) {
         if (!entityList.contains(e))
             return;
-
         //Create destruction package and sent TCP
         EntityDestroyPacket p = new EntityDestroyPacket(e.getId());
         lobby.broadcastToAll(false, p);

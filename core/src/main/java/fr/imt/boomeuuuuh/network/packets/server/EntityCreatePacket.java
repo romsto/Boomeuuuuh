@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
-import fr.imt.boomeuuuuh.entities.Entity;
-import fr.imt.boomeuuuuh.entities.HardBlock;
-import fr.imt.boomeuuuuh.entities.Player;
-import fr.imt.boomeuuuuh.entities.SoftBlock;
+import fr.imt.boomeuuuuh.entities.*;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.utils.Location;
@@ -59,6 +56,8 @@ public class EntityCreatePacket extends Packet {
                     case 40:
                         e = new HardBlock(entityId, location, world);
                         break;
+                    case 20:
+                        e = new PowerUP(entityId, location, world);
                 }
 
                 if (e == null)

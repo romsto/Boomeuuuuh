@@ -7,6 +7,7 @@ import fr.imt.boomeuuuuh.players.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Bomb extends DynamicEntity {
@@ -52,7 +53,7 @@ public class Bomb extends DynamicEntity {
 
     public void checkExplosion(Collection<Entity> entityList, GameManager manager) {
         if (endTime < System.currentTimeMillis())
-            Explode(entityList, manager);
+            explode(new ArrayList<>(entityList), manager);
     }
 
     public void forceExplode(Collection<Entity> entityList, GameManager manager) {
@@ -84,7 +85,7 @@ public class Bomb extends DynamicEntity {
         List<Entity> explosion = classicShape.calcExplosion(entityList, this, manager.getMapHeight(), manager.getMapWidth(), pos.getX(), pos.getY());
         List<Entity> copied = new ArrayList<>(entityList);
         copied.remove(this);
-        copied.removeAll(explosion.stream().filter(entity -> entity instanceof Bomb || entity instanceof PlayerEntity || entity instanceof SoftBlock).collect(Collectors.toList()));
+        copied.removeAll(explosion.stream().filter(entity -> entity instanceof Bomb || entity instanceof PlayerEntity || entity instanceof PowerUp).collect(Collectors.toList()));
         for (Entity entity : explosion) {
             if (entity instanceof Bomb)
                 ((Bomb) entity).forceExplode(copied, manager);
@@ -96,8 +97,48 @@ public class Bomb extends DynamicEntity {
                 manager.destroyEntity(entity);
             }
         }
-        parentPlayer.currentBombs--;
+        if (parentPlayer != null)
+            parentPlayer.currentBombs--;
         manager.destroyEntity(this);
+    }
+
+    public void explode(Collection<Entity> entityList, GameManager manager) {
+        List<Entity> toDestroy = calculateExplosion(entityList, manager);
+        Random random = new Random();
+        for (Entity entity : toDestroy) {
+            if (entity instanceof SoftBlock) {
+                if (random.nextBoolean()) {
+                    PowerUp power = new PowerUp(manager.getNewID());
+                    power.setPos(entity.getPos());
+                    manager.placeEntity(power);
+                }
+                manager.destroyEntity(entity);
+            } else if (entity instanceof PlayerEntity) {
+                if (parentPlayer != null && parentPlayer.getEntity() != null && entity.getId() != parentPlayer.getEntity().getId())
+                    parentPlayer.getEntity().addKill();
+                manager.destroyEntity(entity);
+            } else if (entity instanceof PowerUp || entity instanceof Bomb) {
+                manager.destroyEntity(entity);
+            }
+        }
+    }
+
+    public List<Entity> calculateExplosion(Collection<Entity> toCare, GameManager manager) {
+        toCare.remove(this);
+        List<Entity> explosion = classicShape.calcExplosion(toCare, this, manager.getMapHeight(), manager.getMapWidth(), pos.getX(), pos.getY());
+        for (Entity touched : new ArrayList<>(explosion)) {
+            if (touched instanceof Bomb) {
+                List<Entity> newExplode = ((Bomb) touched).calculateExplosion(toCare, manager);
+                for (Entity entity : newExplode) {
+                    if (!explosion.contains(entity))
+                        explosion.add(entity);
+                }
+            }
+        }
+        explosion.add(this);
+        if (parentPlayer != null)
+            parentPlayer.currentBombs--;
+        return explosion;
     }
 
 }

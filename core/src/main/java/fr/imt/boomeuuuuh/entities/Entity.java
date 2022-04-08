@@ -14,7 +14,9 @@ public abstract class Entity {
     public static short VOID_CATEGORY = 0x0005;
 
     private final int id;
-    private final Body body;
+    private Body body;
+
+    private Location createLocation;
 
     public Entity(int id, Location location, World world, BodyDef.BodyType bodyType) {
         this.id = id;
@@ -36,19 +38,32 @@ public abstract class Entity {
         shape.dispose();
     }
 
+    public Entity(int id, Location location) {
+        this.id = id;
+        this.createLocation = location;
+    }
+
     public float getPixelX() {
+        if (body == null)
+            return createLocation.getX() * 32;
         return (body.getPosition().x * 100) - 16;
     }
 
     public float getPixelY() {
+        if (body == null)
+            return createLocation.getY() * 32;
         return (body.getPosition().y * 100) - 16;
     }
 
     public int getBlocX() {
+        if (body == null)
+            return createLocation.getX();
         return (int) ((getPixelX() + 16) / 32);
     }
 
     public int getBlocY() {
+        if (body == null)
+            return createLocation.getY();
         return (int) ((getPixelY() + 16) / 32);
     }
 
