@@ -27,11 +27,12 @@ public class Player {
     private LobbyJoiningState joinedLobby = LobbyJoiningState.DISCONNETED;
     private int port;
 
-    public int maxBombs = 1;
-    public int bombPower = 2;
-    public int speed = 1;
+    private int maxBombs = 1;
+    private int bombPower = 2;
+    private int speed = 1;
     public int currentBombs = 0;
-    public boolean changed = true;
+    private int gameKills = 0;
+    private boolean changed = true;
 
     private final InetAddress address;
     private final Socket serverSocket;
@@ -43,6 +44,38 @@ public class Player {
 
         this.serverConnection = new ServerConnection(this, socket);
     }
+
+    //------Player Chars------
+    public int getMaxBombs(){ return maxBombs; }
+    public int getBombPower(){ return bombPower; }
+    public int getSpeed(){ return speed; }
+    public int getGameKills(){ return gameKills; }
+    public boolean infoChanged(){ return changed; }
+
+    public void setMaxBombs(int v){
+        maxBombs = v;
+        changed = true;
+    }
+    public void increaseMaxBombs(){ setMaxBombs(maxBombs + 1); }
+    public void setBombPower(int v){
+        bombPower = v;
+        changed = true;
+    }
+    public void increasePower(){ setBombPower(bombPower + 1); }
+    public void setSpeed(int v){
+        speed = v;
+        changed = true;
+    }
+    public void increaseSpeed(){ setSpeed(speed + 1); }
+    public void setGameKills(int v){
+        gameKills = v;
+        changed = true;
+    }
+    public void increaseGameKills(){ setGameKills(gameKills + 1); }
+    public void setChanged( boolean v){
+        changed = true;
+    }
+    //------------------------
 
     public InetAddress getAddress() {
         return address;

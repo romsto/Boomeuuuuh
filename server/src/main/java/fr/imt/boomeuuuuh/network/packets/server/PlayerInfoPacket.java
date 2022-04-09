@@ -20,10 +20,10 @@ public class PlayerInfoPacket extends Packet {
     @Override
     protected byte[] encode() {
         ByteArrayOutputStream baous = new ByteArrayOutputStream();
-        baous.writeBytes(Ints.toByteArray(player.maxBombs));
-        baous.writeBytes(Ints.toByteArray(player.bombPower));
-        baous.writeBytes(Ints.toByteArray(player.speed));
-        baous.writeBytes(Ints.toByteArray(player.getEntity().getKills()));
+        baous.writeBytes(Ints.toByteArray(player.getMaxBombs()));
+        baous.writeBytes(Ints.toByteArray(player.getBombPower()));
+        baous.writeBytes(Ints.toByteArray(player.getSpeed()));
+        baous.writeBytes(Ints.toByteArray(player.getGameKills()));
         return baous.toByteArray();
     }
 

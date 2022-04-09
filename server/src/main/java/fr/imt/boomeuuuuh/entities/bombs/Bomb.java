@@ -31,7 +31,7 @@ public class Bomb extends DynamicEntity {
         //SetTime
         endTime = System.currentTimeMillis() + delay;
 
-        this.power = parentPlayer.bombPower;
+        this.power = parentPlayer.getBombPower();
 
         //Create explosion shape
         //expShape = new ExplosionShape(power, power, power, power);
@@ -93,7 +93,7 @@ public class Bomb extends DynamicEntity {
                 manager.destroyEntity(entity);
             if (entity instanceof PlayerEntity) {
                 if (parentPlayer != null && parentPlayer.getEntity() != null && entity.getId() != parentPlayer.getEntity().getId())
-                    parentPlayer.getEntity().addKill();
+                    parentPlayer.increaseGameKills();
                 manager.destroyEntity(entity);
             }
         }
@@ -115,7 +115,7 @@ public class Bomb extends DynamicEntity {
                 manager.destroyEntity(entity);
             } else if (entity instanceof PlayerEntity) {
                 if (parentPlayer != null && parentPlayer.getEntity() != null && entity.getId() != parentPlayer.getEntity().getId())
-                    parentPlayer.getEntity().addKill();
+                    parentPlayer.increaseGameKills();
                 manager.destroyEntity(entity);
             } else if (entity instanceof PowerUp || entity instanceof Bomb) {
                 manager.destroyEntity(entity);

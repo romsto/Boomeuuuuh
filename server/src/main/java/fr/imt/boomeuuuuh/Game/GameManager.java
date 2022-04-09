@@ -57,11 +57,14 @@ public class GameManager {
         for (Player p : lobby.getPlayers()) {
             PlayerEntity e = new PlayerEntity(p, getNewID());
             e.setPos(m.nextSpawn());
+
             p.setEntity(e);
-            p.maxBombs = 1;
+            p.setMaxBombs(1);
             p.currentBombs = 0;
-            p.speed = 1;
-            p.bombPower = 1;
+            p.setSpeed(1);
+            p.setBombPower(1);
+            p.setGameKills(0);
+
             entityList.add(e);
             livePlayers.add(e);
         }
@@ -113,8 +116,8 @@ public class GameManager {
     public void UpdatePlayersInfos() {
         for (PlayerEntity livePlayer : new ArrayList<>(livePlayers)) {
             Player player = livePlayer.getPlayer();
-            if (player.changed) {
-                player.changed = false;
+            if (player.infoChanged()) {
+                player.setChanged(false);
                 player.serverConnection.send(new PlayerInfoPacket(player));
             }
         }
@@ -142,7 +145,7 @@ public class GameManager {
         if (!checkPosition(pos)) //TODO : Check that delays in placement are not too quick
             return;
 
-        if (origin.maxBombs <= origin.currentBombs)
+        if (origin.getMaxBombs() <= origin.currentBombs)
             return;
 
         origin.currentBombs++;
@@ -222,7 +225,7 @@ public class GameManager {
 
             if (livePlayers.size() <= 1) {
                 if (livePlayers.size() == 1) {
-                    ReceiveChatPacket receiveChatPacket = new ReceiveChatPacket("\n\n" + livePlayers.get(0).getPlayer().getName() + " won the game with " + livePlayers.get(0).getKills() + " kills !");
+                    ReceiveChatPacket receiveChatPacket = new ReceiveChatPacket("\n\n" + livePlayers.get(0).getPlayer().getName() + " won the game with " + livePlayers.get(0).getPlayer().getGameKills() + " kills !");
                     lobby.broadcastToAll(false, receiveChatPacket);
                 }
                 endGame();

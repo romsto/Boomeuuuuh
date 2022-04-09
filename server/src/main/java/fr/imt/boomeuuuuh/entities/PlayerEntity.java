@@ -12,8 +12,6 @@ public class PlayerEntity extends DynamicEntity {
     private final Player playerRep;
     private static final Random random = new Random();
 
-    private int kills = 0;
-
     public PlayerEntity(Player playerRepresented, int id) {
         super(id);
 
@@ -23,14 +21,6 @@ public class PlayerEntity extends DynamicEntity {
     public Player getPlayer() {
         return playerRep;
     } //The big faille
-
-    public void addKill() {
-        kills++;
-    }
-
-    public int getKills() {
-        return kills;
-    }
 
     @Override
     public void setPos(Location pos) {
@@ -47,13 +37,12 @@ public class PlayerEntity extends DynamicEntity {
 
             int rd = random.nextInt(10);
             if (rd <= 1)
-                playerRep.bombPower++;
+                playerRep.increasePower();
             else if (rd <= 7)
-                playerRep.maxBombs++;
+                playerRep.increaseMaxBombs();
             else
-                playerRep.speed++;
+                playerRep.increaseSpeed();
 
-            playerRep.changed = true;
             manager.destroyEntity(entity);
             break;
         }
