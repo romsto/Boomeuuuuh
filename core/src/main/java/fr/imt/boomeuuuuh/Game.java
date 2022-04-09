@@ -66,7 +66,7 @@ public class Game implements InputProcessor {
 
         createWorldBorders();
 
-        hud = new HUD();
+        hud = new HUD(480, 480);
     }
 
     private void createWorldBorders() {
@@ -131,7 +131,7 @@ public class Game implements InputProcessor {
         //font.draw(hudBatch, player_bomb_power + " power", 15, 45);
         //font.draw(hudBatch, player_speed + " speed", 15, 30);
         //font.draw(hudBatch, player_kills + " kills", 15, 15);
-        hud.drawHUD(hudBatch, 480, 480);
+        hud.drawHUD(hudBatch);
         hudBatch.end();
 
         removeEntities();
