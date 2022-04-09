@@ -10,6 +10,7 @@ import fr.imt.boomeuuuuh.network.packets.both.DeclinePacket;
 import fr.imt.boomeuuuuh.network.packets.server.KickPacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyCredentialsPacket;
 import fr.imt.boomeuuuuh.network.packets.server.PlayerDataPacket;
+import fr.imt.boomeuuuuh.network.packets.server.PlayerInfoPacket;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -32,7 +33,6 @@ public class Player {
     private int speed = 1;
     public int currentBombs = 0;
     private int gameKills = 0;
-    private boolean changed = true;
 
     private final InetAddress address;
     private final Socket serverSocket;
@@ -50,31 +50,27 @@ public class Player {
     public int getBombPower(){ return bombPower; }
     public int getSpeed(){ return speed; }
     public int getGameKills(){ return gameKills; }
-    public boolean infoChanged(){ return changed; }
 
     public void setMaxBombs(int v){
         maxBombs = v;
-        changed = true;
+        serverConnection.send(new PlayerInfoPacket(this));
     }
     public void increaseMaxBombs(){ setMaxBombs(maxBombs + 1); }
     public void setBombPower(int v){
         bombPower = v;
-        changed = true;
+        serverConnection.send(new PlayerInfoPacket(this));
     }
     public void increasePower(){ setBombPower(bombPower + 1); }
     public void setSpeed(int v){
         speed = v;
-        changed = true;
+        serverConnection.send(new PlayerInfoPacket(this));
     }
     public void increaseSpeed(){ setSpeed(speed + 1); }
     public void setGameKills(int v){
         gameKills = v;
-        changed = true;
+        serverConnection.send(new PlayerInfoPacket(this));
     }
     public void increaseGameKills(){ setGameKills(gameKills + 1); }
-    public void setChanged( boolean v){
-        changed = true;
-    }
     //------------------------
 
     public InetAddress getAddress() {

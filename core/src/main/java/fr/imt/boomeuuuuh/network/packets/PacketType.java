@@ -82,7 +82,8 @@ public enum PacketType {
         public Packet make(byte[] data) {
             byte[] id = Arrays.copyOfRange(data, 0, 4);
             byte[] location = Arrays.copyOfRange(data, 4, 6);
-            return new EntityMovePacket(Ints.fromByteArray(id), Location.fromBytesArray(location));
+            byte[] speed = Arrays.copyOfRange(data, 6, 10);
+            return new EntityMovePacket(Ints.fromByteArray(id), Location.fromBytesArray(location), Ints.fromByteArray(speed));
         }
     },
     PLAYER_REFERENCE {

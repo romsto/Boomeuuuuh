@@ -11,11 +11,13 @@ public class EntityMovePacket extends Packet {
 
     private final int entityId;
     private final Location location;
+    private final int speed;
 
-    public EntityMovePacket(int entityId, Location location) {
+    public EntityMovePacket(int entityId, Location location, int speed) {
         super(PacketType.ENTITY_MOVE);
         this.entityId = entityId;
         this.location = location;
+        this.speed = speed;
     }
 
     @Override
@@ -23,6 +25,7 @@ public class EntityMovePacket extends Packet {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         baos.writeBytes(Ints.toByteArray(entityId));
         baos.writeBytes(location.toByteArray());
+        baos.writeBytes(Ints.toByteArray(speed));
         return baos.toByteArray();
     }
 

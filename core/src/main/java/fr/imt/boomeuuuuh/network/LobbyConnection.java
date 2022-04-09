@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.Packet;
-import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 import fr.imt.boomeuuuuh.network.packets.client.InitializeLobbyConnectionPacket;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 
@@ -32,15 +31,13 @@ public class LobbyConnection extends Thread {
     @Override
     public void run() {
         while (!stop) {
-            DatagramPacket incomingPacket = new DatagramPacket(new byte[254], 254); // TODO change buffer size to optimize
+            DatagramPacket incomingPacket = new DatagramPacket(new byte[256], 256);
             try {
                 socket.receive(incomingPacket);
                 Packet packet = Packet.getFromBytes(incomingPacket.getData());
-                if (packet instanceof TestPacket)
-                    System.out.println("Lobby");
                 packet.handle();
             } catch (IOException e) {
-                System.out.println("Connection lost to lobby 1");
+                System.out.println("Connection lost to lobby 1 " + e.getMessage());
                 MyGame myGame = MyGame.getInstance();
                 close();
                 Gdx.app.postRunnable(new Runnable() {
@@ -84,7 +81,7 @@ public class LobbyConnection extends Thread {
             try {
                 socket.send(new DatagramPacket(packed, packed.length, address, udpPort));
             } catch (IOException e) {
-                System.out.println("Connection lost to lobby");
+                System.out.println("Connection lost to lobby " + e.getMessage());
                 MyGame myGame = MyGame.getInstance();
                 close();
                 Gdx.app.postRunnable(new Runnable() {

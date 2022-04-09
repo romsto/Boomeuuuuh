@@ -113,22 +113,12 @@ public class GameManager {
         //-----------
     }
 
-    public void UpdatePlayersInfos() {
-        for (PlayerEntity livePlayer : new ArrayList<>(livePlayers)) {
-            Player player = livePlayer.getPlayer();
-            if (player.infoChanged()) {
-                player.setChanged(false);
-                player.serverConnection.send(new PlayerInfoPacket(player));
-            }
-        }
-    }
-
     public void UpdatePlayersPos() {
         for (PlayerEntity e : new ArrayList<>(livePlayers)) {
             if (!e.hasMovedSinceLastTick)
                 continue;
             e.hasMovedSinceLastTick = false;
-            EntityMovePacket p = new EntityMovePacket(e.getId(), e.getPos());
+            EntityMovePacket p = new EntityMovePacket(e.getId(), e.getPos(), e.getPlayer().getSpeed());
             lobby.broadcastExcept(false, e.getPlayer(), p);
         }
     }

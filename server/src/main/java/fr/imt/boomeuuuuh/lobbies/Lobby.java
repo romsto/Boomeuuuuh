@@ -250,8 +250,6 @@ public class Lobby {
                             gameManager.Update();
                         if (currentTick % 5 == 0) //Should we change this to a different tick rate?
                             if (gameManager != null) gameManager.UpdatePlayersPos();
-                        if (currentTick >= 20)
-                            if (gameManager != null) gameManager.UpdatePlayersInfos();
                     }
                     //------------------
 

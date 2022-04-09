@@ -59,13 +59,17 @@ public class ServerConnection extends Thread {
      *
      * @param packets Packets to send
      */
-    public void send(Packet... packets) {
+    public synchronized void send(Packet... packets) {
+        if (stop)
+            return;
+
         for (Packet packet : packets) {
             try {
                 byte[] bytes = packet.getBytes();
                 int type = bytes[0] + 126;
                 if (type < 0 || type >= PacketType.values().length) {
                     System.out.println("ERROR");
+                    continue;
                 }
                 writer.writeInt(bytes.length);
                 writer.write(bytes);

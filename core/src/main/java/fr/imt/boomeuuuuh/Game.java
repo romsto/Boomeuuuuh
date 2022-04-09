@@ -117,7 +117,7 @@ public class Game implements InputProcessor {
         batch.setProjectionMatrix(camera.combined);
         renderer.setView(camera);
         renderer.render();
-        debugRenderer.render(world, debugMatrix);
+        //debugRenderer.render(world, debugMatrix);
 
         batch.begin();
         for (Entity entity : entities) {

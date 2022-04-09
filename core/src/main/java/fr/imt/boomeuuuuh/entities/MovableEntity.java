@@ -12,6 +12,7 @@ public abstract class MovableEntity extends Entity {
     public boolean isAffected = true;
     private int toBlocX, toBlocY;
     private double elapsed = 0;
+    private int speed = 1;
 
     public MovableEntity(int id, Location location, World world) {
         super(id, location, world, BodyDef.BodyType.DynamicBody);
@@ -24,7 +25,7 @@ public abstract class MovableEntity extends Entity {
         return toBlocX;
     }
 
-    public void setToBlocX(int toBlocX) {
+    private void setToBlocX(int toBlocX) {
         this.toBlocX = toBlocX;
         //this.elapsed = 0;
     }
@@ -33,16 +34,17 @@ public abstract class MovableEntity extends Entity {
         return toBlocY;
     }
 
-    public void setToBlocY(int toBlocY) {
+    private void setToBlocY(int toBlocY) {
         this.toBlocY = toBlocY;
         //this.elapsed = 0;
     }
 
-    public void setToBloc(Location location) {
+    public void setToBloc(Location location, int speed) {
         if (location.getX() == toBlocX && location.getY() == toBlocY)
             return;
         setToBlocX(location.getX());
         setToBlocY(location.getY());
+        this.speed = speed;
     }
 
     public boolean alreadyInDestination() {
@@ -61,7 +63,7 @@ public abstract class MovableEntity extends Entity {
                 getBody().setLinearVelocity(new Vector2());
                 elapsed = 0;
             } else
-                getBody().setLinearVelocity(new Vector2((toBlocX * 32 - getPixelX()), (toBlocY * 32 - getPixelY())).nor());
+                getBody().setLinearVelocity(new Vector2((toBlocX * 32 - getPixelX()), (toBlocY * 32 - getPixelY())).nor().scl(1 + (speed - 1) / 6f));
         } else {
             elapsed = 0;
             getBody().setLinearVelocity(new Vector2());

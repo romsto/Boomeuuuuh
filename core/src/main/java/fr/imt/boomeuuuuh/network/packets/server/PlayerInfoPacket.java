@@ -26,7 +26,8 @@ public class PlayerInfoPacket extends Packet {
     @Override
     public void handle() {
         Game game = Game.getInstance();
-
+        if (game == null)
+            return;
         game.player_bomb = maxBomb;
         game.player_speed = speed;
         game.player_kills = kills;

@@ -25,6 +25,6 @@ public class ReadyPacket extends Packet {
 
     @Override
     public void handle() {
-        // TODO Handle this packet
+
     }
 }

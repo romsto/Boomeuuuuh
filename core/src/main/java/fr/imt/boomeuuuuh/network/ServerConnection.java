@@ -36,6 +36,7 @@ public class ServerConnection extends Thread {
                     MyGame.getInstance().connected = false;
                     close();
                     MyGame.getInstance().serverConnection = null;
+                    MyGame.getInstance().logged = false;
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
@@ -47,14 +48,16 @@ public class ServerConnection extends Thread {
                 byte[] incomingBytes = new byte[length];
                 reader.readFully(incomingBytes);
                 Packet packet = Packet.getFromBytes(incomingBytes);
-                if (packet instanceof TestPacket)
-                    System.out.println("Server");
+                if (packet instanceof TestPacket && ((TestPacket) packet).getMessage().equalsIgnoreCase("Unknown Packet")) {
+
+                }
                 packet.handle();
             } catch (IOException e) {
                 System.out.println("Connection lost to server : " + e.getMessage());
                 MyGame.getInstance().connected = false;
                 close();
                 MyGame.getInstance().serverConnection = null;
+                MyGame.getInstance().logged = false;
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -71,7 +74,10 @@ public class ServerConnection extends Thread {
      *
      * @param packets Packets to send
      */
-    public void send(Packet... packets) {
+    public synchronized void send(Packet... packets) {
+        if (stop)
+            return;
+
         for (Packet packet : packets) {
             try {
                 byte[] bytes = packet.getBytes();
