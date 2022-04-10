@@ -2,6 +2,7 @@ package fr.imt.boomeuuuuh;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.both.AlivePacket;
@@ -18,6 +19,8 @@ public class MyGame extends Game {
     public static InetAddress SERVER_ADDRESS = ConfigFile.ADDRESS;
     public static int SERVER_PORT_TCP = ConfigFile.PORT;
     private static MyGame instance;
+
+    private SpriteBatch batch;
 
     private final Map<ScreenType, Screen> screens = new ConcurrentHashMap<>();
     private ScreenType currentScreenType;
@@ -44,6 +47,15 @@ public class MyGame extends Game {
      */
     public static MyGame getInstance() {
         return instance;
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
     }
 
     public ScreenType getCurrentScreenType() {
@@ -95,6 +107,8 @@ public class MyGame extends Game {
 
     @Override
     public void create() {
+        batch = new SpriteBatch();
+
         changeScreen(ScreenType.MAIN_MENU);
 
         new Thread(new Runnable() {
