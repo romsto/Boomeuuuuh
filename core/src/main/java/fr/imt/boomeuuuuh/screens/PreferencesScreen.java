@@ -2,14 +2,17 @@ package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import sun.tools.jconsole.Tab;
 
 public class PreferencesScreen implements Screen {
 
@@ -22,6 +25,7 @@ public class PreferencesScreen implements Screen {
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
 
+    private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
     public PreferencesScreen(MyGame game) {
         this.game = game;
@@ -32,10 +36,15 @@ public class PreferencesScreen implements Screen {
     @Override
     public void show() {
         // Create a table that fills the screen. Everything else will go inside this table.
+        Table mainTable = new Table();
         Table table = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(table);
+        mainTable.setFillParent(true);
+        mainTable.setDebug(true);
+        stage.addActor(mainTable);
+        mainTable.add(table);
+        Table t = new Table();
+        mainTable.add(t);
+        t.setSize(stage.getWidth() * 0.3f, stage.getHeight());
 
         // temporary until we have asset manager in
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
@@ -115,7 +124,6 @@ public class PreferencesScreen implements Screen {
         table.add(soundEffectsCheckbox);
         table.row().pad(10,0,0,10);
         table.add(backButton).colspan(2);
-
     }
 
     @Override
@@ -123,6 +131,11 @@ public class PreferencesScreen implements Screen {
         // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //Perfect background
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
+        stage.getBatch().end();
 
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

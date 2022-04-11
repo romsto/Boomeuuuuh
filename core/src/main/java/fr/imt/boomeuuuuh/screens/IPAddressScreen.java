@@ -3,6 +3,7 @@ package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -26,6 +27,8 @@ public class IPAddressScreen implements Screen {
     private final MyGame game;
     private final Stage stage;
     public Label label;
+
+    private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
     public IPAddressScreen(MyGame game) {
         this.game = game;
@@ -117,6 +120,11 @@ public class IPAddressScreen implements Screen {
         // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //Perfect background
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
+        stage.getBatch().end();
 
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
