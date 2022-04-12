@@ -30,6 +30,10 @@ public class AppPreferences {
     public void setMusicEnabled(boolean musicEnabled) {
         getPrefs().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
         getPrefs().flush();
+        if (!musicEnabled)
+            AssetsManager.stopMusic();
+        else
+            AssetsManager.playMusic("menu");
     }
 
     public float getMusicVolume() {
@@ -39,6 +43,7 @@ public class AppPreferences {
     public void setMusicVolume(float volume) {
         getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
         getPrefs().flush();
+        AssetsManager.changeVolume(volume);
     }
 
     public float getSoundVolume() {

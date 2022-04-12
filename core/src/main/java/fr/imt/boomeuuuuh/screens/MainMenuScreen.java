@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -21,7 +22,7 @@ public class MainMenuScreen implements Screen {
     // public SpriteBatch batch;
     // public float   temps;
 
-    private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
+    private final Texture background = new Texture("other/background.jpg");
 
     public MainMenuScreen(MyGame game) {
         this.game = game;
@@ -87,6 +88,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        AssetsManager.playMusic("menu");
+
         // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

@@ -12,6 +12,7 @@ import com.google.common.base.CharMatcher;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.packets.client.CreateAccountPacket;
 import fr.imt.boomeuuuuh.network.packets.client.LogInPacket;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,9 +41,9 @@ public class LoginScreen implements Screen {
 
         //create elements
         Image connectionPageImage = new Image(MyGame.getDrawable("text_sample/connection_page.png"));
-        label = new Label("", MyGame.getUISkin());
-        final TextField username = new TextField("Username", MyGame.getUISkin());
-        final TextField password = new TextField("Password", MyGame.getUISkin());
+        label = new Label("", AssetsManager.getUISkin());
+        final TextField username = new TextField("Username", AssetsManager.getUISkin());
+        final TextField password = new TextField("Password", AssetsManager.getUISkin());
         ImageButton login = new ImageButton(MyGame.getDrawable("text_sample/login.png"));
         ImageButton register = new ImageButton(MyGame.getDrawable("text_sample/register.png"));
         final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png")); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version

@@ -17,6 +17,7 @@ import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.packets.client.LaunchGamePacket;
 import fr.imt.boomeuuuuh.network.packets.client.LeavePacket;
 import fr.imt.boomeuuuuh.network.packets.client.SendChatPacket;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 public class LobbyScreen implements Screen {
 
@@ -165,6 +166,7 @@ public class LobbyScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        AssetsManager.playMusic("menu");
         // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

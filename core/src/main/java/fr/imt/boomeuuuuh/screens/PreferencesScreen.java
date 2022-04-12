@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 public class PreferencesScreen implements Screen {
 
@@ -47,7 +48,7 @@ public class PreferencesScreen implements Screen {
 
         //create elements
         //volume
-        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, MyGame.getUISkin());
+        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, AssetsManager.getUISkin());
         volumeMusicSlider.setValue( game.getPreferences().getMusicVolume() );
         volumeMusicSlider.addListener( new EventListener() {
             @Override
@@ -57,7 +58,7 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, MyGame.getUISkin());
+        final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, AssetsManager.getUISkin());
         volumeMusicSlider.setValue( game.getPreferences().getMusicVolume() );
         volumeMusicSlider.addListener( new EventListener() {
             @Override
@@ -68,7 +69,7 @@ public class PreferencesScreen implements Screen {
         });
 
         // return to main screen button
-        final TextButton backButton = new TextButton("Back", MyGame.getUISkin()); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        final TextButton backButton = new TextButton("Back", AssetsManager.getUISkin()); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -77,7 +78,7 @@ public class PreferencesScreen implements Screen {
         });
 
         //music
-        final CheckBox musicCheckbox = new CheckBox(null, MyGame.getUISkin());
+        final CheckBox musicCheckbox = new CheckBox(null, AssetsManager.getUISkin());
         musicCheckbox.setChecked( game.getPreferences().isMusicEnabled() );
         musicCheckbox.addListener( new EventListener() {
             @Override
@@ -88,7 +89,7 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        final CheckBox soundEffectsCheckbox = new CheckBox(null, MyGame.getUISkin());
+        final CheckBox soundEffectsCheckbox = new CheckBox(null, AssetsManager.getUISkin());
         musicCheckbox.setChecked(game.getPreferences().isMusicEnabled());
         musicCheckbox.addListener(new EventListener() {
             @Override
@@ -99,11 +100,11 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        titleLabel = new Label("Preferences", MyGame.getUISkin());
-        volumeMusicLabel = new Label("Music Volume", MyGame.getUISkin());
-        volumeSoundLabel = new Label("Sound Volume", MyGame.getUISkin());
-        musicOnOffLabel = new Label("Music", MyGame.getUISkin());
-        soundOnOffLabel = new Label("Sound", MyGame.getUISkin());
+        titleLabel = new Label("Preferences", AssetsManager.getUISkin());
+        volumeMusicLabel = new Label("Music Volume", AssetsManager.getUISkin());
+        volumeSoundLabel = new Label("Sound Volume", AssetsManager.getUISkin());
+        musicOnOffLabel = new Label("Music", AssetsManager.getUISkin());
+        soundOnOffLabel = new Label("Sound", AssetsManager.getUISkin());
 
         table.add(titleLabel).colspan(2);
         table.row().pad(10, 0, 0, 10);
@@ -124,6 +125,7 @@ public class PreferencesScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        AssetsManager.playMusic("menu");
         // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

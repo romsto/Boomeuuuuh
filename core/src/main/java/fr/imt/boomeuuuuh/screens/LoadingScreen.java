@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 public class LoadingScreen implements Screen {
 
@@ -53,6 +54,8 @@ public class LoadingScreen implements Screen {
         //add buttons to table
         table.add(loading).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
+
+        AssetsManager.stopMusic();
 
         Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/meuh.wav"));
         wavSound.play();
