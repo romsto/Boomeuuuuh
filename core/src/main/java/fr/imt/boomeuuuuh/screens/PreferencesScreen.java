@@ -39,7 +39,6 @@ public class PreferencesScreen implements Screen {
         Table mainTable = new Table();
         Table table = new Table();
         mainTable.setFillParent(true);
-        mainTable.setDebug(true);
         stage.addActor(mainTable);
         mainTable.add(table);
         Table t = new Table();

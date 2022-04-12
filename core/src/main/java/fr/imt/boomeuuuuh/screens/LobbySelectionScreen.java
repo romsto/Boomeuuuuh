@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.ServerConnection;
@@ -69,7 +67,6 @@ public class LobbySelectionScreen implements Screen {
 
         Table mainTable = new Table();
         mainTable.setFillParent(true);
-        mainTable.setDebug(true);
         stage.addActor(mainTable);
 
         mainTable.add(titleImg);
@@ -77,7 +74,6 @@ public class LobbySelectionScreen implements Screen {
 
         scrollTable = new Table();
         //scrollTable.setFillParent(true);
-        scrollTable.setDebug(true);
         //stage.addActor(scrollTable);
         mainTable.add(scrollTable);
         mainTable.row().pad(10,0,10,0);
@@ -89,7 +85,6 @@ public class LobbySelectionScreen implements Screen {
 
         Table table = new Table(skin);
         //table.setFillParent(true);
-        table.setDebug(true);
         //stage.addActor(table);
         mainTable.add(table);
 
@@ -118,6 +113,10 @@ public class LobbySelectionScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                MyGame.getInstance().connected = false;
+                MyGame.getInstance().username = null;
+                MyGame.getInstance().logged = false;
+                MyGame.getInstance().serverConnection = null;
                 game.changeScreen(ScreenType.MAIN_MENU);
             }
         });

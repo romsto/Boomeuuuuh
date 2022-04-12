@@ -38,7 +38,6 @@ public class MainMenuScreen implements Screen {
         Table table = new Table();
         Table subTable1 = new Table();
         //table.setFillParent(true);
-        //table.setDebug(true);
         stage.addActor(table);
         table.setSize(stage.getWidth() / 2, stage.getHeight());
         table.add(subTable1);

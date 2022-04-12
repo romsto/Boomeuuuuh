@@ -188,7 +188,7 @@ public class Game implements InputProcessor {
 
     public Entity getEntity(int id) {
         Entity found = null;
-        for (Entity entity : entities) {
+        for (Entity entity : new ArrayList<>(entities)) {
             if (entity.getId() == id) {
                 found = entity;
                 break;

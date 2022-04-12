@@ -42,7 +42,6 @@ public class LoadingScreen implements Screen {
     public void show() {
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
         stage.addActor(table);
 
         // temporary until we have asset manager in
