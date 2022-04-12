@@ -215,7 +215,9 @@ public class GameManager {
 
             if (livePlayers.size() <= 1) {
                 if (livePlayers.size() == 1) {
-                    ReceiveChatPacket receiveChatPacket = new ReceiveChatPacket("\n\n" + livePlayers.get(0).getPlayer().getName() + " won the game with " + livePlayers.get(0).getPlayer().getGameKills() + " kills !");
+                    String winner = "\n\n" + livePlayers.get(0).getPlayer().getName() + " won the game with " + livePlayers.get(0).getPlayer().getGameKills() + " kills !";
+                    lobby.addToChat(winner);
+                    ReceiveChatPacket receiveChatPacket = new ReceiveChatPacket(winner);
                     lobby.broadcastToAll(false, receiveChatPacket);
                 }
                 endGame();

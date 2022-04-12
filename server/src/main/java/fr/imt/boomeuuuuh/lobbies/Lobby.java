@@ -48,7 +48,6 @@ public class Lobby {
         this.owner = owner;
         this.name = name;
 
-        //TODO : Create lobby executor
         lobbyExecutor = new LobbyExecutor();
         lobbyExecutor.start();
     }

@@ -55,7 +55,10 @@ public class BombeStandard extends Bomb {
         TextureRegion currentRegion = animation.getKeyFrame(animationTime, true);
         currentRegion.setRegion(currentRegion, 0, 0, 32, 32);
         batch.draw(currentRegion, this.getPixelX(), this.getPixelY());
-        if (System.nanoTime() - time > 28e8) calculateExplosion();
+        if (System.nanoTime() - time > 28e8) {
+            AssetsManager.playSound("bomb");
+            calculateExplosion();
+        }
     }
 
     public void calculateExplosion() {
@@ -106,8 +109,6 @@ public class BombeStandard extends Bomb {
     }
 
     public void drawExplosion(Batch batch) {
-        AssetsManager.playSound("bomb");
-
         for (int k = 0; k < this.power; k++) {
             if (this.getBlocX() + k <= Math.min(this.getBlocX() + power, right)) {
                 batch.draw(explosion_horiz, this.getPixelX() + (32 * k), this.getPixelY());
