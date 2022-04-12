@@ -35,7 +35,7 @@ public class DeclinePacket extends Packet {
         } else if (currentScreen instanceof LobbySelectionScreen) {
             LobbySelectionScreen lobbySelectionScreen = (LobbySelectionScreen) currentScreen;
 
-            lobbySelectionScreen.titleLabel.setText(reason);
+            lobbySelectionScreen.messageLabel.setText(reason);
         } else if (currentScreen instanceof LobbyScreen) {
             LobbyScreen lobbyScreen = (LobbyScreen) currentScreen;
 

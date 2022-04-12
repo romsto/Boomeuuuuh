@@ -1,6 +1,7 @@
 package fr.imt.boomeuuuuh.network.packets.server;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -14,6 +15,7 @@ import fr.imt.boomeuuuuh.network.packets.PacketType;
 import fr.imt.boomeuuuuh.network.packets.client.JoinLobbyPacket;
 import fr.imt.boomeuuuuh.screens.LobbySelectionScreen;
 import fr.imt.boomeuuuuh.screens.ScreenType;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 import fr.imt.boomeuuuuh.utils.LobbyInfoList;
 
 import java.util.ArrayList;
@@ -55,11 +57,16 @@ public class LobbyListPacket extends Packet {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
+                Skin skin = AssetsManager.getUISkin();
                 Table scrollTable = lobbySelectionScreen.scrollTable;
                 scrollTable.clear();
                 for (final LobbyInfoList lobbyInfoList : list) {
                     scrollTable.row().pad(10, 0, 10, 0);
+
+                    //Table thisTable = new Table();
+                    //thisTable.setBackground(skin.getDrawable("Button"));
+                    //scrollTable.add(thisTable);
+
                     final TextButton button = new TextButton(lobbyInfoList.name + " (" + lobbyInfoList.currentPlayers + "/8)", skin);
                     button.addListener(new ClickListener() {
                         @Override

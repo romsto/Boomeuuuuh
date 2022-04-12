@@ -117,6 +117,7 @@ public class Game implements InputProcessor {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        hudBatch.setProjectionMatrix(camera.combined);
         renderer.setView(camera);
         renderer.render();
         //debugRenderer.render(world, debugMatrix);
