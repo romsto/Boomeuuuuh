@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.base.CharMatcher;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.ServerConnection;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -47,7 +48,7 @@ public class IPAddressScreen implements Screen {
         table.setSize(stage.getWidth() / 2, stage.getHeight());
 
         // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
+        Skin skin = AssetsManager.getUISkin();
 
         //create elements
         //Color col = new Color(255, 255, 255, 255);

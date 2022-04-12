@@ -50,7 +50,7 @@ public class LobbyScreen implements Screen {
         stage.addActor(table);
 
         // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
+        Skin skin = AssetsManager.getUISkin();
 
         //create items
         lobbyname = new Label("[" + lobby.name + "]", skin);

@@ -46,9 +46,11 @@ public class PreferencesScreen implements Screen {
         mainTable.add(t);
         t.setSize(stage.getWidth() * 0.3f, stage.getHeight());
 
+        Skin skin = AssetsManager.getUISkin();
+
         //create elements
         //volume
-        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, AssetsManager.getUISkin());
+        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeMusicSlider.setValue(game.getPreferences().getMusicVolume());
         volumeMusicSlider.addListener(new EventListener() {
             @Override
@@ -58,7 +60,7 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, AssetsManager.getUISkin());
+        final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         soundMusicSlider.setValue(game.getPreferences().getSoundVolume());
         soundMusicSlider.addListener(new EventListener() {
             @Override
@@ -69,7 +71,7 @@ public class PreferencesScreen implements Screen {
         });
 
         // return to main screen button
-        final TextButton backButton = new TextButton("Back", AssetsManager.getUISkin()); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        final TextButton backButton = new TextButton("Back", skin); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -78,7 +80,7 @@ public class PreferencesScreen implements Screen {
         });
 
         //music
-        final CheckBox musicCheckbox = new CheckBox(null, AssetsManager.getUISkin());
+        final CheckBox musicCheckbox = new CheckBox(null, skin);
         musicCheckbox.setChecked( game.getPreferences().isMusicEnabled() );
         musicCheckbox.addListener(new EventListener() {
             @Override
@@ -89,7 +91,7 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        final CheckBox soundEffectsCheckbox = new CheckBox(null, AssetsManager.getUISkin());
+        final CheckBox soundEffectsCheckbox = new CheckBox(null, skin);
         soundEffectsCheckbox.setChecked(game.getPreferences().isSoundEffectsEnabled());
         soundEffectsCheckbox.addListener(new EventListener() {
             @Override
@@ -100,11 +102,11 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        titleLabel = new Label("Preferences", AssetsManager.getUISkin());
-        volumeMusicLabel = new Label("Music Volume", AssetsManager.getUISkin());
-        volumeSoundLabel = new Label("Sound Volume", AssetsManager.getUISkin());
-        musicOnOffLabel = new Label("Music", AssetsManager.getUISkin());
-        soundOnOffLabel = new Label("Sound", AssetsManager.getUISkin());
+        titleLabel = new Label("Preferences", skin);
+        volumeMusicLabel = new Label("Music Volume", skin);
+        volumeSoundLabel = new Label("Sound Volume", skin);
+        musicOnOffLabel = new Label("Music", skin);
+        soundOnOffLabel = new Label("Sound", skin);
 
         table.add(titleLabel).colspan(2);
         table.row().pad(10, 0, 0, 10);

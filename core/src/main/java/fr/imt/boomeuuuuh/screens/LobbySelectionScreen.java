@@ -118,7 +118,7 @@ public class LobbySelectionScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
+                game.changeScreen(ScreenType.MAIN_MENU);
             }
         });
         refreshButton.addListener(new ChangeListener() {
