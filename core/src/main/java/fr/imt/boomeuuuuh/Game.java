@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import fr.imt.boomeuuuuh.entities.Bomb;
 import fr.imt.boomeuuuuh.entities.Entity;
 import fr.imt.boomeuuuuh.entities.Player;
@@ -37,6 +38,7 @@ public class Game implements InputProcessor {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+    private FitViewport viewport;
 
     private final HUD hud;
 
@@ -137,6 +139,10 @@ public class Game implements InputProcessor {
         removeEntities();
     }
 
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+    }
+
     public void loadMap() {
         map = new TmxMapLoader().load("map/map1Final.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -145,6 +151,7 @@ public class Game implements InputProcessor {
         camera.update();
         camera.position.x = 240;
         camera.position.y = 240;
+        viewport = new FitViewport(480, 480, camera);
     }
 
     public void dispose() {

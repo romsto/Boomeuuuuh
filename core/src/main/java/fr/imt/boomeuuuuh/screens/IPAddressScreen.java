@@ -2,14 +2,12 @@ package fr.imt.boomeuuuuh.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.base.CharMatcher;
 import fr.imt.boomeuuuuh.MyGame;
@@ -46,7 +44,7 @@ public class IPAddressScreen implements Screen {
         //table.setFillParent(true);
         table.setDebug(true);
         stage.addActor(table);
-        table.setSize(stage.getWidth()/2, stage.getHeight());
+        table.setSize(stage.getWidth() / 2, stage.getHeight());
 
         // temporary until we have asset manager in
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
@@ -56,8 +54,8 @@ public class IPAddressScreen implements Screen {
         label = new Label("Choose your server", skin);
         final TextField ip = new TextField("193.26.14.30", skin);
         final TextField port = new TextField("25566", skin);
-        TextButton connect = new TextButton("Connect", skin);
-        final TextButton backButton = new TextButton("Back", skin); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        ImageButton connect = new ImageButton(MyGame.getDrawable("text_sample/play.png"));
+        final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png")); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
 
 //        label.setColor(col);
 //        ip.setColor(col);

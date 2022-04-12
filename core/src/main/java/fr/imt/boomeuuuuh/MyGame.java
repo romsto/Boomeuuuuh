@@ -1,8 +1,13 @@
 package fr.imt.boomeuuuuh;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.both.AlivePacket;
@@ -125,5 +130,11 @@ public class MyGame extends Game {
                 }
             }
         }).start();
+    }
+
+    public static Drawable getDrawable(String path) {
+        Texture texture = new Texture(Gdx.files.internal(path));
+        TextureRegion textureRegion = new TextureRegion(texture);
+        return new TextureRegionDrawable(texture);
     }
 }

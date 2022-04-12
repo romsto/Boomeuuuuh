@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
@@ -44,15 +42,15 @@ public class MainMenuScreen implements Screen {
         stage.addActor(table);
         table.setSize(stage.getWidth() / 2, stage.getHeight());
         table.add(subTable1);
-        subTable1.setSize(stage.getWidth()/4, stage.getHeight());
+        subTable1.setSize(stage.getWidth() / 4, stage.getHeight());
 
         // temporary until we have asset manager in
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
         //create buttons
-        TextButton newGame = new TextButton("Play", skin);
-        TextButton preferences = new TextButton("Preferences", skin);
-        TextButton exit = new TextButton("Exit", skin);
+        ImageButton newGame = new ImageButton(MyGame.getDrawable("text_sample/play.png"));
+        ImageButton preferences = new ImageButton(MyGame.getDrawable("text_sample/options.png"));
+        ImageButton exit = new ImageButton(MyGame.getDrawable("text_sample/exit.png"));
 
         //add buttons to table
         subTable1.add(newGame).fillX().uniformX();
