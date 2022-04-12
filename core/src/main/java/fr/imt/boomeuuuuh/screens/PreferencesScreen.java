@@ -18,12 +18,6 @@ public class PreferencesScreen implements Screen {
 
     private final MyGame game;
     private final Stage stage;
-    // our new fields
-    private Label titleLabel;
-    private Label volumeMusicLabel;
-    private Label volumeSoundLabel;
-    private Label musicOnOffLabel;
-    private Label soundOnOffLabel;
 
     private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
@@ -70,7 +64,7 @@ public class PreferencesScreen implements Screen {
         });
 
         // return to main screen button
-        final TextButton backButton = new TextButton("Back", skin); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -101,24 +95,25 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        titleLabel = new Label("Preferences", skin);
-        volumeMusicLabel = new Label("Music Volume", skin);
-        volumeSoundLabel = new Label("Sound Volume", skin);
-        musicOnOffLabel = new Label("Music", skin);
-        soundOnOffLabel = new Label("Sound", skin);
+        Image preferences = new Image(MyGame.getDrawable("text_sample/options.png"));
+        Image musicVolume = new Image(MyGame.getDrawable("text_sample/musicVolume.png"));
+        Image soundVolume = new Image(MyGame.getDrawable("text_sample/soundVolume.png"));
+        Image musicOnOff = new Image(MyGame.getDrawable("text_sample/music.png"));
+        Image soundOnOff = new Image(MyGame.getDrawable("text_sample/sound.png"));
 
-        table.add(titleLabel).colspan(2);
-        table.row().pad(10, 0, 0, 10);
-        table.add(volumeMusicLabel).left();
+
+        table.add(preferences).colspan(2);
+        table.row().pad(30, 0, 0, 10);
+        table.add(musicVolume).left();
         table.add(volumeMusicSlider);
         table.row().pad(10, 0, 0, 10);
-        table.add(musicOnOffLabel).left();
+        table.add(musicOnOff);
         table.add(musicCheckbox);
         table.row().pad(10, 0, 0, 10);
-        table.add(volumeSoundLabel).left();
+        table.add(soundVolume).left();
         table.add(soundMusicSlider);
         table.row().pad(10,0,0,10);
-        table.add(soundOnOffLabel).left();
+        table.add(soundOnOff);
         table.add(soundEffectsCheckbox);
         table.row().pad(10,0,0,10);
         table.add(backButton).colspan(2);
