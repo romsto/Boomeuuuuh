@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import fr.imt.boomeuuuuh.Game;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 public class PlayScreen implements Screen {
 
@@ -32,7 +33,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-        // called when this screen is set as the screen with game.setScreen();
+        AssetsManager.playMusic("battle");
     }
 
     @Override
