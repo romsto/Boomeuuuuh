@@ -58,7 +58,7 @@ public class PreferencesScreen implements Screen {
         soundMusicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                game.getPreferences().setSoundVolume(volumeMusicSlider.getValue());
+                game.getPreferences().setSoundVolume(soundMusicSlider.getValue());
                 return false;
             }
         });
@@ -89,7 +89,7 @@ public class PreferencesScreen implements Screen {
         soundEffectsCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                boolean enabled = musicCheckbox.isChecked();
+                boolean enabled = soundEffectsCheckbox.isChecked();
                 game.getPreferences().setSoundEffectsEnabled(enabled);
                 return false;
             }

@@ -14,8 +14,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.utils.AssetsManager;
 
-import javax.swing.*;
-
 public class MainMenuScreen implements Screen {
 
     private final MyGame game;
@@ -37,6 +35,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        AssetsManager.playSound("Boomeuuuuh", 1.5f);
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         Table subTable1 = new Table();
