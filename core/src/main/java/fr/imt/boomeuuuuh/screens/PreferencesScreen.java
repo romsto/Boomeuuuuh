@@ -21,6 +21,8 @@ public class PreferencesScreen implements Screen {
 
     private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
+    private Table mainTable;
+
     public PreferencesScreen(MyGame game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
@@ -30,9 +32,9 @@ public class PreferencesScreen implements Screen {
     @Override
     public void show() {
         // Create a table that fills the screen. Everything else will go inside this table.
-        Table mainTable = new Table();
+        mainTable = new Table();
         Table table = new Table();
-        mainTable.setFillParent(true);
+        mainTable.setSize(stage.getWidth() / 2, stage.getHeight());
         stage.addActor(mainTable);
         mainTable.add(table);
         Table t = new Table();
@@ -140,6 +142,8 @@ public class PreferencesScreen implements Screen {
     public void resize(int width, int height) {
         // change the stage's viewport when teh screen size is changed
         stage.getViewport().update(width, height, true);
+        if(mainTable != null)
+            mainTable.setSize(stage.getWidth() / 2, stage.getHeight());
     }
 
     @Override
