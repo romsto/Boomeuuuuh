@@ -49,21 +49,21 @@ public class PreferencesScreen implements Screen {
         //create elements
         //volume
         final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, AssetsManager.getUISkin());
-        volumeMusicSlider.setValue( game.getPreferences().getMusicVolume() );
-        volumeMusicSlider.addListener( new EventListener() {
+        volumeMusicSlider.setValue(game.getPreferences().getMusicVolume());
+        volumeMusicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                game.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
+                game.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
                 return false;
             }
         });
 
         final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, AssetsManager.getUISkin());
-        volumeMusicSlider.setValue( game.getPreferences().getMusicVolume() );
-        volumeMusicSlider.addListener( new EventListener() {
+        soundMusicSlider.setValue(game.getPreferences().getSoundVolume());
+        soundMusicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                game.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
+                game.getPreferences().setSoundVolume(volumeMusicSlider.getValue());
                 return false;
             }
         });
@@ -80,22 +80,22 @@ public class PreferencesScreen implements Screen {
         //music
         final CheckBox musicCheckbox = new CheckBox(null, AssetsManager.getUISkin());
         musicCheckbox.setChecked( game.getPreferences().isMusicEnabled() );
-        musicCheckbox.addListener( new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                boolean enabled = musicCheckbox.isChecked();
-                game.getPreferences().setMusicEnabled( enabled );
-                return false;
-            }
-        });
-
-        final CheckBox soundEffectsCheckbox = new CheckBox(null, AssetsManager.getUISkin());
-        musicCheckbox.setChecked(game.getPreferences().isMusicEnabled());
         musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked();
                 game.getPreferences().setMusicEnabled(enabled);
+                return false;
+            }
+        });
+
+        final CheckBox soundEffectsCheckbox = new CheckBox(null, AssetsManager.getUISkin());
+        soundEffectsCheckbox.setChecked(game.getPreferences().isSoundEffectsEnabled());
+        soundEffectsCheckbox.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                boolean enabled = musicCheckbox.isChecked();
+                game.getPreferences().setSoundEffectsEnabled(enabled);
                 return false;
             }
         });

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import fr.imt.boomeuuuuh.Game;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 import fr.imt.boomeuuuuh.utils.Location;
 
 public class BombeStandard extends Bomb {
@@ -54,7 +55,7 @@ public class BombeStandard extends Bomb {
         TextureRegion currentRegion = animation.getKeyFrame(animationTime, true);
         currentRegion.setRegion(currentRegion, 0, 0, 32, 32);
         batch.draw(currentRegion, this.getPixelX(), this.getPixelY());
-        if (System.nanoTime() - time > 26e8) calculateExplosion();
+        if (System.nanoTime() - time > 28e8) calculateExplosion();
     }
 
     public void calculateExplosion() {
@@ -105,6 +106,8 @@ public class BombeStandard extends Bomb {
     }
 
     public void drawExplosion(Batch batch) {
+        AssetsManager.playSound("bomb");
+
         for (int k = 0; k < this.power; k++) {
             if (this.getBlocX() + k <= Math.min(this.getBlocX() + power, right)) {
                 batch.draw(explosion_horiz, this.getPixelX() + (32 * k), this.getPixelY());

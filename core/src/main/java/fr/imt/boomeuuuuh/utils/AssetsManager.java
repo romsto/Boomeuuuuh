@@ -2,6 +2,7 @@ package fr.imt.boomeuuuuh.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import fr.imt.boomeuuuuh.MyGame;
 
@@ -10,10 +11,12 @@ import java.util.Map;
 
 public class AssetsManager {
 
+    private static final Map<String, Sound> SOUND_CACHE = new HashMap<>();
+
     private static final Map<String, Music> MUSIC_CACHE = new HashMap<>();
-    private static Skin UI_SKIN;
     private static Music MUSIC;
     private static String CURRENT_MUSIC = "";
+    private static Skin UI_SKIN;
 
     public static void stopMusic() {
         if (MUSIC == null)
@@ -50,6 +53,25 @@ public class AssetsManager {
 
     public static void playMusic(String name) {
         playMusic(name, MyGame.getInstance().preferences.getMusicVolume());
+    }
+
+    public static void playSound(String name, float volume) {
+        if (!MyGame.getInstance().preferences.isSoundEffectsEnabled())
+            return;
+
+        String path = "Sounds/" + name + ".wav";
+
+        Sound sound = SOUND_CACHE.get(name);
+        if (sound == null) {
+            sound = Gdx.audio.newSound(Gdx.files.internal(path));
+            SOUND_CACHE.put(name, sound);
+        }
+
+        sound.play(volume);
+    }
+
+    public static void playSound(String name) {
+        playSound(name, MyGame.getInstance().preferences.getSoundVolume());
     }
 
     public static void changeVolume(float volume) {
