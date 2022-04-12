@@ -231,10 +231,10 @@ public class Game implements InputProcessor {
             }
         }
 
-        boolean left = Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.A);
-        boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
-        boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
-        boolean up = Gdx.input.isKeyPressed(Input.Keys.Z) || Gdx.input.isKeyPressed(Input.Keys.W);
+        boolean left = Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.LEFT);
+        boolean right = Gdx.input.isKeyPressed(Input.Keys.D)|| Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        boolean down = Gdx.input.isKeyPressed(Input.Keys.S)|| Gdx.input.isKeyPressed(Input.Keys.DOWN);
+        boolean up = Gdx.input.isKeyPressed(Input.Keys.Z) || Gdx.input.isKeyPressed(Input.Keys.W)|| Gdx.input.isKeyPressed(Input.Keys.UP);
 
         player.getBody().setLinearVelocity(new Vector2((left ? -1f : 0f) + (right ? 1f : 0f), (up ? 1f : 0) + (down ? -1f : 0f)).nor().scl(1 + (player_speed - 1) / 6f));
     }
