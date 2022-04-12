@@ -28,6 +28,7 @@ public class IPAddressScreen implements Screen {
     private final MyGame game;
     private final Stage stage;
     public Label label;
+    private Table mainTable;
 
     private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 //    private final Texture slab = new Texture("Backgrounds/Slab.png");
@@ -41,10 +42,10 @@ public class IPAddressScreen implements Screen {
     @Override
     public void show() {
         // Create a table that fills the screen. Everything else will go inside this table.
-        Table table = new Table();
+        mainTable = new Table();
         //table.setFillParent(true);
-        stage.addActor(table);
-        table.setSize(stage.getWidth() / 2, stage.getHeight());
+        stage.addActor(mainTable);
+        mainTable.setSize(stage.getWidth() / 2, stage.getHeight());
 
         // temporary until we have asset manager in
         Skin skin = AssetsManager.getUISkin();
@@ -63,15 +64,15 @@ public class IPAddressScreen implements Screen {
 //        backButton.setColor(col);
 
         //add buttons to table
-        table.add(label).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(ip).fillX().uniformX();
-        table.row();
-        table.add(port).fillX().uniformX();
-        table.row();
-        table.add(connect).fillX().uniformX();
-        table.row();
-        table.add(backButton).fillX().uniformX();
+        mainTable.add(label).fillX().uniformX();
+        mainTable.row().pad(10, 0, 10, 0);
+        mainTable.add(ip).fillX().uniformX();
+        mainTable.row();
+        mainTable.add(port).fillX().uniformX();
+        mainTable.row();
+        mainTable.add(connect).fillX().uniformX();
+        mainTable.row();
+        mainTable.add(backButton).fillX().uniformX();
 
         // create button listeners
         backButton.addListener(new ChangeListener() {
@@ -144,6 +145,8 @@ public class IPAddressScreen implements Screen {
     public void resize(int width, int height) {
         // change the stage's viewport when teh screen size is changed
         stage.getViewport().update(width, height, true);
+        if(mainTable != null)
+            mainTable.setSize(stage.getWidth() / 2, stage.getHeight());
     }
 
     @Override
