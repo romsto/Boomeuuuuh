@@ -36,7 +36,7 @@ public class SendChatPacket extends Packet {
             return;
 
         String chat = player.getName() + " : " + message;
-        player.getLobby().addToChat(chat);
+        player.getLobby().addToChat(chat + "\n");
         player.getLobby().broadcastToAll(false, new ReceiveChatPacket(chat));
     }
 }

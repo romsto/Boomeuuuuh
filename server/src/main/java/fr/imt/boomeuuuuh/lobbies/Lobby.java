@@ -3,7 +3,6 @@ package fr.imt.boomeuuuuh.lobbies;
 import fr.imt.boomeuuuuh.Game.GameManager;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 import fr.imt.boomeuuuuh.network.packets.Packet;
-import fr.imt.boomeuuuuh.network.packets.client.SendChatPacket;
 import fr.imt.boomeuuuuh.network.packets.server.EndGamePacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
 import fr.imt.boomeuuuuh.network.packets.server.ReceiveChatPacket;
@@ -33,7 +32,7 @@ public class Lobby {
     private String name;
     private boolean open = true;
 
-    private String chatHistoric;
+    private String chatHistoric = "";
 
     private final LobbyExecutor lobbyExecutor;
 
@@ -117,7 +116,12 @@ public class Lobby {
         broadcastToAll(false, lobbyInfoPacket);
     }
 
-    public void addToChat(String chat){ chatHistoric += chat; }
+    public void addToChat(String chat) {
+        chatHistoric += chat;
+        if (chatHistoric.length() >= 20000)
+            chatHistoric = chatHistoric.substring(5000);
+    }
+
     //-----------------------------------------------------
     //------------------------GAME-------------------------
     public void startGame(String mapID) {
@@ -152,11 +156,11 @@ public class Lobby {
         players.add(player);
         player.joinLobby(this);
 
-        ReceiveChatPacket chatPacket = new ReceiveChatPacket(chatHistoric);
-        broadcastTo(false, chatPacket, player);
-
         LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
         broadcastToAll(false, lobbyInfoPacket);
+
+        ReceiveChatPacket chatPacket = new ReceiveChatPacket(chatHistoric);
+        broadcastTo(false, chatPacket, player);
     }
 
     public void setOpen(boolean open) {
@@ -212,8 +216,8 @@ public class Lobby {
     /**
      * Broadcasts packet to players specified
      *
-     * @param udp     Using UDP or TCP
-     * @param packet to send
+     * @param udp      Using UDP or TCP
+     * @param packet   to send
      * @param playersT players targeted by broadcast
      */
     public void broadcastTo(boolean udp, Packet packet, Player... playersT) {
