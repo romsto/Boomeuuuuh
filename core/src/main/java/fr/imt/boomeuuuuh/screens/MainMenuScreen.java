@@ -38,9 +38,13 @@ public class MainMenuScreen implements Screen {
     public void show() {
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
+        Table subTable1 = new Table();
+        //table.setFillParent(true);
+        //table.setDebug(true);
         stage.addActor(table);
+        table.setSize(stage.getWidth() / 2, stage.getHeight());
+        table.add(subTable1);
+        subTable1.setSize(stage.getWidth()/4, stage.getHeight());
 
         // temporary until we have asset manager in
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
@@ -51,9 +55,9 @@ public class MainMenuScreen implements Screen {
         TextButton exit = new TextButton("Exit", skin);
 
         //add buttons to table
-        table.add(newGame).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(exit).fillX().uniformX();
+        subTable1.add(newGame).fillX().uniformX();
+        subTable1.row().pad(10, 0, 10, 0);
+        subTable1.add(exit).fillX().uniformX();
 
         stage.addActor(preferences);
         //st = new BombeStandard(50);
