@@ -3,8 +3,10 @@ package fr.imt.boomeuuuuh.lobbies;
 import fr.imt.boomeuuuuh.Game.GameManager;
 import fr.imt.boomeuuuuh.network.LobbyConnection;
 import fr.imt.boomeuuuuh.network.packets.Packet;
+import fr.imt.boomeuuuuh.network.packets.client.SendChatPacket;
 import fr.imt.boomeuuuuh.network.packets.server.EndGamePacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
+import fr.imt.boomeuuuuh.network.packets.server.ReceiveChatPacket;
 import fr.imt.boomeuuuuh.players.Player;
 
 import java.net.SocketException;
@@ -30,6 +32,8 @@ public class Lobby {
     private Player owner;
     private String name;
     private boolean open = true;
+
+    private String chatHistoric;
 
     private final LobbyExecutor lobbyExecutor;
 
@@ -112,6 +116,8 @@ public class Lobby {
         LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
         broadcastToAll(false, lobbyInfoPacket);
     }
+
+    public void addToChat(String chat){ chatHistoric += chat; }
     //-----------------------------------------------------
     //------------------------GAME-------------------------
     public void startGame(String mapID) {
@@ -145,6 +151,9 @@ public class Lobby {
     public void addPlayer(Player player) {
         players.add(player);
         player.joinLobby(this);
+
+        ReceiveChatPacket chatPacket = new ReceiveChatPacket(chatHistoric);
+        broadcastTo(false, chatPacket, player);
 
         LobbyInfoPacket lobbyInfoPacket = new LobbyInfoPacket(getInstance());
         broadcastToAll(false, lobbyInfoPacket);
