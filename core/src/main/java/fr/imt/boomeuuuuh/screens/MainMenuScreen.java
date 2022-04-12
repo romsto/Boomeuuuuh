@@ -6,12 +6,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.utils.AssetsManager;
+
+import javax.swing.*;
 
 public class MainMenuScreen implements Screen {
 
@@ -37,22 +40,34 @@ public class MainMenuScreen implements Screen {
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         Table subTable1 = new Table();
+        Table subTable2 = new Table();
+
         //table.setFillParent(true);
         stage.addActor(table);
         //table.setSize(stage.getWidth() / 2, stage.getHeight());
         table.setFillParent(true);
         table.add(subTable1);
         subTable1.setSize(stage.getWidth() / 4, stage.getHeight());
+        table.row().pad(50, 0, 10, 0);
+        table.add(subTable2);
+        subTable1.setSize(stage.getWidth() / 4, stage.getHeight());
 
         //create buttons
         ImageButton newGame = new ImageButton(MyGame.getDrawable("text_sample/play.png"));
         ImageButton preferences = new ImageButton(MyGame.getDrawable("text_sample/options.png"));
         ImageButton exit = new ImageButton(MyGame.getDrawable("text_sample/exit.png"));
+        Image logo = new Image(MyGame.getDrawable("other/logo.png"));
+        Image title = new Image(MyGame.getDrawable("text_sample/boomeuuuuh.png"));
+
 
         //add buttons to table
-        subTable1.add(newGame).fillX().uniformX();
+        subTable1.add(logo).size(200,200);
         subTable1.row().pad(10, 0, 10, 0);
-        subTable1.add(exit).fillX().uniformX();
+        subTable1.add(title).fillX().uniformX();
+
+        subTable2.add(newGame).fillX().uniformX();
+        subTable2.row().pad(10, 0, 10, 0);
+        subTable2.add(exit).fillX().uniformX();
 
         stage.addActor(preferences);
         //st = new BombeStandard(50);

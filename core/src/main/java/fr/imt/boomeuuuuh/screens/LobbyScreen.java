@@ -57,7 +57,7 @@ public class LobbyScreen implements Screen {
         //create items
         lobbyname = new Label("[" + lobby.name + "]", skin);
         players = new Label("Current players : " + lobby.players, skin);
-        owner = new Label(lobby.isOwner ? "You are owner of the lobby" : " ", skin);
+        owner = new Label(lobby.isOwner ? "You are the owner of the lobby" : " ", skin);
         info = new Label("", skin);
         TextButton start = new TextButton("Start the game", skin);
         TextButton leave = new TextButton("Leave the game", skin);
@@ -184,7 +184,7 @@ public class LobbyScreen implements Screen {
 
         lobbyname.setText("[" + lobby.name + "]");
         players.setText("Current players : " + lobby.players);
-        owner.setText(lobby.isOwner ? "You are owner of the lobby" : " ");
+        owner.setText(lobby.isOwner ? "You are the owner of the lobby" : " ");
 
         //Check for messages
         String a = lobby.collectChat();
