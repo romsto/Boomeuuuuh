@@ -38,14 +38,11 @@ public class LoginScreen implements Screen {
         table.setDebug(true);
         stage.addActor(table);
 
-        // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
-
         //create elements
         Image connectionPageImage = new Image(MyGame.getDrawable("text_sample/connection_page.png"));
-        label = new Label("", skin);
-        final TextField username = new TextField("Username", skin);
-        final TextField password = new TextField("Password", skin);
+        label = new Label("", MyGame.getUISkin());
+        final TextField username = new TextField("Username", MyGame.getUISkin());
+        final TextField password = new TextField("Password", MyGame.getUISkin());
         ImageButton login = new ImageButton(MyGame.getDrawable("text_sample/login.png"));
         ImageButton register = new ImageButton(MyGame.getDrawable("text_sample/register.png"));
         final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png")); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version

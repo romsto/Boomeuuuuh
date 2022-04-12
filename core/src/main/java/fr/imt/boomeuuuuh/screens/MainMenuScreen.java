@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -43,9 +42,6 @@ public class MainMenuScreen implements Screen {
         table.setSize(stage.getWidth() / 2, stage.getHeight());
         table.add(subTable1);
         subTable1.setSize(stage.getWidth() / 4, stage.getHeight());
-
-        // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
         //create buttons
         ImageButton newGame = new ImageButton(MyGame.getDrawable("text_sample/play.png"));

@@ -1,4 +1,5 @@
 package fr.imt.boomeuuuuh.screens;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,15 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
-import sun.tools.jconsole.Tab;
 
 public class PreferencesScreen implements Screen {
 
-    private MyGame game;
-    private Stage stage;
+    private final MyGame game;
+    private final Stage stage;
     // our new fields
     private Label titleLabel;
     private Label volumeMusicLabel;
@@ -46,12 +45,9 @@ public class PreferencesScreen implements Screen {
         mainTable.add(t);
         t.setSize(stage.getWidth() * 0.3f, stage.getHeight());
 
-        // temporary until we have asset manager in
-        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
-
         //create elements
         //volume
-        final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
+        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, MyGame.getUISkin());
         volumeMusicSlider.setValue( game.getPreferences().getMusicVolume() );
         volumeMusicSlider.addListener( new EventListener() {
             @Override
@@ -61,7 +57,7 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        final Slider soundMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
+        final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, MyGame.getUISkin());
         volumeMusicSlider.setValue( game.getPreferences().getMusicVolume() );
         volumeMusicSlider.addListener( new EventListener() {
             @Override
@@ -72,7 +68,7 @@ public class PreferencesScreen implements Screen {
         });
 
         // return to main screen button
-        final TextButton backButton = new TextButton("Back", skin); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        final TextButton backButton = new TextButton("Back", MyGame.getUISkin()); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -81,7 +77,7 @@ public class PreferencesScreen implements Screen {
         });
 
         //music
-        final CheckBox musicCheckbox = new CheckBox(null, skin);
+        final CheckBox musicCheckbox = new CheckBox(null, MyGame.getUISkin());
         musicCheckbox.setChecked( game.getPreferences().isMusicEnabled() );
         musicCheckbox.addListener( new EventListener() {
             @Override
@@ -92,31 +88,31 @@ public class PreferencesScreen implements Screen {
             }
         });
 
-        final CheckBox soundEffectsCheckbox = new CheckBox(null, skin);
-        musicCheckbox.setChecked( game.getPreferences().isMusicEnabled() );
-        musicCheckbox.addListener( new EventListener() {
+        final CheckBox soundEffectsCheckbox = new CheckBox(null, MyGame.getUISkin());
+        musicCheckbox.setChecked(game.getPreferences().isMusicEnabled());
+        musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked();
-                game.getPreferences().setMusicEnabled( enabled );
+                game.getPreferences().setMusicEnabled(enabled);
                 return false;
             }
         });
 
-        titleLabel = new Label( "Preferences", skin );
-        volumeMusicLabel = new Label( "Music Volume", skin );
-        volumeSoundLabel = new Label( "Sound Volume", skin );
-        musicOnOffLabel = new Label( "Music", skin );
-        soundOnOffLabel = new Label( "Sound", skin );
+        titleLabel = new Label("Preferences", MyGame.getUISkin());
+        volumeMusicLabel = new Label("Music Volume", MyGame.getUISkin());
+        volumeSoundLabel = new Label("Sound Volume", MyGame.getUISkin());
+        musicOnOffLabel = new Label("Music", MyGame.getUISkin());
+        soundOnOffLabel = new Label("Sound", MyGame.getUISkin());
 
         table.add(titleLabel).colspan(2);
-        table.row().pad(10,0,0,10);
+        table.row().pad(10, 0, 0, 10);
         table.add(volumeMusicLabel).left();
         table.add(volumeMusicSlider);
-        table.row().pad(10,0,0,10);
+        table.row().pad(10, 0, 0, 10);
         table.add(musicOnOffLabel).left();
         table.add(musicCheckbox);
-        table.row().pad(10,0,0,10);
+        table.row().pad(10, 0, 0, 10);
         table.add(volumeSoundLabel).left();
         table.add(soundMusicSlider);
         table.row().pad(10,0,0,10);

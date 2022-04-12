@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import fr.imt.boomeuuuuh.lobbies.Lobby;
@@ -20,6 +21,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MyGame extends Game {
+
+    private static Skin UI_SKIN;
 
     public static InetAddress SERVER_ADDRESS = ConfigFile.ADDRESS;
     public static int SERVER_PORT_TCP = ConfigFile.PORT;
@@ -136,5 +139,12 @@ public class MyGame extends Game {
         Texture texture = new Texture(Gdx.files.internal(path));
         TextureRegion textureRegion = new TextureRegion(texture);
         return new TextureRegionDrawable(texture);
+    }
+
+    public static Skin getUISkin() {
+        if (UI_SKIN == null)
+            UI_SKIN = new Skin(Gdx.files.internal("orange/uiskin.json"));
+
+        return UI_SKIN;
     }
 }
