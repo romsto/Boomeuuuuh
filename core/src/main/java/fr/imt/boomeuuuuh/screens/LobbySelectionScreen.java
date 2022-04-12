@@ -7,11 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.client.CreateLobbyPacket;
 import fr.imt.boomeuuuuh.network.packets.client.RequestLobbyListPacket;
+import fr.imt.boomeuuuuh.utils.AssetsManager;
 import fr.imt.boomeuuuuh.utils.LobbyInfoList;
 
 import java.io.IOException;
@@ -23,7 +26,7 @@ public class LobbySelectionScreen implements Screen {
 
     private final MyGame game; // Note it's "MyGame" not "Game"
     private final Stage stage;
-    public Label titleLabel;
+    public Label messageLabel;
     public List<LobbyInfoList> lobbies = new ArrayList<>();
     public Table scrollTable;
 
@@ -54,20 +57,30 @@ public class LobbySelectionScreen implements Screen {
     @Override
     public void show() {
 
-        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
-
-        titleLabel = new Label("Lobby Selection", skin);
+        Skin skin = AssetsManager.getUISkin();
 
         // called when this screen is set as the screen with game.setScreen();
-        final TextButton backButton = new TextButton("Disconnect", skin);
-        final TextButton refreshButton = new TextButton("Refresh the list", skin);
-        final TextButton createButton = new TextButton("Create a lobby", skin);
+        final Image titleImg = new Image(MyGame.getDrawable("text_sample/lobby_selection.png"));
+        final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
+        final ImageButton refreshButton = new ImageButton(MyGame.getDrawable("text_sample/refresh.png"));
+        final ImageButton createButton = new ImageButton(MyGame.getDrawable("text_sample/create.png"));
 
+        messageLabel = new Label("", skin);
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.setDebug(true);
+        stage.addActor(mainTable);
+
+        mainTable.add(titleImg);
+        mainTable.row().pad(10, 0, 10, 0);
 
         scrollTable = new Table();
-        scrollTable.setFillParent(true);
+        //scrollTable.setFillParent(true);
         scrollTable.setDebug(true);
-        stage.addActor(scrollTable);
+        //stage.addActor(scrollTable);
+        mainTable.add(scrollTable);
+        mainTable.row().pad(10,0,10,0);
 
         ScrollPane lobbyScroll = new ScrollPane(null, skin);
 
@@ -75,11 +88,12 @@ public class LobbySelectionScreen implements Screen {
         lobbyScroll.setActor(scrollTable);
 
         Table table = new Table(skin);
-        table.setFillParent(true);
+        //table.setFillParent(true);
         table.setDebug(true);
-        stage.addActor(table);
+        //stage.addActor(table);
+        mainTable.add(table);
 
-        table.add(titleLabel).fillX().uniformX().colspan(2);
+        table.add(messageLabel).fillX().uniformX().colspan(2);
         table.row().pad(10, 10, 10, 10);
         table.add(lobbyScroll).fillX().uniformX();
         table.row().pad(10, 10, 10, 10);
@@ -88,8 +102,6 @@ public class LobbySelectionScreen implements Screen {
         table.add(createButton).fillX().uniformX();
         table.row().pad(10, 10, 10, 10);
         table.add(backButton).fillX().uniformX();
-
-        stage.addActor(table);
 
         if (game.connected) {
             game.serverConnection.send(new RequestLobbyListPacket());
