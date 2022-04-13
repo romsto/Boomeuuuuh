@@ -3,6 +3,7 @@ package fr.imt.boomeuuuuh.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,6 +17,7 @@ public class LoadingScreen implements Screen {
 
     private final MyGame game; // Note it's "MyGame" not "Game"
     private final Stage stage;
+    private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
     // constructor to keep a reference to the main Game class
     public LoadingScreen(MyGame game) {
@@ -28,6 +30,11 @@ public class LoadingScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //Perfect background
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
+        stage.getBatch().end();
 
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -43,6 +50,8 @@ public class LoadingScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+
+
 
         // temporary until we have asset manager in
         Skin skin = AssetsManager.getUISkin();
