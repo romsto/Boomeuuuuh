@@ -11,6 +11,7 @@ import fr.imt.boomeuuuuh.players.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class GameManager {
 
@@ -54,7 +55,9 @@ public class GameManager {
         //Add players to map
         deadPlayers = new ArrayList<>();
         livePlayers = new ArrayList<>();
+        Random random = new Random();
         for (Player p : lobby.getPlayers()) {
+            p.getPlayerData().setCurrentSkin("skin" + (random.nextInt(4) + 1));
             PlayerEntity e = new PlayerEntity(p, getNewID());
             e.setPos(m.nextSpawn());
 
