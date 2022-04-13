@@ -1,11 +1,6 @@
 package fr.imt.boomeuuuuh.utils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
 
 public class ConfigFile {
 
@@ -13,7 +8,7 @@ public class ConfigFile {
     public static int PORT;
 
     static {
-        File file = new File("config.boomeuuuuh");
+        /*File file = new File("config.boomeuuuuh");
         try {
             if (file.createNewFile()) {
                 FileWriter fileWriter = new FileWriter(file);
@@ -34,6 +29,6 @@ public class ConfigFile {
                 exception.printStackTrace();
             }
             e.printStackTrace();
-        }
+        }*/
     }
 }

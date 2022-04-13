@@ -54,7 +54,7 @@ public class IPAddressScreen implements Screen {
         //Color col = new Color(255, 255, 255, 255);
         label = new Label("Choose your server", skin);
         final TextField ip = new TextField("193.26.14.30", skin);
-        final TextField port = new TextField("25566", skin);
+        final TextField port = new TextField("8080", skin);
         ImageButton connect = new ImageButton(MyGame.getDrawable("text_sample/play.png"));
         final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
 
