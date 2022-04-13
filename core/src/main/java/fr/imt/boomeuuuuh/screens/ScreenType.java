@@ -14,7 +14,8 @@ public enum ScreenType {
     MAIN_MENU(MainMenuScreen.class),
     PREFERENCES(PreferencesScreen.class),
     PLAY(PlayScreen.class),
-    CONNECT(IPAddressScreen.class);
+    CONNECT(IPAddressScreen.class),
+    CREDITS(CreditsScreen.class);
 
     private final Class<? extends Screen> screenClass;
 

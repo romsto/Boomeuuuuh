@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.utils.AssetsManager;
@@ -18,6 +19,7 @@ public class MainMenuScreen implements Screen {
 
     private final MyGame game;
     private final Stage stage;
+    ImageButton credits;
     // private BombeStandard st;
     //private BombeStandard st1;
     // public SpriteBatch batch;
@@ -54,6 +56,7 @@ public class MainMenuScreen implements Screen {
         //create buttons
         ImageButton newGame = new ImageButton(MyGame.getDrawable("text_sample/play.png"));
         ImageButton preferences = new ImageButton(MyGame.getDrawable("text_sample/options.png"));
+        credits = new ImageButton(MyGame.getDrawable("text_sample/credits.png"));
         ImageButton exit = new ImageButton(MyGame.getDrawable("text_sample/exit.png"));
         Image logo = new Image(MyGame.getDrawable("other/logo.png"));
         Image title = new Image(MyGame.getDrawable("text_sample/boomeuuuuh.png"));
@@ -69,6 +72,8 @@ public class MainMenuScreen implements Screen {
         subTable2.add(exit).fillX().uniformX();
 
         stage.addActor(preferences);
+        stage.addActor(credits);
+        credits.setPosition(stage.getWidth() - credits.getWidth() + 20, 0);
         //st = new BombeStandard(50);
         //st1 = new BombeStandard(51);
         //st.setX_screen(150);st.setY_screen(150);st.setPower(6);
@@ -96,6 +101,13 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(ScreenType.PREFERENCES);
+            }
+        });
+
+        credits.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(ScreenType.CREDITS);
             }
         });
     }
@@ -130,6 +142,8 @@ public class MainMenuScreen implements Screen {
     public void resize(int width, int height) {
         // change the stage's viewport when teh screen size is changed
         stage.getViewport().update(width, height, true);
+
+        credits.setPosition(stage.getWidth() - credits.getWidth() + 20, 0);
     }
 
     @Override
