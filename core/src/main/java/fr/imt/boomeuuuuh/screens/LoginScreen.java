@@ -62,12 +62,12 @@ public class LoginScreen implements Screen {
         RGPDTable = new Table();
         Label RGPDText = new Label("Reglement general sur la protection des donnees\n" +
                 "\n" +
-                "Les informations recueillies sur ce formulaire sont enregistrees dans un fichier informatise par l'equipe 6-bits pour la definition des comptes individuels. La base legale du traitement est le consentement.\n" +
-                "Les donnees collectees seront communiquees aux seuls destinataires suivants : server que vous avez renseignez.\n" +
-                "Les donnees sont conservees temp que la base de donnee n'est pas detruite.\n" +
-                "Vous pouvez acceder aux donnees vous concernant, les rectifier, demander leur effacement ou exercer votre droit a la limitation du traitement de vos donnees.\n" +
+                "Les informations recueillies sur ce formulaire sont enregistrees dans un fichier informatise par l'equipe 6-bits pour la creation des comptes individuels. La base legale du traitement est le consentement.\n" +
+                "Les donnees collectees seront communiquees aux seuls destinataires suivants : Le serveur que vous avez renseignees.\n" +
+                "Les donnees sont conservees tant que la base de données n'est pas detruite.\n" +
+                "Vous pouvez acceder aux donnees vous concernant, les rectifier, demander leur effacement ou exercer votre droit à la limitation du traitement de vos donnees.\n" +
                 "Consultez le site cnil.fr pour plus d’informations sur vos droits.\n" +
-                "Si vous estimez que vos droits « Informatique et Libertes » ne sont pas respectes, vous pouvez adresser une reclamation a la CNIL.", skin, "white");
+                "Si vous estimez que vos droits 'Informatique et Libertes' ne sont pas respectes, vous pouvez adresser une reclamation à la CNIL.", skin, "white");
         RGPDText.setAlignment(Align.center);
         ImageButton noIDont = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
         ImageButton yesIDo = new ImageButton(MyGame.getDrawable("text_sample/register.png"));
