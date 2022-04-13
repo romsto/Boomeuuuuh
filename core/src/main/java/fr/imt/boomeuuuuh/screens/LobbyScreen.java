@@ -55,10 +55,11 @@ public class LobbyScreen implements Screen {
         Skin skin = AssetsManager.getUISkin();
 
         //create items
-        lobbyname = new Label("[" + lobby.name + "]", skin);
-        players = new Label("Current players : " + lobby.players, skin);
-        owner = new Label(lobby.isOwner ? "You are the owner of the lobby" : " ", skin);
-        info = new Label("", skin);
+        lobbyname = new Label("Lobby : " + lobby.name, skin, "white");
+        lobbyname.setAlignment(Align.center);
+        players = new Label("Current players : " + lobby.players, skin, "white");
+        owner = new Label(lobby.isOwner ? "You are the owner of the lobby" : " ", skin, "white");
+        info = new Label("", skin, "white");
         TextButton start = new TextButton("Start the game", skin);
         TextButton leave = new TextButton("Leave the game", skin);
 
@@ -182,15 +183,18 @@ public class LobbyScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        lobbyname.setText("[" + lobby.name + "]");
-        players.setText("Current players : " + lobby.players);
+        lobbyname.setText("Lobby " + lobby.name);
+        StringBuilder playerList = new StringBuilder();
+        for (String player : lobby.players)
+            playerList.append("\n - ").append(player);
+        players.setText("Current players (" + lobby.players.size() + "/8) : " + playerList);
         owner.setText(lobby.isOwner ? "You are the owner of the lobby" : " ");
 
         //Check for messages
         String a = lobby.collectChat();
-        chat_label.setText( chat_label.getText() + a);
+        chat_label.setText(chat_label.getText() + a);
         if (a.length() != 0)
-            chat_scroll.scrollTo(0,0,0,0);
+            chat_scroll.scrollTo(0, 0, 0, 0);
     }
 
     @Override

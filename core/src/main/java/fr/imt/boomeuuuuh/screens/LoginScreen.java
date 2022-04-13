@@ -33,7 +33,7 @@ public class LoginScreen implements Screen {
     private Table RGPDTable;
     private Cell RGPDTextCell;
 
-    private final Texture background = new Texture("other/background.jpg");
+    private static final Texture background = new Texture("other/background.jpg");
 
     public LoginScreen(MyGame game) {
         this.game = game;
