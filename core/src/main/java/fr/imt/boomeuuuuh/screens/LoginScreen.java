@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.base.CharMatcher;
 import fr.imt.boomeuuuuh.MyGame;
@@ -25,6 +26,10 @@ public class LoginScreen implements Screen {
     private final MyGame game;
     private final Stage stage;
     public Label label;
+
+    private boolean hasAcceptedHRT;
+    private Table RGPDTable;
+    private Cell RGPDTextCell;
 
     private final Texture background = new Texture("other/background.jpg");
 
@@ -52,6 +57,40 @@ public class LoginScreen implements Screen {
         ImageButton register = new ImageButton(MyGame.getDrawable("text_sample/register.png"));
         final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png")); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
 
+
+        //HRT---------------
+        RGPDTable = new Table();
+        Label RGPDText = new Label("Reglement general sur la protection des donnees\n" +
+                "\n" +
+                "Les informations recueillies sur ce formulaire sont enregistrees dans un fichier informatise par l'equipe 6-bits pour la definition des comptes individuels. La base legale du traitement est le consentement.\n" +
+                "Les donnees collectees seront communiquees aux seuls destinataires suivants : server que vous avez renseignez.\n" +
+                "Les donnees sont conservees temp que la base de donnee n'est pas detruite.\n" +
+                "Vous pouvez acceder aux donnees vous concernant, les rectifier, demander leur effacement ou exercer votre droit a la limitation du traitement de vos donnees.\n" +
+                "Consultez le site cnil.fr pour plus d’informations sur vos droits.\n" +
+                "Si vous estimez que vos droits « Informatique et Libertes » ne sont pas respectes, vous pouvez adresser une reclamation a la CNIL.", skin, "white");
+        RGPDText.setAlignment(Align.center);
+        ImageButton noIDont = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
+        ImageButton yesIDo = new ImageButton(MyGame.getDrawable("text_sample/register.png"));
+
+        RGPDTable.setBackground(skin.getDrawable("button-orange"));
+        float mw = stage.getWidth() * 2/3;
+        float mh = stage.getHeight() * 9/10;
+        RGPDTable.setSize(mw, mh);
+        RGPDTable.setPosition(stage.getWidth()/2, stage.getHeight()/2, Align.center);
+
+        RGPDText.setWrap(true);
+        RGPDTextCell = RGPDTable.add(RGPDText).expandX().prefWidth(mw * 0.9f);
+        RGPDTable.row().pad(10, 0, 10, 0);
+
+        Table RGPDSubTable = new Table();
+        RGPDSubTable.add(noIDont);
+        RGPDSubTable.add(yesIDo);
+        RGPDTable.add(RGPDSubTable);
+
+        stage.addActor(RGPDTable);
+        RGPDTable.setZIndex(1);
+        RGPDTable.setVisible(false);
+        //------------------
 
         //add buttons to table
         table.add(connectionPageImage).fillX().uniform();
@@ -123,6 +162,27 @@ public class LoginScreen implements Screen {
                     return;
                 }
 
+                if(!hasAcceptedHRT){
+                    RGPDTable.setVisible(true);
+                    return;
+                }
+
+                MyGame.getInstance().serverConnection.send(new CreateAccountPacket(username.getText(), password.getText()));
+            }
+        });
+
+        //HRT
+        noIDont.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                RGPDTable.setVisible(false);
+            }
+        });
+        yesIDo.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                RGPDTable.setVisible(false);
+                hasAcceptedHRT = true;
                 MyGame.getInstance().serverConnection.send(new CreateAccountPacket(username.getText(), password.getText()));
             }
         });
@@ -149,6 +209,12 @@ public class LoginScreen implements Screen {
     public void resize(int width, int height) {
         // change the stage's viewport when teh screen size is changed
         stage.getViewport().update(width, height, true);
+
+        float mw = stage.getWidth() * 2/3;
+        float mh = stage.getHeight() * 9/10;
+        RGPDTable.setSize(mw, mh);
+        RGPDTable.setPosition(stage.getWidth()/2, stage.getHeight()/2, Align.center);
+        RGPDTextCell.prefWidth(mw * 0.9f);
     }
 
     @Override
