@@ -19,7 +19,7 @@ public class PreferencesScreen implements Screen {
     private final MyGame game;
     private final Stage stage;
 
-    private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
+    private static final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
     private Table mainTable;
 

@@ -5,9 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.common.base.CharMatcher;
@@ -21,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class LoginScreen implements Screen {
 
-    private static final Pattern illegalChars = Pattern.compile("[~#@*+%{}<>\\[\\]|\"\\_^ ]");
+    private static final Pattern illegalChars = Pattern.compile("[| ]");
 
     private final MyGame game;
     private final Stage stage;
@@ -51,8 +53,8 @@ public class LoginScreen implements Screen {
         //create elements
         Image connectionPageImage = new Image(MyGame.getDrawable("text_sample/connection_page.png"));
         label = new Label("", skin);
-        final TextField username = new TextField("Username", skin);
-        final TextField password = new TextField("Password", skin);
+        final TextField username = new TextField("Username", skin, "login");
+        final TextField password = new TextField("Password", skin, "password");
         ImageButton login = new ImageButton(MyGame.getDrawable("text_sample/login.png"));
         ImageButton register = new ImageButton(MyGame.getDrawable("text_sample/register.png"));
         final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png")); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
@@ -62,12 +64,12 @@ public class LoginScreen implements Screen {
         RGPDTable = new Table();
         Label RGPDText = new Label("Reglement general sur la protection des donnees\n" +
                 "\n" +
-                "Les informations recueillies sur ce formulaire sont enregistrees dans un fichier informatise par l'equipe 6-bits pour la creation des comptes individuels. La base legale du traitement est le consentement.\n" +
-                "Les donnees collectees seront communiquees aux seuls destinataires suivants : Le serveur que vous avez renseignees.\n" +
-                "Les donnees sont conservees tant que la base de données n'est pas detruite.\n" +
-                "Vous pouvez acceder aux donnees vous concernant, les rectifier, demander leur effacement ou exercer votre droit à la limitation du traitement de vos donnees.\n" +
+                "Les informations recueillies sur ce formulaire sont enregistrées dans un fichier informatise par l'équipe 6-bits pour la creation des comptes individuels. La base légale du traitement est le consentement.\n" +
+                "Les donnees collectées seront communiquées aux seuls destinataires suivants : Le serveur que vous avez renseigne.\n" +
+                "Les donnees sont conservées tant que la base de données n'est pas détruite.\n" +
+                "Vous pouvez accéder aux donnees vous concernant, les rectifier, demander leur effacement ou exercer votre droit à la limitation du traitement de vos donnees.\n" +
                 "Consultez le site cnil.fr pour plus d’informations sur vos droits.\n" +
-                "Si vous estimez que vos droits 'Informatique et Libertes' ne sont pas respectes, vous pouvez adresser une reclamation à la CNIL.", skin, "white");
+                "Si vous estimez que vos droits 'Informatique et Libertés' ne sont pas respectes, vous pouvez adresser une reclamation à la CNIL.", skin, "white");
         RGPDText.setAlignment(Align.center);
         ImageButton noIDont = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
         ImageButton yesIDo = new ImageButton(MyGame.getDrawable("text_sample/register.png"));
@@ -100,6 +102,7 @@ public class LoginScreen implements Screen {
         table.add(username).fillX().uniformX();
         table.row();
         password.setPasswordMode(true);
+        password.setPasswordCharacter('*');
         table.add(password).fillX().uniformX();
         table.row();
         table.add(login).fillX().uniformX();
@@ -162,12 +165,28 @@ public class LoginScreen implements Screen {
                     return;
                 }
 
-                if(!hasAcceptedHRT){
+                if (!hasAcceptedHRT) {
                     RGPDTable.setVisible(true);
                     return;
                 }
 
                 MyGame.getInstance().serverConnection.send(new CreateAccountPacket(username.getText(), password.getText()));
+            }
+        });
+
+        username.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                username.selectAll();
+            }
+        });
+
+        password.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                password.selectAll();
             }
         });
 
@@ -186,6 +205,9 @@ public class LoginScreen implements Screen {
                 MyGame.getInstance().serverConnection.send(new CreateAccountPacket(username.getText(), password.getText()));
             }
         });
+
+        stage.setKeyboardFocus(username);
+        username.selectAll();
     }
 
 

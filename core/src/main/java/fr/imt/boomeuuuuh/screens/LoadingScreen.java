@@ -17,7 +17,7 @@ public class LoadingScreen implements Screen {
 
     private final MyGame game; // Note it's "MyGame" not "Game"
     private final Stage stage;
-    private final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
+    private static final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
     // constructor to keep a reference to the main Game class
     public LoadingScreen(MyGame game) {

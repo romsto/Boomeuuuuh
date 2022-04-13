@@ -77,8 +77,6 @@ public class Player extends MovableEntity {
             animationTime += delta;
             font.setColor(1f, (!isAffected ? 1f : 0), (!isAffected ? 1f : 0), 0.8f);
             font.draw(batch, name, getPixelX() + 16 - fontWidth / 2, getPixelY() + 45);
-            System.out.println(skin + "Up");
-            System.out.println(skinTextures.containsKey(skin + "Down"));
             batch.draw(skinTextures.get(skin + (getBody().getLinearVelocity().y > 0 ? "Up" : "Down")).getKeyFrame(animationTime, true), getPixelX(), getPixelY(), 32, 32);
         }
     }
