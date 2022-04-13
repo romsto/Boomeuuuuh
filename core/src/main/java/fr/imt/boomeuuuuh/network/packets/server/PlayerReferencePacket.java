@@ -48,6 +48,8 @@ public class PlayerReferencePacket extends Packet {
             filter.maskBits = Entity.SOLID_CATEGORY;
         }
 
+        System.out.println(skin);
+
         ((Player) entity).refer(playerName, skin);
     }
 }

@@ -21,7 +21,7 @@ public class Player extends MovableEntity {
     private static final Map<String, Animation<TextureRegion>> skinTextures = new HashMap<>();
 
     static {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             Texture up = new Texture("skin/skinUp" + i + ".png");
             Texture down = new Texture("skin/skinDown" + i + ".png");
             TextureRegion[] tabRegionDown = TextureRegion.split(down, 32, down.getHeight())[0];
@@ -77,6 +77,8 @@ public class Player extends MovableEntity {
             animationTime += delta;
             font.setColor(1f, (!isAffected ? 1f : 0), (!isAffected ? 1f : 0), 0.8f);
             font.draw(batch, name, getPixelX() + 16 - fontWidth / 2, getPixelY() + 45);
+            System.out.println(skin + "Up");
+            System.out.println(skinTextures.containsKey(skin + "Down"));
             batch.draw(skinTextures.get(skin + (getBody().getLinearVelocity().y > 0 ? "Up" : "Down")).getKeyFrame(animationTime, true), getPixelX(), getPixelY(), 32, 32);
         }
     }
