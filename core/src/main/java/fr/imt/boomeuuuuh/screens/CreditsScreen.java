@@ -2,23 +2,24 @@ package fr.imt.boomeuuuuh.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
 import fr.imt.boomeuuuuh.utils.AssetsManager;
-import sun.tools.jconsole.Tab;
 
 public class CreditsScreen implements Screen {
 
-    private MyGame game;
-    private Stage stage;
+    private final MyGame game;
+    private final Stage stage;
     private ImageButton credits;
 
     private static final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
@@ -52,8 +53,7 @@ public class CreditsScreen implements Screen {
         TextButton externalTitle = new TextButton("EXTERNAL RESOURCES", skin, "maroon-small");
         TextButton externalText = new TextButton(
                 "Cow picture : freeimages.com, by kitenellie, title : Cow \n" +
-                "Music : \n" +
-                "Tiles :", skin);
+                        "Music : https://www.fesliyanstudios.com/ David Renda", skin);
 
         mainTable.add(contributorsTitle);
         mainTable.row().pad(0,0,0,0);
