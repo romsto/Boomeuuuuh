@@ -46,10 +46,10 @@ public class CreditsScreen implements Screen {
         TextButton contributorsText = new TextButton(
                 "Romain STORAI \n" +
                         "Benoit FAURE \n" +
-                        "Matheo Bregier \n" +
-                        "Antoine Mathieu \n" +
-                        "Theo Nicolau \n" +
-                        "Arnaud Garry\n\nThe project is under Apache licence v2.0", skin);
+                        "Matheo BREGIER \n" +
+                        "Antoine MATHIEU \n" +
+                        "Theo NICOLAU \n" +
+                        "Arnaud GARRY \n\nThe project is under Apache licence v2.0", skin);
         TextButton externalTitle = new TextButton("EXTERNAL RESOURCES", skin, "maroon-small");
         TextButton externalText = new TextButton(
                 "Cow picture : freeimages.com, by kitenellie, title : Cow \n" +
