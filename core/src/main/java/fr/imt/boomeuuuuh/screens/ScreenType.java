@@ -15,7 +15,8 @@ public enum ScreenType {
     PREFERENCES(PreferencesScreen.class),
     PLAY(PlayScreen.class),
     CONNECT(IPAddressScreen.class),
-    CREDITS(CreditsScreen.class);
+    CREDITS(CreditsScreen.class),
+    SKINS(SkinsScreen.class);
 
     private final Class<? extends Screen> screenClass;
 
