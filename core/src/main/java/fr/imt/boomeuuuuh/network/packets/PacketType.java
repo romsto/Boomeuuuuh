@@ -149,7 +149,9 @@ public enum PacketType {
         public Packet make(byte[] data) {
             return new AlivePacket();
         }
-    };
+    },
+    UNLOCK_SKIN,
+    SELECT_SKIN;
 
     public Packet make(byte[] data) {
 

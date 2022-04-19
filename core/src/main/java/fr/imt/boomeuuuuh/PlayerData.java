@@ -1,5 +1,7 @@
 package fr.imt.boomeuuuuh;
 
+import fr.imt.boomeuuuuh.network.packets.client.SelectSkinPacket;
+import fr.imt.boomeuuuuh.network.packets.client.UnlockSkinPacket;
 import fr.imt.boomeuuuuh.utils.Skin;
 
 public class PlayerData {
@@ -24,9 +26,11 @@ public class PlayerData {
     public void selectSkin(Skin skin) {
         this.currentSkin = skin.getDataName();
         // TODO send packet
+        MyGame.getInstance().serverConnection.send(new SelectSkinPacket(currentSkin));
     }
 
     public void unlockSkin(Skin skin) {
         // TODO send packet
+        MyGame.getInstance().serverConnection.send(new UnlockSkinPacket(skin.getDataName()));
     }
 }
