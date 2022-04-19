@@ -11,7 +11,6 @@ import fr.imt.boomeuuuuh.players.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 public class GameManager {
 
@@ -55,9 +54,7 @@ public class GameManager {
         //Add players to map
         deadPlayers = new ArrayList<>();
         livePlayers = new ArrayList<>();
-        Random random = new Random();
         for (Player p : lobby.getPlayers()) {
-            p.getPlayerData().setCurrentSkin("skin" + (random.nextInt(4) + 1));
             PlayerEntity e = new PlayerEntity(p, getNewID());
             e.setPos(m.nextSpawn());
 
@@ -67,6 +64,7 @@ public class GameManager {
             p.setSpeed(1);
             p.setBombPower(1);
             p.setGameKills(0);
+            p.goldWonDuringGame = 0;
 
             entityList.add(e);
             livePlayers.add(e);
@@ -220,6 +218,8 @@ public class GameManager {
                 if (livePlayers.size() == 1) {
                     String winner = "\n\n" + livePlayers.get(0).getPlayer().getName() + " won the game with " + livePlayers.get(0).getPlayer().getGameKills() + " kills !";
                     lobby.addToChat(winner);
+                    livePlayers.get(0).getPlayer().getPlayerData().addWin();
+                    livePlayers.get(0).getPlayer().goldWonDuringGame += 5;
                     ReceiveChatPacket receiveChatPacket = new ReceiveChatPacket(winner);
                     lobby.broadcastToAll(false, receiveChatPacket);
                 }

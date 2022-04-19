@@ -5,6 +5,7 @@ import fr.imt.boomeuuuuh.network.LobbyConnection;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.server.EndGamePacket;
 import fr.imt.boomeuuuuh.network.packets.server.LobbyInfoPacket;
+import fr.imt.boomeuuuuh.network.packets.server.PlayerDataPacket;
 import fr.imt.boomeuuuuh.network.packets.server.ReceiveChatPacket;
 import fr.imt.boomeuuuuh.players.Player;
 
@@ -138,10 +139,17 @@ public class Lobby {
         //Broadcast end of game
         gameManager = null;
 
+        players.forEach(pl -> {
+            if (pl.goldWonDuringGame >= 0) {
+                pl.serverConnection.send(new ReceiveChatPacket("During this game you won " + pl.goldWonDuringGame + " gold !"));
+                pl.getPlayerData().addGold(pl.goldWonDuringGame);
+            }
+            pl.serverConnection.send(new PlayerDataPacket(pl));
+            pl.setEntity(null);
+        });
+
         EndGamePacket p = new EndGamePacket();
         broadcastToAll(false, p);
-
-        players.forEach(pl -> pl.setEntity(null));//Lose game entity reference
 
         open = true;
         state = LobbyState.WAITING;

@@ -30,10 +30,16 @@ public class PlayerDataPacket extends Packet {
     public void handle() {
         byte[] bgold = Arrays.copyOfRange(rawData, 0, 4);
         byte[] blevel = Arrays.copyOfRange(rawData, 4, 8);
-        byte[] bstring = Arrays.copyOfRange(rawData, 8, rawData.length);
+        byte[] bkills = Arrays.copyOfRange(rawData, 8, 12);
+        byte[] bmaxkillstreak = Arrays.copyOfRange(rawData, 12, 16);
+        byte[] bwins = Arrays.copyOfRange(rawData, 16, 20);
+        byte[] bstring = Arrays.copyOfRange(rawData, 20, rawData.length);
 
         int gold = Ints.fromByteArray(bgold);
         int level = Ints.fromByteArray(blevel);
+        int kills = Ints.fromByteArray(bkills);
+        int maxkillstreak = Ints.fromByteArray(bmaxkillstreak);
+        int wins = Ints.fromByteArray(bwins);
         String string = new String(bstring, StandardCharsets.UTF_8);
         String[] split = string.split("[|]");
         String username = split[0];
@@ -50,14 +56,18 @@ public class PlayerDataPacket extends Packet {
 
         playerData.gold = gold;
         playerData.level = level;
+        playerData.kills = kills;
+        playerData.maxkillstreak = maxkillstreak;
+        playerData.wins = wins;
         playerData.currentSkin = currentSkin;
         playerData.unlockedSkins = skins;
 
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                MyGame.getInstance().changeScreen(ScreenType.LOBBY_SELECTION);
-            }
-        });
+        if (MyGame.getInstance().getCurrentScreenType() == ScreenType.LOG_IN)
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    MyGame.getInstance().changeScreen(ScreenType.LOBBY_SELECTION);
+                }
+            });
     }
 }

@@ -8,6 +8,9 @@ public class PlayerData {
 
     public int gold;
     public int level;
+    public int kills;
+    public int maxkillstreak;
+    public int wins;
     public String currentSkin;
     public String[] unlockedSkins;
 
@@ -25,12 +28,10 @@ public class PlayerData {
 
     public void selectSkin(Skin skin) {
         this.currentSkin = skin.getDataName();
-        // TODO send packet
         MyGame.getInstance().serverConnection.send(new SelectSkinPacket(currentSkin));
     }
 
     public void unlockSkin(Skin skin) {
-        // TODO send packet
         MyGame.getInstance().serverConnection.send(new UnlockSkinPacket(skin.getDataName()));
     }
 }

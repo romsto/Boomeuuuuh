@@ -9,12 +9,18 @@ public class PlayerData {
     private Player player;
     private int gold = 0;
     private int level = 0;
+    private int kills = 0;
+    private int maxkillstreak = 0;
+    private int wins = 0;
     private String currentSkin;
     private ArrayList<String> unlockedSkins = new ArrayList<>();
 
-    public PlayerData(int gold, int level, String currentSkin, ArrayList<String> unlockedSkins) {
+    public PlayerData(int gold, int level, String currentSkin, ArrayList<String> unlockedSkins, int kills, int maxkillstreak, int wins) {
         this.gold = gold;
         this.level = level;
+        this.kills = kills;
+        this.maxkillstreak = maxkillstreak;
+        this.wins = wins;
         this.currentSkin = currentSkin;
         this.unlockedSkins = unlockedSkins;
     }
@@ -47,6 +53,34 @@ public class PlayerData {
     public void setLevel(int level) {
         this.level = level;
         Boomeuuuuh.database.setLevel(player.getName(), level);
+    }
+
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void addKills(int kills) {
+        this.kills += kills;
+        Boomeuuuuh.database.setKills(player.getName(), this.kills);
+    }
+
+    public int getMaxkillstreak() {
+        return maxkillstreak;
+    }
+
+    public void setMaxkillstreak(int maxkillstreak) {
+        this.maxkillstreak = maxkillstreak;
+        Boomeuuuuh.database.setMaxKillstreak(player.getName(), maxkillstreak);
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void addWin() {
+        this.wins++;
+        Boomeuuuuh.database.setWins(player.getName(), this.wins);
     }
 
     public void addOneLevel() {

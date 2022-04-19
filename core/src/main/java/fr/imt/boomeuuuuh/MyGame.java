@@ -13,7 +13,6 @@ import fr.imt.boomeuuuuh.network.ServerConnection;
 import fr.imt.boomeuuuuh.network.packets.both.AlivePacket;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 import fr.imt.boomeuuuuh.utils.AppPreferences;
-import fr.imt.boomeuuuuh.utils.ConfigFile;
 
 import java.net.InetAddress;
 import java.util.Map;
@@ -21,8 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MyGame extends Game {
 
-    public static InetAddress SERVER_ADDRESS = ConfigFile.ADDRESS;
-    public static int SERVER_PORT_TCP = ConfigFile.PORT;
+    public static InetAddress SERVER_ADDRESS;
+    public static int SERVER_PORT_TCP;
     private static MyGame instance;
 
     private SpriteBatch batch;

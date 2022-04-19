@@ -28,7 +28,7 @@ public class Database {
     }
 
     public void createAccount(String username, String MdP) {
-        String request = "INSERT INTO bomberman(username,MdP,level,currentSkin,skin1,skin2,skin3,skin4,skin5,skin6,skin7,skin8,skin9,skin10,gold) VALUES(?,?,1,'skin1',1,0,0,0,0,0,0,0,0,0,0)";
+        String request = "INSERT INTO bomberman(username,MdP,level,currentSkin,skin1,skin2,skin3,skin4,skin5,skin6,skin7,skin8,skin9,skin10,gold,kills,maxkillstreak,wins) VALUES(?,?,1,'skin1',1,0,0,0,0,0,0,0,0,0,0,0,0,0)";
 
         // Encrypt password
         messageDigest.update(MdP.getBytes());
@@ -95,9 +95,12 @@ public class Database {
     public PlayerData getPlayerData(String username) {
         int gold = 0;
         int level = 0;
+        int kills = 0;
+        int maxkillstreak = 0;
+        int wins = 0;
         String currentSkin = null;
         ArrayList<String> unlockedSkins = new ArrayList<>();
-        String sql = "SELECT level,currentSkin,skin1,skin2,skin3,skin4,skin5,skin6,skin7,skin8,skin9,skin10,gold FROM bomberman WHERE username= ?";
+        String sql = "SELECT level,currentSkin,skin1,skin2,skin3,skin4,skin5,skin6,skin7,skin8,skin9,skin10,gold,kills,maxkillstreak,wins FROM bomberman WHERE username= ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             // set the value
             pstmt.setString(1, username);
@@ -105,6 +108,9 @@ public class Database {
             // loop through the result set
             gold = rs.getInt("gold");
             level = rs.getInt("level");
+            kills = rs.getInt("kills");
+            maxkillstreak = rs.getInt("maxkillstreak");
+            wins = rs.getInt("wins");
             currentSkin = rs.getString("currentSkin");
             for (int i = 1; i < 10; i++)
                 if (rs.getInt("skin" + i) == 1)
@@ -113,7 +119,7 @@ public class Database {
             Boomeuuuuh.logger.severe("Impossible to prepare the statement to the database : " + e.getMessage());
         }
 
-        return new PlayerData(gold, level, currentSkin, unlockedSkins);
+        return new PlayerData(gold, level, currentSkin, unlockedSkins, kills, maxkillstreak, wins);
     }
 
     /**
@@ -129,6 +135,54 @@ public class Database {
 
             // set the corresponding param
             pstmt.setInt(1, level);
+            pstmt.setString(2, username);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            Boomeuuuuh.logger.severe("Impossible to prepare the statement to the database : " + e.getMessage());
+        }
+    }
+
+    public void setKills(String username, int kills) {
+        String request = "UPDATE bomberman SET kills = ? "
+                + "WHERE username= ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(request)) {
+
+            // set the corresponding param
+            pstmt.setInt(1, kills);
+            pstmt.setString(2, username);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            Boomeuuuuh.logger.severe("Impossible to prepare the statement to the database : " + e.getMessage());
+        }
+    }
+
+    public void setMaxKillstreak(String username, int maxkillstreak) {
+        String request = "UPDATE bomberman SET maxkillstreak = ? "
+                + "WHERE username= ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(request)) {
+
+            // set the corresponding param
+            pstmt.setInt(1, maxkillstreak);
+            pstmt.setString(2, username);
+            // update
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            Boomeuuuuh.logger.severe("Impossible to prepare the statement to the database : " + e.getMessage());
+        }
+    }
+
+    public void setWins(String username, int wins) {
+        String request = "UPDATE bomberman SET wins = ? "
+                + "WHERE username= ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(request)) {
+
+            // set the corresponding param
+            pstmt.setInt(1, wins);
             pstmt.setString(2, username);
             // update
             pstmt.executeUpdate();
@@ -208,6 +262,9 @@ public class Database {
                 "    \"skin9\"    integer," +
                 "    \"skin10\"    integer," +
                 "    \"gold\"    integer," +
+                "    \"kills\"    integer," +
+                "    \"maxkillstreak\"    integer," +
+                "    \"wins\"    integer," +
                 "    CONSTRAINT \"bomberman_pk\" PRIMARY KEY(\"username\")" +
                 ")";
 

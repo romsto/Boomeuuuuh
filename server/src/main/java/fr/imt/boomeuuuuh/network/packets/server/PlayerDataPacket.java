@@ -25,6 +25,9 @@ public class PlayerDataPacket extends Packet {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         baos.writeBytes(Ints.toByteArray(data.getGold()));
         baos.writeBytes(Ints.toByteArray(data.getLevel()));
+        baos.writeBytes(Ints.toByteArray(data.getKills()));
+        baos.writeBytes(Ints.toByteArray(data.getMaxkillstreak()));
+        baos.writeBytes(Ints.toByteArray(data.getWins()));
         StringBuilder builder = new StringBuilder(player.getName()).append("|").append(data.getCurrentSkin()).append("|");
         String delimiter = "";
         for (String unlockedSkin : data.getUnlockedSkins()) {

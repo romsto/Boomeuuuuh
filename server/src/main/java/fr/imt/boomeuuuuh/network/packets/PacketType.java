@@ -139,6 +139,12 @@ public enum PacketType {
         public Packet make(byte[] data, Player player) {
             return new UnlockSkinPacket(new String(data, StandardCharsets.UTF_8), player);
         }
+    },
+    SELECT_SKIN {
+        @Override
+        public Packet make(byte[] data, Player player) {
+            return new SelectSkinPacket(new String(data, StandardCharsets.UTF_8), player);
+        }
     };
 
 

@@ -29,7 +29,7 @@ public class ConfigFile {
         } catch (IOException e) {
             try {
                 ADDRESS = InetAddress.getByName("localhost");
-                PORT = 25566;
+                PORT = 8080;
             } catch (UnknownHostException exception) {
                 exception.printStackTrace();
             }

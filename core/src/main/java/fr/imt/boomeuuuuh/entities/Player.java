@@ -16,6 +16,9 @@ public class Player extends MovableEntity {
 
     private final static BitmapFont font = new BitmapFont();
     private String name;
+    private boolean referred = false;
+    private float fontWidth;
+    private static final Map<String, Animation<TextureRegion>> skinTextures = new HashMap<>();
 
     static {
         for (int i = 1; i <= Skin.values().length; i++) {
@@ -27,10 +30,6 @@ public class Player extends MovableEntity {
             skinTextures.put("skin" + i + "Up", new Animation<TextureRegion>(0.25F, tabRegionUp));
         }
     }
-
-    private boolean referred = false;
-    private float fontWidth;
-    private static final Map<String, Animation<TextureRegion>> skinTextures = new HashMap<>();
 
     private Skin skin;
 

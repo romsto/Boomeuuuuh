@@ -7,13 +7,13 @@ import fr.imt.boomeuuuuh.network.packets.server.PlayerDataPacket;
 import fr.imt.boomeuuuuh.players.Player;
 import fr.imt.boomeuuuuh.players.PlayerData;
 
-public class UnlockSkinPacket extends Packet {
+public class SelectSkinPacket extends Packet {
 
     private final Player player;
     private final String name;
 
-    public UnlockSkinPacket(String name, Player player) {
-        super(PacketType.UNLOCK_SKIN);
+    public SelectSkinPacket(String name, Player player) {
+        super(PacketType.SELECT_SKIN);
 
         this.name = name;
         this.player = player;
@@ -29,18 +29,12 @@ public class UnlockSkinPacket extends Packet {
     public void handle() {
         PlayerData playerData = player.getPlayerData();
 
-        if (playerData.hasSkin(name)) {
-            player.serverConnection.send(new DeclinePacket("You already have this skin!"));
+        if (!playerData.hasSkin(name)) {
+            player.serverConnection.send(new DeclinePacket("You don't have this skin."));
             return;
         }
 
-        if (playerData.getGold() < 100) {
-            player.serverConnection.send(new DeclinePacket("You do not have enough gold!"));
-            return;
-        }
-
-        playerData.addGold(-100);
-        playerData.unlockSkin(name);
+        playerData.setCurrentSkin(name);
 
         player.serverConnection.send(new PlayerDataPacket(player));
     }

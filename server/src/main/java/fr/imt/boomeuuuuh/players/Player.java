@@ -33,6 +33,7 @@ public class Player {
     private int speed = 1;
     public int currentBombs = 0;
     private int gameKills = 0;
+    public int goldWonDuringGame = 0;
 
     private final InetAddress address;
     private final Socket serverSocket;
@@ -66,8 +67,12 @@ public class Player {
         serverConnection.send(new PlayerInfoPacket(this));
     }
     public void increaseSpeed(){ setSpeed(speed + 1); }
-    public void setGameKills(int v){
+    public void setGameKills(int v) {
         gameKills = v;
+        playerData.addKills(v);
+        goldWonDuringGame++;
+        if (playerData.getMaxkillstreak() < gameKills)
+            playerData.setMaxkillstreak(gameKills);
         serverConnection.send(new PlayerInfoPacket(this));
     }
     public void increaseGameKills(){ setGameKills(gameKills + 1); }
