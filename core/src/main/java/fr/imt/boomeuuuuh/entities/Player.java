@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import fr.imt.boomeuuuuh.utils.Location;
+import fr.imt.boomeuuuuh.utils.Skin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,13 +16,9 @@ public class Player extends MovableEntity {
 
     private final static BitmapFont font = new BitmapFont();
     private String name;
-    private String skin;
-    private boolean referred = false;
-    private float fontWidth;
-    private static final Map<String, Animation<TextureRegion>> skinTextures = new HashMap<>();
 
     static {
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= Skin.values().length; i++) {
             Texture up = new Texture("skin/skinUp" + i + ".png");
             Texture down = new Texture("skin/skinDown" + i + ".png");
             TextureRegion[] tabRegionDown = TextureRegion.split(down, 32, down.getHeight())[0];
@@ -30,6 +27,12 @@ public class Player extends MovableEntity {
             skinTextures.put("skin" + i + "Up", new Animation<TextureRegion>(0.25F, tabRegionUp));
         }
     }
+
+    private boolean referred = false;
+    private float fontWidth;
+    private static final Map<String, Animation<TextureRegion>> skinTextures = new HashMap<>();
+
+    private Skin skin;
 
     private float animationTime = new Random().nextFloat();
 
@@ -45,11 +48,11 @@ public class Player extends MovableEntity {
         return name;
     }
 
-    public String getSkin() {
+    public Skin getSkin() {
         return skin;
     }
 
-    public void refer(String name, String skin) {
+    public void refer(String name, Skin skin) {
         this.referred = true;
         this.name = name;
         this.skin = skin;
@@ -77,7 +80,7 @@ public class Player extends MovableEntity {
             animationTime += delta;
             font.setColor(1f, (!isAffected ? 1f : 0), (!isAffected ? 1f : 0), 0.8f);
             font.draw(batch, name, getPixelX() + 16 - fontWidth / 2, getPixelY() + 45);
-            batch.draw(skinTextures.get(skin + (getBody().getLinearVelocity().y > 0 ? "Up" : "Down")).getKeyFrame(animationTime, true), getPixelX(), getPixelY(), 32, 32);
+            batch.draw(skinTextures.get(skin.getDataName() + (getBody().getLinearVelocity().y > 0 ? "Up" : "Down")).getKeyFrame(animationTime, true), getPixelX(), getPixelY(), 32, 32);
         }
     }
 

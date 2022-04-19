@@ -7,6 +7,7 @@ import fr.imt.boomeuuuuh.entities.Entity;
 import fr.imt.boomeuuuuh.entities.Player;
 import fr.imt.boomeuuuuh.network.packets.Packet;
 import fr.imt.boomeuuuuh.network.packets.PacketType;
+import fr.imt.boomeuuuuh.utils.Skin;
 
 public class PlayerReferencePacket extends Packet {
 
@@ -48,6 +49,6 @@ public class PlayerReferencePacket extends Packet {
             filter.maskBits = Entity.SOLID_CATEGORY;
         }
 
-        ((Player) entity).refer(playerName, skin);
+        ((Player) entity).refer(playerName, Skin.getByDataName(skin));
     }
 }
