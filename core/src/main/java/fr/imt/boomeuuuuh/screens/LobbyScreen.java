@@ -89,6 +89,8 @@ public class LobbyScreen implements Screen {
         //--------ACTION TABLE--------
         buttonsTable.add(info).fillX().uniformX();
         buttonsTable.row().pad(10, 0, 10, 0);
+        buttonsTable.add(skinButton).fillX().uniformX();
+        buttonsTable.row().pad(10, 0, 10, 0);
         buttonsTable.add(start).fillX().uniformX();
         buttonsTable.row().pad(10, 0, 10, 0);
         buttonsTable.add(leave).fillX().uniformX();

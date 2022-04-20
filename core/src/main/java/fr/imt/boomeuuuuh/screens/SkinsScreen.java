@@ -11,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
+import fr.imt.boomeuuuuh.PlayerData;
+import fr.imt.boomeuuuuh.network.packets.client.SelectSkinPacket;
+import fr.imt.boomeuuuuh.network.packets.client.UnlockSkinPacket;
 import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 public class SkinsScreen implements Screen {
@@ -19,6 +22,9 @@ public class SkinsScreen implements Screen {
     private final Stage stage;
     private Label skinLabel;
     private ScrollPane skinScroll;
+    public Table skinTable;
+    public Label gold;
+    public boolean act = true;
 
     private static final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
@@ -35,6 +41,8 @@ public class SkinsScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
 
+        gold = new Label(MyGame.getInstance().playerData.gold + " gold", skin);
+        table.add(gold);
 
         skinLabel = new Label("", skin);
         skinLabel.setWrap(true);
@@ -46,14 +54,49 @@ public class SkinsScreen implements Screen {
         table.add(skinScroll).fill();
         table.row();
 
-        Table skinTable = new Table();
+        skinTable = new Table();
         table.add(skinTable).fill();
         table.row();
 
+        PlayerData playerData = MyGame.getInstance().playerData;
 
+        for (final fr.imt.boomeuuuuh.utils.Skin value : fr.imt.boomeuuuuh.utils.Skin.values()) {
+            skinTable.row().pad(10, 0, 10, 0);
+            boolean hasSkin = playerData.hasSkin(value);
+            TextButton button;
+            if (hasSkin) {
+                if (playerData.getCurrentSkin() == value) {
+                    button = new TextButton("Current Skin", skin, "maroon");
+                } else {
+                    button = new TextButton("Select Skin", skin);
+                    button.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            if (!act) return;
+                            MyGame.getInstance().serverConnection.send(new SelectSkinPacket(value.getDataName()));
+                            act = false;
+                        }
+                    });
+                }
+            } else {
+                if (playerData.gold >= 100) {
+                    button = new TextButton("100 gold", skin);
+                    button.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            if (!act) return;
+                            MyGame.getInstance().serverConnection.send(new UnlockSkinPacket(value.getDataName()));
+                            act = false;
+                        }
+                    });
+                } else {
+                    button = new TextButton("Not enough gold", skin);
+                }
+            }
 
-
-
+            skinTable.add(value.getIcon()).width(32).height(32);
+            skinTable.add(button).fillX().uniformX();
+        }
 
         stage.addActor(table);
 
