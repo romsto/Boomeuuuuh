@@ -15,6 +15,7 @@ import fr.imt.boomeuuuuh.network.packets.client.SelectSkinPacket;
 import fr.imt.boomeuuuuh.network.packets.client.UnlockSkinPacket;
 import fr.imt.boomeuuuuh.screens.ScreenType;
 import fr.imt.boomeuuuuh.screens.SkinsScreen;
+import fr.imt.boomeuuuuh.screens.StatsScreen;
 import fr.imt.boomeuuuuh.utils.AssetsManager;
 
 import java.nio.charset.StandardCharsets;
@@ -82,50 +83,58 @@ public class PlayerDataPacket extends Packet {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    Skin skin = AssetsManager.getUISkin();
-                    Table skinTable = ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).skinTable;
-                    ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act = true;
-                    skinTable.clear();
-                    for (final fr.imt.boomeuuuuh.utils.Skin value : fr.imt.boomeuuuuh.utils.Skin.values()) {
-                        skinTable.row().pad(10, 0, 10, 0);
-                        boolean hasSkin = playerData.hasSkin(value);
-                        TextButton button;
-                        if (hasSkin) {
-                            if (playerData.getCurrentSkin() == value) {
-                                button = new TextButton("Current Skin", skin, "maroon");
-                            } else {
-                                button = new TextButton("Select Skin", skin);
-                                button.addListener(new ChangeListener() {
-                                    @Override
-                                    public void changed(ChangeEvent event, Actor actor) {
-                                        if (!((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act) return;
-                                        MyGame.getInstance().serverConnection.send(new SelectSkinPacket(value.getDataName()));
-                                        ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act = false;
-                                    }
-                                });
-                            }
-                        } else {
-                            if (playerData.gold >= 100) {
-                                button = new TextButton("100 gold", skin);
-                                button.addListener(new ChangeListener() {
-                                    @Override
-                                    public void changed(ChangeEvent event, Actor actor) {
-                                        if (!((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act) return;
-                                        MyGame.getInstance().serverConnection.send(new UnlockSkinPacket(value.getDataName()));
-                                        ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act = false;
-                                    }
-                                });
-                            } else {
-                                button = new TextButton("Not enough gold", skin);
-                            }
-                        }
-
-                        skinTable.add(value.getIcon()).width(32).height(32);
-                        skinTable.add(button).fillX().uniformX();
-                        ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).gold.setText(gold + " gold");
-                    }
+//                    Skin skin = AssetsManager.getUISkin();
+//                    Table skinTable = ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).skinTable;
+//                    ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act = true;
+//                    skinTable.clear();
+//                    for (final fr.imt.boomeuuuuh.utils.Skin value : fr.imt.boomeuuuuh.utils.Skin.values()) {
+//                        skinTable.row().pad(10, 0, 10, 0);
+//                        boolean hasSkin = playerData.hasSkin(value);
+//                        TextButton button;
+//                        if (hasSkin) {
+//                            if (playerData.getCurrentSkin() == value) {
+//                                button = new TextButton("Current Skin", skin, "maroon");
+//                            } else {
+//                                button = new TextButton("Select Skin", skin);
+//                                button.addListener(new ChangeListener() {
+//                                    @Override
+//                                    public void changed(ChangeEvent event, Actor actor) {
+//                                        if (!((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act) return;
+//                                        MyGame.getInstance().serverConnection.send(new SelectSkinPacket(value.getDataName()));
+//                                        ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act = false;
+//                                    }
+//                                });
+//                            }
+//                        } else {
+//                            if (playerData.gold >= 100) {
+//                                button = new TextButton("100 gold", skin);
+//                                button.addListener(new ChangeListener() {
+//                                    @Override
+//                                    public void changed(ChangeEvent event, Actor actor) {
+//                                        if (!((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act) return;
+//                                        MyGame.getInstance().serverConnection.send(new UnlockSkinPacket(value.getDataName()));
+//                                        ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).act = false;
+//                                    }
+//                                });
+//                            } else {
+//                                button = new TextButton("Not enough gold", skin);
+//                            }
+//                        }
+//
+//                        skinTable.add(value.getIcon()).width(32).height(32);
+//                        skinTable.add(button).fillX().uniformX();
+//                        ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).gold.setText(gold + " gold");
+//                    }
+                    ((SkinsScreen) MyGame.getInstance().getCurrentScreen()).reShow();
                 }
             });
+        }
+        if(MyGame.getInstance().getCurrentScreenType() == ScreenType.STATS){
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    ((StatsScreen) MyGame.getInstance().getCurrentScreen()).reShow();
+                }});
         }
     }
 }

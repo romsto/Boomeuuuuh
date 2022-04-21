@@ -62,7 +62,7 @@ public class LobbyScreen implements Screen {
         info = new Label("", skin, "white");
         TextButton start = new TextButton("Start the game", skin);
         TextButton leave = new TextButton("Leave the game", skin);
-        TextButton skinButton  = new TextButton("Select skin", skin);
+        TextButton skinButton  = new TextButton("Stats", skin);
 
         //Create tables
         Table infoTable = new Table();
@@ -171,7 +171,7 @@ public class LobbyScreen implements Screen {
         skinButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.SKINS);
+                game.changeScreen(ScreenType.STATS);
         }
     });
     }

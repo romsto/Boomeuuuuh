@@ -26,6 +26,8 @@ public class SkinsScreen implements Screen {
     public Label gold;
     public boolean act = true;
 
+    private ImageButton lobbyButton;
+
     private static final Texture background = new Texture("Backgrounds/cow-1575964.jpg");
 
     public SkinsScreen(MyGame game) {
@@ -105,11 +107,28 @@ public class SkinsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.LOBBY);
+                game.changeScreen(ScreenType.STATS);
             }
         });
         stage.addActor(backButton);
+
+        lobbyButton = new ImageButton(MyGame.getDrawable("text_sample/lobby.png"));
+        lobbyButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(ScreenType.LOBBY);
+            }
+        });
+        lobbyButton.right();
+        lobbyButton.setPosition(stage.getWidth() - lobbyButton.getWidth(), 0);
+        stage.addActor(lobbyButton);
     }
+
+    public void reShow(){
+        stage.clear();
+        show();
+    }
+
 
     @Override
     public void render(float delta) {
@@ -122,6 +141,9 @@ public class SkinsScreen implements Screen {
         stage.getBatch().begin();
         stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
         stage.getBatch().end();
+
+        //Put the correct position for the button
+        lobbyButton.setPosition(stage.getWidth() - lobbyButton.getWidth(), 0);
 
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
