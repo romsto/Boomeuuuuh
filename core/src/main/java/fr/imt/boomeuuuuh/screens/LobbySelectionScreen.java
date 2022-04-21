@@ -68,6 +68,7 @@ public class LobbySelectionScreen implements Screen {
         final ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
         final ImageButton refreshButton = new ImageButton(MyGame.getDrawable("text_sample/refresh.png"));
         final ImageButton createButton = new ImageButton(MyGame.getDrawable("text_sample/create.png"));
+        final TextButton statsButton = new TextButton("Stats", skin);
 
         messageLabel = new Label("", skin);
 
@@ -102,6 +103,8 @@ public class LobbySelectionScreen implements Screen {
         table.row().pad(10, 10, 10, 10);
         table.add(createButton).fillX().uniformX();
         table.row().pad(10, 10, 10, 10);
+        table.add(statsButton).fillX().uniformX();
+        table.row().pad(10, 10, 10, 10);
         table.add(backButton).fillX().uniformX();
 
         backButton.addListener(new ChangeListener() {
@@ -125,6 +128,12 @@ public class LobbySelectionScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (game.connected) game.serverConnection.send(new CreateLobbyPacket(game.username));
+            }
+        });
+        statsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(ScreenType.STATS);
             }
         });
     }

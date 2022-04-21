@@ -58,6 +58,8 @@ public class MyGame extends Game {
         batch.dispose();
     }
 
+    public boolean hasLobby(){ return lobby != null; }
+
     public SpriteBatch getBatch() {
         return batch;
     }

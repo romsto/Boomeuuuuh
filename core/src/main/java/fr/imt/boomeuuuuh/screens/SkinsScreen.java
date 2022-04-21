@@ -112,11 +112,12 @@ public class SkinsScreen implements Screen {
         });
         stage.addActor(backButton);
 
-        lobbyButton = new ImageButton(MyGame.getDrawable("text_sample/lobby.png"));
+
+        lobbyButton = new ImageButton(MyGame.getDrawable((MyGame.getInstance().hasLobby())? "text_sample/lobby.png" : "text_sample/lobby_selection.png"));
         lobbyButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.LOBBY);
+                game.changeScreen((MyGame.getInstance().hasLobby())? ScreenType.LOBBY : ScreenType.LOBBY_SELECTION);
             }
         });
         lobbyButton.right();

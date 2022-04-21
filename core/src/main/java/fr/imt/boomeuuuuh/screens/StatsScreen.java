@@ -61,7 +61,7 @@ public class StatsScreen implements Screen {
         currSkinTable.add(new Label("SKIN", skin, "title-white"));
         currSkinTable.row();
         Image currSkinImg = fr.imt.boomeuuuuh.utils.Skin.getByDataName(data.currentSkin).getIcon();
-        currSkinTable.add(currSkinImg);
+        currSkinTable.add(currSkinImg).width(32*3).height(32*3);
 
         subTable1.add(currSkinTable).fill();
 
@@ -116,7 +116,7 @@ public class StatsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(ScreenType.LOBBY);
+                game.changeScreen((MyGame.getInstance().hasLobby())? ScreenType.LOBBY : ScreenType.LOBBY_SELECTION);
             }
         });
         stage.addActor(backButton);
