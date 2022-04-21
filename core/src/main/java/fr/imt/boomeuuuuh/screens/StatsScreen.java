@@ -123,6 +123,7 @@ public class StatsScreen implements Screen {
     }
 
     public void reShow(){
+        changeUsed = false;
         stage.clear();
         show();
     }

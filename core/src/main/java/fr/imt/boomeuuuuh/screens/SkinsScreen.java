@@ -125,6 +125,7 @@ public class SkinsScreen implements Screen {
     }
 
     public void reShow(){
+        act = true;
         stage.clear();
         show();
     }
