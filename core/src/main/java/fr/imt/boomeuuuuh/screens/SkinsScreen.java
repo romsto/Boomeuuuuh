@@ -5,9 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import fr.imt.boomeuuuuh.MyGame;
@@ -36,8 +38,8 @@ public class SkinsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    @Override
-    public void show() {
+
+    public void show_old() {
         Skin skin = AssetsManager.getUISkin();
 
         Table table = new Table();
@@ -101,6 +103,117 @@ public class SkinsScreen implements Screen {
         }
 
         stage.addActor(table);
+
+        // return to main screen button
+        ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(ScreenType.STATS);
+            }
+        });
+        stage.addActor(backButton);
+
+
+        lobbyButton = new ImageButton(MyGame.getDrawable((MyGame.getInstance().hasLobby())? "text_sample/lobby.png" : "text_sample/lobby_selection.png"));
+        lobbyButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen((MyGame.getInstance().hasLobby())? ScreenType.LOBBY : ScreenType.LOBBY_SELECTION);
+            }
+        });
+        lobbyButton.right();
+        lobbyButton.setPosition(stage.getWidth() - lobbyButton.getWidth(), 0);
+        stage.addActor(lobbyButton);
+    }
+
+    @Override
+    public void show() {
+        Skin skin = AssetsManager.getUISkin();
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+
+        Label goldLabel = new Label(MyGame.getInstance().playerData.gold + " gold", skin, "title-white");
+
+        Table skinListTable = new Table();
+        skinListTable.setFillParent(true);
+        ScrollPane listScroll = new ScrollPane(skinListTable);
+
+        PlayerData data = MyGame.getInstance().playerData;
+
+        //Making the list of skins
+        int count = 0;
+        Table listSubTable = new Table();
+        for (final fr.imt.boomeuuuuh.utils.Skin value : fr.imt.boomeuuuuh.utils.Skin.values()){
+
+            //---------Make the table that holds the skin---------
+            Table skinTable = new Table();
+            skinTable.background(skin.getDrawable("button-orange"));
+            skinTable.add(value.getIcon());
+
+            if (data.getCurrentSkin() == value) {
+                Label subLabel = new Label("Current Skin", skin, "white");
+                skinTable.add(subLabel);
+            }
+            else {
+
+                if(data.hasSkin(value)){
+                    Label subLabel = new Label("Select Skin", skin, "white");
+                    skinTable.add(subLabel);
+                    skinTable.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (!act) return;
+                            MyGame.getInstance().serverConnection.send(new SelectSkinPacket(value.getDataName()));
+                            act = false;
+                        }
+                    });
+
+                }
+                else{
+
+                    if (data.gold >= 100){
+                        Label subLabel = new Label("Buy (100)", skin, "white");
+                        skinTable.add(subLabel);
+                        skinTable.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                if (!act) return;
+                                MyGame.getInstance().serverConnection.send(new UnlockSkinPacket(value.getDataName()));
+                                act = false;
+                            }
+                        });
+                    }
+                    else{
+                        Label subLabel = new Label("Buy (100)", skin, "white");
+                        skinTable.add(subLabel);
+                        skinTable.background(skin.getDrawable("button-maroon"));
+                    }
+
+                }
+            }
+            //----------------------------------------------------
+
+            if(count == 0){
+                listSubTable = new Table();
+                listSubTable.add(skinTable);
+            }else{
+                listSubTable.row().pad(1,0,1,0);
+                listSubTable.add(skinTable);
+                if(count == 2)
+                    skinListTable.add(listSubTable);
+            }
+            count = (count + 1) % 3;
+        }
+        if(count != 2)
+            skinListTable.add(listSubTable);
+
+        mainTable.add(goldLabel);
+        mainTable.row().pad(5,0,5,0);
+        mainTable.add(listScroll);
+
+        stage.addActor(mainTable);
 
         // return to main screen button
         ImageButton backButton = new ImageButton(MyGame.getDrawable("text_sample/back.png"));
