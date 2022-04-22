@@ -11,6 +11,9 @@ public class LobbyListPacket extends Packet {
 
     private final String rawString;
 
+    /**
+     * Packet containing info on all lobbies currently on the server (name, number of players, if open)
+     */
     public LobbyListPacket() {
         super(PacketType.LOBBY_LIST);
 

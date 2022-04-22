@@ -13,6 +13,10 @@ public class PlayerDataPacket extends Packet {
 
     private final Player player;
 
+    /**
+     * Packet containing stats of a player (gold, level, kills, max kill streak, wins, name, current skin, owned skins)
+     * @param player player the packet is about
+     */
     public PlayerDataPacket(Player player) {
         super(PacketType.PLAYER_DATA);
         this.player = player;

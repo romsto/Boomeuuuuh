@@ -11,6 +11,10 @@ public class LobbyInfoPacket extends Packet {
 
     private final String rawData;
 
+    /**
+     * Packet containing all necessary info on the current lobby (name, owner, if open, players)
+     * @param lobby lobby the packet is about
+     */
     public LobbyInfoPacket(Lobby lobby) {
         super(PacketType.LOBBY_INFO);
         StringBuilder builder = new StringBuilder(lobby.getName()).append("|").append(lobby.getOwner().getName()).append("|").append(lobby.isOpen() ? 1 : 0).append("|");

@@ -13,6 +13,12 @@ public class EntityMovePacket extends Packet {
     private final Location location;
     private final int speed;
 
+    /**
+     * Packet to tell the client to move an entity
+     * @param entityId ID of the entity
+     * @param location new location of the entity
+     * @param speed speed at which the entity moves
+     */
     public EntityMovePacket(int entityId, Location location, int speed) {
         super(PacketType.ENTITY_MOVE);
         this.entityId = entityId;

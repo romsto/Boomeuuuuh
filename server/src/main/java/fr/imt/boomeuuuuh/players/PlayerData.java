@@ -15,6 +15,16 @@ public class PlayerData {
     private String currentSkin;
     private ArrayList<String> unlockedSkins = new ArrayList<>();
 
+    /**
+     * Class to store player data outside the database
+     * @param gold gold the player has
+     * @param level level of the player
+     * @param currentSkin name of the currentSkin of the player
+     * @param unlockedSkins names of the player's unlocked skins
+     * @param kills total kills of the player
+     * @param maxkillstreak max kill streak of the player
+     * @param wins total wins of the player
+     */
     public PlayerData(int gold, int level, String currentSkin, ArrayList<String> unlockedSkins, int kills, int maxkillstreak, int wins) {
         this.gold = gold;
         this.level = level;

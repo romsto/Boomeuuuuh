@@ -12,6 +12,12 @@ public class EntityCreatePacket extends Packet {
     private final int entityId, entityType;
     private final Location location;
 
+    /**
+     * Packet to tell the client of the creation of an entity in game of types currently handled by the client (Including : hardBlock, softBlock)
+     * @param entityId ID assigned
+     * @param entityType Type of the entity, see enum
+     * @param location Location the entity was placed at
+     */
     public EntityCreatePacket(int entityId, int entityType, Location location) {
         super(PacketType.ENTITY_CREATE);
         this.entityId = entityId;

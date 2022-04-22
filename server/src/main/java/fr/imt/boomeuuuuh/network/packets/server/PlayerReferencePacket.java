@@ -13,6 +13,12 @@ public class PlayerReferencePacket extends Packet {
     private final String playerName;
     private final String skin;
 
+    /**
+     * Packet for the creation of a player entity
+     * @param entityId ID of the player entity in game
+     * @param playerName Name of the player the entity references
+     * @param skin name of the skin of the player this entity references
+     */
     public PlayerReferencePacket(int entityId, String playerName, String skin) {
         super(PacketType.PLAYER_REFERENCE);
         this.entityId = entityId;

@@ -5,6 +5,9 @@ import fr.imt.boomeuuuuh.network.packets.PacketType;
 
 public class StartGamePacket extends Packet {
 
+    /**
+     * Packet to communicate the start of the game in the player's current lobby
+     */
     public StartGamePacket() {
         super(PacketType.START_GAME);
     }

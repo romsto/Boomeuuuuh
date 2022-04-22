@@ -9,6 +9,10 @@ public class KickPacket extends Packet {
 
     private final String reason;
 
+    /**
+     * Packet to inform the client it has been kicked from a lobby
+     * @param reason reason it has been kicked
+     */
     public KickPacket(String reason) {
         super(PacketType.KICK);
 

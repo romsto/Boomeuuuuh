@@ -10,6 +10,10 @@ public class EntityDestroyPacket extends Packet {
 
     private final int entityId;
 
+    /**
+     * Packet to tell the client of the destruction of an entity
+     * @param entityId ID of the entity destroyed
+     */
     public EntityDestroyPacket(int entityId) {
         super(PacketType.ENTITY_DESTROY);
         this.entityId = entityId;

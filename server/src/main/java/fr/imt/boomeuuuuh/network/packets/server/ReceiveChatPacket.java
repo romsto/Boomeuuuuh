@@ -9,6 +9,10 @@ public class ReceiveChatPacket extends Packet {
 
     private final String message;
 
+    /**
+     * Chat communication from the server to the client
+     * @param message message sent from the server, contains the senders name if it originates from a client
+     */
     public ReceiveChatPacket(String message) {
         super(PacketType.RECEIVE_CHAT);
 

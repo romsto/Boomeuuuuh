@@ -39,6 +39,11 @@ public class Player {
     private final Socket serverSocket;
     public final ServerConnection serverConnection;
 
+    /**
+     * Representation of player on the server
+     * @param socket socket the player is attached to
+     * @throws IOException thrown if connection doesn't go through
+     */
     public Player(Socket socket) throws IOException {
         this.serverSocket = socket;
         this.address = socket.getInetAddress();
@@ -52,21 +57,50 @@ public class Player {
     public int getSpeed(){ return speed; }
     public int getGameKills(){ return gameKills; }
 
+    /**
+     * Set the max number of bombs the player can have and communicate it to the client
+     * @param v value to assign
+     */
     public void setMaxBombs(int v){
         maxBombs = v;
         serverConnection.send(new PlayerInfoPacket(this));
     }
+
+    /**
+     * Increase the number of max bombs by 1 and communicate it to the client
+     */
     public void increaseMaxBombs(){ setMaxBombs(maxBombs + 1); }
+
+    /**
+     * Set the power of the player's bombs and communicate it to the client
+     * @param v value to assign
+     */
     public void setBombPower(int v){
         bombPower = v;
         serverConnection.send(new PlayerInfoPacket(this));
     }
+
+    /**
+     * Increase the power of the player's bombs by 1 and communicate it to the client
+     */
     public void increasePower(){ setBombPower(bombPower + 1); }
+
+    /**
+     * Set the speed of the player and communicate it to the client
+     * @param v value to assign
+     */
     public void setSpeed(int v){
         speed = v;
         serverConnection.send(new PlayerInfoPacket(this));
     }
+    /**
+     * Increase the speed of the player by 1 and communicate it to the client
+     */
     public void increaseSpeed(){ setSpeed(speed + 1); }
+    /**
+     * Set the number of kills of the player, update the max kill streak and communicate it to the client
+     * @param v value to assign
+     */
     public void setGameKills(int v) {
         gameKills = v;
         playerData.addKills(v);
@@ -75,6 +109,9 @@ public class Player {
             playerData.setMaxkillstreak(gameKills);
         serverConnection.send(new PlayerInfoPacket(this));
     }
+    /**
+     * Increase the number of kills of the player by 1, update the max kill streak and communicate it to the client
+     */
     public void increaseGameKills(){ setGameKills(gameKills + 1); }
     //------------------------
 
@@ -102,6 +139,12 @@ public class Player {
         return authentified;
     }
 
+    /**
+     * Link the current player to a registered account, if the link fails, a decline packet is communicated to the client
+     * @param username username of the account
+     * @param password password of the account
+     * @return true if the player was linked to the account, if false possible reasons are : Player already connected, wrong credentials
+     */
     public boolean authenticate(String username, String password) {
         if (Server.getPlayers().stream().anyMatch(player -> player.isAuthentified() && player.getName().equalsIgnoreCase(username))) {
             serverConnection.send(new DeclinePacket("You are already connected..."));
@@ -141,6 +184,11 @@ public class Player {
         return lobby != null && joinedLobby != LobbyJoiningState.DISCONNETED;
     }
 
+    /**
+     * Make the player join a lobby, the player can't join two lobbies simultaneously
+     * The client receives the lobby information and awaits port assignment from the lobby
+     * @param lobby lobby to join
+     */
     public void joinLobby(Lobby lobby) {
         if (isInLobby()) {
             leaveLobby("Already in a lobby");
@@ -150,6 +198,10 @@ public class Player {
         serverConnection.send(new LobbyCredentialsPacket(lobby.getUdpPort()));
     }
 
+    /**
+     * Remove a player from a lobby, client receives the information through a KickPacket
+     * @param reason reason why the player was removed
+     */
     public void leaveLobby(String reason) {
         KickPacket kickPacket = new KickPacket(reason);
         getLobby().getLobbyConnection().send(this, kickPacket);
@@ -158,6 +210,9 @@ public class Player {
         joinedLobby = LobbyJoiningState.DISCONNETED;
     }
 
+    /**
+     * Disconnect the player from the server, if is in a lobby, kick the player from it
+     */
     public void disconnect() {
         if (isInLobby())
             lobby.removePlayer(this);
@@ -183,10 +238,18 @@ public class Player {
     //-------------------------GAME------------------------
     PlayerEntity myEntity;
 
+    /**
+     * Get player entity associated with this player in game
+     * @return player entity associated with this player in game
+     */
     public PlayerEntity getEntity() {
         return myEntity;
     }
 
+    /**
+     * Set player entity associated with this player in game
+     * @param e entity to set
+     */
     public void setEntity(PlayerEntity e) {
         myEntity = e;
     }

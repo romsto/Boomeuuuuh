@@ -12,6 +12,12 @@ public class BombPlacedPacket extends Packet {
     private final int entityId, power;
     private final Location location;
 
+    /**
+     * Packet to tell the target client that a bomb has been placed in game
+     * @param entityId ID assigned to the bomb
+     * @param power power of the bomb
+     * @param location location the bomb was placed
+     */
     public BombPlacedPacket(int entityId, int power, Location location) {
         super(PacketType.BOMB_PLACED);
         this.entityId = entityId;

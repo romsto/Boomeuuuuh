@@ -11,6 +11,10 @@ public class PlayerInfoPacket extends Packet {
 
     private final Player player;
 
+    /**
+     * Packet containing info on a player in game (max bombs, bomb power, speed, kills)
+     * @param player player the packet is about
+     */
     public PlayerInfoPacket(Player player) {
         super(PacketType.PLAYER_INFO);
 

@@ -5,6 +5,9 @@ import fr.imt.boomeuuuuh.network.packets.PacketType;
 
 public class EndGamePacket extends Packet {
 
+    /**
+     * Packet to tell the client the game has ended
+     */
     public EndGamePacket() {
         super(PacketType.END_GAME);
     }
