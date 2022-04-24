@@ -12,6 +12,11 @@ public class CreateLobbyPacket extends Packet {
     private final Player player;
     private final String name;
 
+    /**
+     * packet received when a player request to create a lobby
+     * @param player player that made the request
+     * @param name name of the new lobby
+     */
     public CreateLobbyPacket(Player player, String name) {
         super(PacketType.CREATE_LOBBY);
 

@@ -11,6 +11,12 @@ public class CreateAccountPacket extends Packet {
     private final Player player;
     private final String username, password;
 
+    /**
+     * Packet received when a client requests to create an account
+     * @param player player that made the request
+     * @param username new account username
+     * @param password new account password
+     */
     public CreateAccountPacket(Player player, String username, String password) {
         super(PacketType.CREATE_ACCOUNT);
 

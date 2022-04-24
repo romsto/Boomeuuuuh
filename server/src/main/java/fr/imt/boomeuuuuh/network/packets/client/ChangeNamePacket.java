@@ -11,6 +11,11 @@ public class ChangeNamePacket extends Packet {
     private final Player player;
     private final String name;
 
+    /**
+     * Packet received when client requests to change the name of the lobby they own
+     * @param name new name of the lobby
+     * @param player player that made the request
+     */
     public ChangeNamePacket(String name, Player player) {
         super(PacketType.CHANGE_LOBBY_NAME);
 

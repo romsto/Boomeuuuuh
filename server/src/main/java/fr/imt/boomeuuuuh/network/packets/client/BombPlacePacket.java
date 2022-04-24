@@ -12,6 +12,11 @@ public class BombPlacePacket extends Packet {
     private final Player player;
     private final Location location;
 
+    /**
+     * Packet received when client requests to plant a bomb
+     * @param player player who sent the request
+     * @param location location where the bomb should be placed in the player's game
+     */
     public BombPlacePacket(Player player, Location location) {
         super(PacketType.BOMB_PLACE);
         this.player = player;
