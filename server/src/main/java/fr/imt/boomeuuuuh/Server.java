@@ -17,6 +17,12 @@ public class Server extends Thread {
 
     private boolean stop = false;
 
+    /**
+     * Create an instance of server. (Usually only one instance runs at once)
+     *
+     * @param port to host the TCP server
+     * @throws IOException in case of socket issue
+     */
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
     }

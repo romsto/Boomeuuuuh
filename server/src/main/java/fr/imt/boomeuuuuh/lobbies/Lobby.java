@@ -55,46 +55,79 @@ public class Lobby {
 
     //-------------------------GET-------------------------
 
+    /**
+     * @return UDP port of the lobby
+     */
     public int getUdpPort() {
         return udpPort;
     }
 
+    /**
+     * @return players list
+     */
     public Collection<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * @return lobby connection thread
+     */
     public LobbyConnection getLobbyConnection() {
         return lobbyConnection;
     }
 
+    /**
+     * @return id of the lobby
+     */
     public int getLobbyID() {
         return lobbyID;
     }
 
+    /**
+     * @return current owner of the lobby
+     */
     public Player getOwner() {
         return owner;
     }
 
+    /**
+     * @return name of the lobby
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return true if the lobby is opened
+     */
     public boolean isOpen() {
         return open;
     }
 
+    /**
+     * @return the game manager
+     */
     public GameManager getGameManager() {
         return gameManager;
     }
 
+    /**
+     * @return true if the lobby is still running
+     */
     public boolean isRunning() {
         return running;
     }
 
+    /**
+     * @return state of the lobby
+     */
     public LobbyState getState() {
         return state;
     }
 
+    /**
+     * @return current instance
+     */
     private Lobby getInstance() {
         return this;
     }
@@ -102,6 +135,11 @@ public class Lobby {
     //-----------------------------------------------------
     //------------------------SET--------------------------
 
+    /**
+     * Set the lobby name
+     *
+     * @param name to set
+     */
     public void setName(String name) {
         this.name = name;
 
@@ -109,6 +147,11 @@ public class Lobby {
         broadcastToAll(false, lobbyInfoPacket);
     }
 
+    /**
+     * Set the current owner of the lobby
+     *
+     * @param owner to set (Player)
+     */
     public void setOwner(Player owner) {
         this.owner = owner;
 
@@ -116,6 +159,11 @@ public class Lobby {
         broadcastToAll(false, lobbyInfoPacket);
     }
 
+    /**
+     * Add a String to the current chat
+     *
+     * @param chat to add
+     */
     public void addToChat(String chat) {
         chatHistoric += chat;
         if (chatHistoric.length() >= 20000)
@@ -124,6 +172,12 @@ public class Lobby {
 
     //-----------------------------------------------------
     //------------------------GAME-------------------------
+
+    /**
+     * Starts the game with a specific map
+     *
+     * @param mapID selected map
+     */
     public void startGame(String mapID) {
         open = false;
         gameManager = new GameManager(this, mapID);
@@ -135,6 +189,9 @@ public class Lobby {
 
     //Update cycle is in LobbyExecutor
 
+    /**
+     * Stops the game
+     */
     public void stopGame() {
         //Broadcast end of game
         gameManager = null;
@@ -159,6 +216,11 @@ public class Lobby {
     }
     //-----------------------------------------------------
 
+    /**
+     * Add a player to the lobby
+     *
+     * @param player to add
+     */
     public void addPlayer(Player player) {
         players.add(player);
         player.joinLobby(this);
@@ -170,17 +232,29 @@ public class Lobby {
         broadcastTo(false, chatPacket, player);
     }
 
+    /**
+     * Set the current state of the lobby
+     *
+     * @param open join
+     */
     public void setOpen(boolean open) {
         this.open = open;
     }
 
+    /**
+     * Remove a player from the current lobby
+     *
+     * @param player player
+     */
     public void removePlayer(Player player) {
-        if (state == LobbyState.PLAYING) {
-            if (player.getEntity() != null)
-                gameManager.destroyEntity(player.getEntity());
-        }
+        if (players.contains(player)) {
+            if (state == LobbyState.PLAYING) {
+                if (player.getEntity() != null)
+                    gameManager.destroyEntity(player.getEntity());
+            }
 
-        players.remove(player);
+            players.remove(player);
+        }
         if (players.size() <= 0) {
             // There is no more players. Closing lobby
             LobbyManager.endLobby(name);
@@ -196,11 +270,17 @@ public class Lobby {
         broadcastToAll(false, lobbyInfoPacket);
     }
 
+    /**
+     * Disconnects all the players
+     */
     public void disconnectAll() {
         for (Player p : players)
             removePlayer(p);
     }
 
+    /**
+     * Stops the lobby
+     */
     public void close() {
         disconnectAll();
         lobbyConnection.close();

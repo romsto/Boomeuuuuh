@@ -30,6 +30,12 @@ public class GameManager {
 
     public boolean ready = false;
 
+    /**
+     * Create a Game
+     *
+     * @param lobby linked
+     * @param mapID id of the map to load
+     */
     public GameManager(Lobby lobby, String mapID) {
         //Set vars
         this.lobby = lobby;
@@ -76,34 +82,38 @@ public class GameManager {
 
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         broadcastEntities();
 
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         broadcastReferences();
 
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         lobby.broadcastToAll(false, new ReadyPacket());
 
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
 
         ready = true;
     }
 
     //-----------------------------------------------------
+
+    /**
+     * Called each ticks
+     */
     public void Update() {
         //---Bombs---
         List<Entity> copiedList = new ArrayList<>(entityList);
@@ -114,6 +124,9 @@ public class GameManager {
         //-----------
     }
 
+    /**
+     * Called to update the player location
+     */
     public void UpdatePlayersPos() {
         for (PlayerEntity e : new ArrayList<>(livePlayers)) {
             if (!e.hasMovedSinceLastTick)
@@ -124,6 +137,9 @@ public class GameManager {
         }
     }
 
+    /**
+     * Stop the game
+     */
     private void endGame() {
         //Tell lobby to stop the game
         lobby.stopGame();
@@ -131,9 +147,16 @@ public class GameManager {
 
     //-----------------------------------------------------
     //------------------------BOMBS------------------------
-    public void placeBomb(Player origin, Location pos) {// Later inclune multiple bomb types
+
+    /**
+     * Place a bomb
+     *
+     * @param origin player who placed it
+     * @param pos    to place
+     */
+    public void placeBomb(Player origin, Location pos) {
         //Check if position is possible
-        if (!checkPosition(pos)) //TODO : Check that delays in placement are not too quick
+        if (!checkPosition(pos))
             return;
 
         if (origin.getMaxBombs() <= origin.currentBombs)
@@ -152,11 +175,23 @@ public class GameManager {
 
     //-----------------------------------------------------
     //------------------ENTITY MANAGEMENT------------------
+
+    /**
+     * Get next entity id (unique)
+     *
+     * @return unique id
+     */
     public int getNewID() {
         lastID++;
         return lastID - 1;
     }
 
+    /**
+     * Check if you can place a bomb
+     *
+     * @param pos to palce
+     * @return true or false
+     */
     public boolean checkPosition(Location pos) {
         for (Entity e : entityList)
             if (e instanceof Bomb || e instanceof SoftBlock || e instanceof HardBlock)
@@ -165,20 +200,31 @@ public class GameManager {
         return pos.comprisedInExcludingBorder(-1, mapWidth, -1, mapHeight);
     }
 
+    /**
+     * Returns the list of all the entities
+     *
+     * @return entity list
+     */
     public Collection<Entity> getEntityList() {
         return entityList;
     }
 
+    /**
+     * Spawns an entity
+     *
+     * @param e to spawn
+     */
     public void placeEntity(Entity e) {
         entityList.add(e);
         EntityCreatePacket p = new EntityCreatePacket(e.getId(), getEntityRef(e), e.getPos());
         lobby.broadcastToAll(false, p);
     }
 
-    private void placeEntityLocal(Entity e) {
-        entityList.add(e);
-    }
-
+    /**
+     * Sends entities to all the players
+     *
+     * @param players to send the entities
+     */
     private void broadcastEntities(Player... players) {
         boolean all = players.length == 0;
         for (Entity e : entityList) {
@@ -190,6 +236,9 @@ public class GameManager {
         }
     }
 
+    /**
+     * Sends the player's references
+     */
     private void broadcastReferences() {
         for (Entity entity : entityList) {
             if (!(entity instanceof PlayerEntity))
@@ -200,6 +249,11 @@ public class GameManager {
         }
     }
 
+    /**
+     * Remove an entity
+     *
+     * @param e to remove
+     */
     public void destroyEntity(Entity e) {
         if (!entityList.contains(e))
             return;
@@ -228,20 +282,29 @@ public class GameManager {
         }
     }
 
-    public void removePlayer(PlayerEntity e) {
-        destroyEntity(e);
-    }
-
     //-----------------------------------------------------
     //-------------------------GET-------------------------
+
+    /**
+     * @return map's height
+     */
     public int getMapHeight() {
         return mapHeight;
     }
 
+    /**
+     * @return map width
+     */
     public int getMapWidth() {
         return mapWidth;
     }
 
+    /**
+     * Get entity id by its type
+     *
+     * @param e to get
+     * @return id
+     */
     private int getEntityRef(Entity e) {
         if (e instanceof PlayerEntity)
             return 60;

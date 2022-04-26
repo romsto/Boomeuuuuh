@@ -25,6 +25,11 @@ public class Map {
         this.takenSpawns = new ArrayList<>();
     }
 
+    /**
+     * Finds the next available spawn
+     *
+     * @return spawn
+     */
     public Location nextSpawn() {
         int sp = random.nextInt(spawns.size());
         while (takenSpawns.contains(sp))

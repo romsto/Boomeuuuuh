@@ -10,6 +10,11 @@ public class Boomeuuuuh {
     public final static Logger logger = Logger.getLogger("Boomeuuuuh");
     public static Database database;
 
+    /**
+     * Main method
+     *
+     * @param args passed in the launch command
+     */
     public static void main(String[] args) {
         // Open database connection
         database = new Database();
@@ -23,11 +28,5 @@ public class Boomeuuuuh {
         } catch (IOException e) {
             logger.severe("Impossible to start the server on port " + port + " : " + e.getMessage());
         }
-
-        //Test
-//        try{
-//        Lobby l = new Lobby(0, "Test", null);
-//        l.startGame("map1");
-//        }catch (Exception e){Boomeuuuuh.logger.severe(e.toString());}
     }
 }

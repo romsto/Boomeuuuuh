@@ -12,6 +12,9 @@ public class Database {
     private Connection connection;
     private MessageDigest messageDigest;
 
+    /**
+     * Create an instance of Database. One instance = one connection
+     */
     public Database() {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:database.db");
@@ -27,6 +30,12 @@ public class Database {
         }
     }
 
+    /**
+     * Create an account that is not already existing in the database
+     *
+     * @param username of the account
+     * @param MdP      password encrypted in MD5
+     */
     public void createAccount(String username, String MdP) {
         String request = "INSERT INTO bomberman(username,MdP,level,currentSkin,skin1,skin2,skin3,skin4,skin5,skin6,skin7,skin8,skin9,skin10,gold,kills,maxkillstreak,wins) VALUES(?,?,1,'skin1',1,0,0,0,0,0,0,0,0,0,0,0,0,0)";
 
@@ -49,6 +58,13 @@ public class Database {
         }
     }
 
+    /**
+     * Attempt to log into an account.
+     *
+     * @param username to log
+     * @param password of the account
+     * @return true if the password is correct and the account existing
+     */
     public boolean login(String username, String password) {
         if (!usernameAlreadyExists(username))
             return false;
@@ -76,6 +92,12 @@ public class Database {
         return encryptedPassword.equals(resultPassword);
     }
 
+    /**
+     * Checks if a username already exists in the database
+     *
+     * @param username to check
+     * @return true if an account already exists
+     */
     public boolean usernameAlreadyExists(String username) {
         String sql = "SELECT COUNT(*) AS number FROM bomberman WHERE username= ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -92,6 +114,12 @@ public class Database {
         return false;
     }
 
+    /**
+     * Returns the PlayerData of a user
+     *
+     * @param username to fetch
+     * @return PlayerData
+     */
     public PlayerData getPlayerData(String username) {
         int gold = 0;
         int level = 0;
@@ -123,9 +151,10 @@ public class Database {
     }
 
     /**
-     * Augmenter le niveau du joueur d'une unité
+     * Sets the player level in the database
      *
-     * @param username nom du joeur
+     * @param username username
+     * @param level    to save
      */
     public void setLevel(String username, int level) {
         String request = "UPDATE bomberman SET level = ? "
@@ -143,6 +172,12 @@ public class Database {
         }
     }
 
+    /**
+     * Sets the player kills in the database
+     *
+     * @param username username
+     * @param kills    kills
+     */
     public void setKills(String username, int kills) {
         String request = "UPDATE bomberman SET kills = ? "
                 + "WHERE username= ?";
@@ -159,6 +194,12 @@ public class Database {
         }
     }
 
+    /**
+     * Sets the player maxkillstreak in the database
+     *
+     * @param username      user
+     * @param maxkillstreak maxkillstreak
+     */
     public void setMaxKillstreak(String username, int maxkillstreak) {
         String request = "UPDATE bomberman SET maxkillstreak = ? "
                 + "WHERE username= ?";
@@ -175,6 +216,12 @@ public class Database {
         }
     }
 
+    /**
+     * Sets the player wins in the database
+     *
+     * @param username user
+     * @param wins     wins
+     */
     public void setWins(String username, int wins) {
         String request = "UPDATE bomberman SET wins = ? "
                 + "WHERE username= ?";
@@ -191,8 +238,12 @@ public class Database {
         }
     }
 
+
     /**
-     * Ajouter la quantité difference au solde de gold du joueur
+     * Sets the player golds in the database
+     *
+     * @param username user
+     * @param gold     amount
      */
     public void setGold(String username, int gold) {
         String request = "UPDATE bomberman SET gold = ? " + "WHERE username= ?";
@@ -210,7 +261,10 @@ public class Database {
     }
 
     /**
-     * Débloquer le skin
+     * Unlock a skin to a specific player
+     *
+     * @param username player
+     * @param idSkin   skin number from 1 to 10
      */
     public void unlockSkin(String username, String idSkin) {
         String request = "UPDATE bomberman SET " + idSkin + " = 1 WHERE username = ?";
@@ -227,7 +281,10 @@ public class Database {
     }
 
     /**
-     * Changer de skin
+     * Sets the player current skin
+     *
+     * @param username user
+     * @param idSkin   skin id
      */
     public void setCurrentSkin(String username, String idSkin) {
 
@@ -245,6 +302,11 @@ public class Database {
         }
     }
 
+    /**
+     * Check if the database exists, if not it initializes it
+     *
+     * @throws SQLException if there is an exception
+     */
     private void checkDatabase() throws SQLException {
         String createRequest = "CREATE TABLE \"bomberman\" (" +
                 "    \"username\"    varchar," +

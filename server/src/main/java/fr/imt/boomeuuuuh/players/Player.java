@@ -41,6 +41,7 @@ public class Player {
 
     /**
      * Representation of player on the server
+     *
      * @param socket socket the player is attached to
      * @throws IOException thrown if connection doesn't go through
      */
@@ -52,16 +53,28 @@ public class Player {
     }
 
     //------Player Chars------
-    public int getMaxBombs(){ return maxBombs; }
-    public int getBombPower(){ return bombPower; }
-    public int getSpeed(){ return speed; }
-    public int getGameKills(){ return gameKills; }
+    public int getMaxBombs() {
+        return maxBombs;
+    }
+
+    public int getBombPower() {
+        return bombPower;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public int getGameKills() {
+        return gameKills;
+    }
 
     /**
      * Set the max number of bombs the player can have and communicate it to the client
+     *
      * @param v value to assign
      */
-    public void setMaxBombs(int v){
+    public void setMaxBombs(int v) {
         maxBombs = v;
         serverConnection.send(new PlayerInfoPacket(this));
     }
@@ -69,13 +82,16 @@ public class Player {
     /**
      * Increase the number of max bombs by 1 and communicate it to the client
      */
-    public void increaseMaxBombs(){ setMaxBombs(maxBombs + 1); }
+    public void increaseMaxBombs() {
+        setMaxBombs(maxBombs + 1);
+    }
 
     /**
      * Set the power of the player's bombs and communicate it to the client
+     *
      * @param v value to assign
      */
-    public void setBombPower(int v){
+    public void setBombPower(int v) {
         bombPower = v;
         serverConnection.send(new PlayerInfoPacket(this));
     }
@@ -83,22 +99,30 @@ public class Player {
     /**
      * Increase the power of the player's bombs by 1 and communicate it to the client
      */
-    public void increasePower(){ setBombPower(bombPower + 1); }
+    public void increasePower() {
+        setBombPower(bombPower + 1);
+    }
 
     /**
      * Set the speed of the player and communicate it to the client
+     *
      * @param v value to assign
      */
-    public void setSpeed(int v){
+    public void setSpeed(int v) {
         speed = v;
         serverConnection.send(new PlayerInfoPacket(this));
     }
+
     /**
      * Increase the speed of the player by 1 and communicate it to the client
      */
-    public void increaseSpeed(){ setSpeed(speed + 1); }
+    public void increaseSpeed() {
+        setSpeed(speed + 1);
+    }
+
     /**
      * Set the number of kills of the player, update the max kill streak and communicate it to the client
+     *
      * @param v value to assign
      */
     public void setGameKills(int v) {
@@ -109,38 +133,72 @@ public class Player {
             playerData.setMaxkillstreak(gameKills);
         serverConnection.send(new PlayerInfoPacket(this));
     }
+
     /**
      * Increase the number of kills of the player by 1, update the max kill streak and communicate it to the client
      */
-    public void increaseGameKills(){ setGameKills(gameKills + 1); }
+    public void increaseGameKills() {
+        setGameKills(gameKills + 1);
+    }
     //------------------------
 
+    /**
+     * Get the player current IP address
+     *
+     * @return InetAddress
+     */
     public InetAddress getAddress() {
         return address;
     }
 
+    /**
+     * Get the player name if it's logged
+     *
+     * @return player name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the player id
+     *
+     * @return player id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Get the current player lobby. May be null
+     *
+     * @return Lobby
+     */
     public Lobby getLobby() {
         return lobby;
     }
 
+    /**
+     * Get the lobby joining state. Used when a player join a lobby
+     *
+     * @return LobbyJoiningState
+     */
     public LobbyJoiningState getJoinedLobbyState() {
         return joinedLobby;
     }
 
+    /**
+     * Check if the player is logged
+     *
+     * @return boolean
+     */
     public boolean isAuthentified() {
         return authentified;
     }
 
     /**
      * Link the current player to a registered account, if the link fails, a decline packet is communicated to the client
+     *
      * @param username username of the account
      * @param password password of the account
      * @return true if the player was linked to the account, if false possible reasons are : Player already connected, wrong credentials
@@ -164,22 +222,47 @@ public class Player {
         return false;
     }
 
+    /**
+     * Return the player data
+     *
+     * @return Playerdata
+     */
     public PlayerData getPlayerData() {
         return playerData;
     }
 
+    /**
+     * Get the port the player is using to communicate through UDP
+     *
+     * @return int
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Set the current player UDP port
+     *
+     * @param port int
+     */
     public void setPort(int port) {
         this.port = port;
     }
 
+    /**
+     * Set the current player's joining state
+     *
+     * @param state LobbyJoiningState
+     */
     public void setJoinedLobbyState(LobbyJoiningState state) {
         this.joinedLobby = state;
     }
 
+    /**
+     * Check if the player is in a lobby
+     *
+     * @return boolean
+     */
     public boolean isInLobby() {
         return lobby != null && joinedLobby != LobbyJoiningState.DISCONNETED;
     }
@@ -187,6 +270,7 @@ public class Player {
     /**
      * Make the player join a lobby, the player can't join two lobbies simultaneously
      * The client receives the lobby information and awaits port assignment from the lobby
+     *
      * @param lobby lobby to join
      */
     public void joinLobby(Lobby lobby) {
@@ -200,6 +284,7 @@ public class Player {
 
     /**
      * Remove a player from a lobby, client receives the information through a KickPacket
+     *
      * @param reason reason why the player was removed
      */
     public void leaveLobby(String reason) {
@@ -240,6 +325,7 @@ public class Player {
 
     /**
      * Get player entity associated with this player in game
+     *
      * @return player entity associated with this player in game
      */
     public PlayerEntity getEntity() {
@@ -248,6 +334,7 @@ public class Player {
 
     /**
      * Set player entity associated with this player in game
+     *
      * @param e entity to set
      */
     public void setEntity(PlayerEntity e) {

@@ -15,26 +15,68 @@ public class Entity {
     }
 
     //-------------------------GET-------------------------
-    public boolean isObstacle() { return isObstacle; }
-    public boolean isMovable() { return false; }
 
-    public Location getPos(){ return pos; }
-    public int getX(){ return pos.getX(); }
+    /**
+     * @return if the entity is considered as an obstacle
+     */
+    public boolean isObstacle() {
+        return isObstacle;
+    }
 
+    /**
+     * @return if the entity can move
+     */
+    public boolean isMovable() {
+        return false;
+    }
+
+    /**
+     * Get entity location (blocs)
+     *
+     * @return bloc location
+     */
+    public Location getPos() {
+        return pos;
+    }
+
+    /**
+     * @return bloc X
+     */
+    public int getX() {
+        return pos.getX();
+    }
+
+    /**
+     * @return bloc Y
+     */
     public int getY() {
         return pos.getY();
     }
 
+    /**
+     * @return UID of the entity
+     */
     public int getId() {
         return id;
     }
 
     //-----------------------------------------------------
     //------------------------SET--------------------------
+
+    /**
+     * Set obstacle
+     *
+     * @param isObstacle or not
+     */
     public void isObstacle(boolean isObstacle) {
         this.isObstacle = isObstacle;
     }
 
+    /**
+     * Set location
+     *
+     * @param pos location
+     */
     public void setPos(Location pos) {
         this.pos = pos;
     }

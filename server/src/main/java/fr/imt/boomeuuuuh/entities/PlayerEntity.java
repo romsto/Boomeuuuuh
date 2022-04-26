@@ -20,7 +20,7 @@ public class PlayerEntity extends DynamicEntity {
 
     public Player getPlayer() {
         return playerRep;
-    } //The big faille
+    }
 
     @Override
     public void setPos(Location pos) {
