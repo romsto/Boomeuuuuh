@@ -28,6 +28,7 @@ public class PlayerData {
 
     public void selectSkin(Skin skin) {
         this.currentSkin = skin.getDataName();
+
         MyGame.getInstance().serverConnection.send(new SelectSkinPacket(currentSkin));
     }
 
