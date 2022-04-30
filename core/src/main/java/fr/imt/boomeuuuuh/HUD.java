@@ -1,10 +1,21 @@
+/*
+ * Copyright (c) 2022.
+ * Authors : Storaï R, Faure B, Mathieu A, Garry A, Nicolau T, Bregier M.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package fr.imt.boomeuuuuh;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import fr.imt.boomeuuuuh.network.packets.both.TestPacket;
 
 public class HUD {
 
@@ -53,8 +64,8 @@ public class HUD {
 
         font.setColor(1f, 1f, 1f, 0.9f);
         for (int i = 0; i < vs.length; i++){
-        batch.draw(imgs[i], xImg, ys[i], width, height);
-        drawText(batch, String.valueOf(vs[i]), xTxt, ys[i] + height/2);
+            batch.draw(imgs[i], xImg, ys[i], width, height);
+            drawText(batch, String.valueOf(vs[i]), xTxt, ys[i] + height/2);
         }
 
         if (game.player == null) {

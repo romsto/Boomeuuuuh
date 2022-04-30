@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2022.
+ * Authors : Storaï R, Faure B, Mathieu A, Garry A, Nicolau T, Bregier M.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package fr.imt.boomeuuuuh.entities.bombs;
 
 import fr.imt.boomeuuuuh.entities.Entity;
@@ -34,15 +46,11 @@ public class ExplosionShape {
             int y = e.getY();
 
             if(e instanceof SoftBlock || e instanceof HardBlock)
-            if((bounds[3] <= x || x <= bounds[1]) && y == by){
-                if(x < bx){ bounds[3] = x; }
-                else if (x > bx) {bounds[1] = x;}
-                else{ bounds[3] = bx; bounds[1] = bx; }
-            } else if ((bounds[2] <= y || y <= bounds[0]) && x == bx) {
-                if(y < by){ bounds[2] = y; }
-                else if (y > by) {bounds[0] = y;}
-                else{ bounds[2] = by; bounds[0] = by; }
-            }
+                if((bounds[3] <= x || x <= bounds[1]) && y == by){
+                    if(x < bx){ bounds[3] = x; } else if (x > bx) {bounds[1] = x;} else{ bounds[3] = bx; bounds[1] = bx; }
+                } else if ((bounds[2] <= y || y <= bounds[0]) && x == bx) {
+                    if(y < by){ bounds[2] = y; } else if (y > by) {bounds[0] = y;} else{ bounds[2] = by; bounds[0] = by; }
+                }
         }
 
         List<Entity> ret = new ArrayList<>();

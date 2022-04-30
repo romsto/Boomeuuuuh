@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2022.
+ * Authors : Storaï R, Faure B, Mathieu A, Garry A, Nicolau T, Bregier M.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
+
 package fr.imt.boomeuuuuh;
 
 import com.badlogic.gdx.Gdx;
@@ -71,6 +83,9 @@ public class Game implements InputProcessor {
         hud = new HUD(480, 480);
     }
 
+    /**
+     * Creates the world border to avoid players going out
+     */
     private void createWorldBorders() {
         BodyDef borders = new BodyDef();
         borders.position.set(new Vector2());
@@ -104,6 +119,11 @@ public class Game implements InputProcessor {
         return instance;
     }
 
+    /**
+     * Method called each delta times
+     *
+     * @param delta time
+     */
     public void draw(float delta) {
         handleMovements();
 
@@ -120,7 +140,6 @@ public class Game implements InputProcessor {
         hudBatch.setProjectionMatrix(camera.combined);
         renderer.setView(camera);
         renderer.render();
-        //debugRenderer.render(world, debugMatrix);
 
         batch.begin();
         for (Entity entity : entities) {
@@ -129,21 +148,25 @@ public class Game implements InputProcessor {
         batch.end();
 
         hudBatch.begin();
-        //font.setColor(1f, 1f, 1f, 0.7f);
-        //font.draw(hudBatch, player_bomb + " bombs", 15, 60);
-        //font.draw(hudBatch, player_bomb_power + " power", 15, 45);
-        //font.draw(hudBatch, player_speed + " speed", 15, 30);
-        //font.draw(hudBatch, player_kills + " kills", 15, 15);
         hud.drawHUD(hudBatch);
         hudBatch.end();
 
         removeEntities();
     }
 
+    /**
+     * Called when the frame is resized
+     *
+     * @param width  resi
+     * @param height resi
+     */
     public void resize(int width, int height) {
         viewport.update(width, height);
     }
 
+    /**
+     * Load the map from the file
+     */
     public void loadMap() {
         map = new TmxMapLoader().load("map/map1Final.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -155,6 +178,9 @@ public class Game implements InputProcessor {
         viewport = new FitViewport(480, 480, camera);
     }
 
+    /**
+     * Called when closed
+     */
     public void dispose() {
         map.dispose();
         renderer.dispose();
@@ -162,20 +188,38 @@ public class Game implements InputProcessor {
         hudBatch.dispose();
     }
 
+    /**
+     * Spawns an entity
+     *
+     * @param entity to spawn
+     */
     public void spawnEntity(Entity entity) {
         entities.add(entity);
     }
 
+    /**
+     * Remove an entity on the next update
+     *
+     * @param entity to remove
+     */
     public void removeEntity(Entity entity) {
         toBeRemovedEntities.add(entity);
     }
 
+    /**
+     * Remove an entity by its id
+     *
+     * @param entityId to remove
+     */
     public void removeEntity(int entityId) {
         Entity entity = getEntity(entityId);
         if (entity != null)
             removeEntity(entity);
     }
 
+    /**
+     * Clear all the entities to be removed
+     */
     private void removeEntities() {
         for (Entity entity : toBeRemovedEntities) {
             if (entity.getBody() != null)
@@ -186,6 +230,12 @@ public class Game implements InputProcessor {
         toBeRemovedEntities.clear();
     }
 
+    /**
+     * Get an entity by its id
+     *
+     * @param id of the entity
+     * @return Entity
+     */
     public Entity getEntity(int id) {
         Entity found = null;
         for (Entity entity : new ArrayList<>(entities)) {
@@ -197,14 +247,25 @@ public class Game implements InputProcessor {
         return found;
     }
 
+    /**
+     * Get all the current displayed entities
+     *
+     * @return List of all entities
+     */
     public List<Entity> getEntities() {
         return entities;
     }
 
+    /**
+     * @return box2D World
+     */
     public World getWorld() {
         return world;
     }
 
+    /**
+     * Checks the current input of the player
+     */
     public void handleMovements() {
         if (player == null)
             return;
